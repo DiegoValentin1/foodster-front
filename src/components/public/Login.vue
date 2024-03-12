@@ -2,21 +2,21 @@
   <div class="flex h-screen">
     <!-- Left Pane -->
     <div
-      class="hidden lg:flex items-center justify-center flex-1 bg-fdvino text-black"
+      class="hidden lg:flex items-center justify-center flex-1 bg-fdoscuro text-fdoscuro"
     >
       <!-- <div
         id="glowcircle"
         class="absolute w-[300px] h-[400px] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 rounded-[100%] fixed z-10 left-[20%] translate-x-[-40%] translate-y-[0%] blur-[100px]"
       ></div> -->
-      <div class=" rotate max-w-md text-center fixed left-[13%] top-[25%]">
+      <div class="max-w-md text-center">
         <img
-          class=""
+          class="fixed left-[7%] top-[15%] logo"
           src="../../assets/images/logorealista.png"
           alt=""
           srcset=""
         />
-        <section class="">
-          <svg viewBox="0 0 100 100" class="translate-y-[-100%]">
+        <section class="rotate left-[7%] top-[15%]">
+          <svg viewBox="0 0 100 100" class="">
             <path
               id="circlePath"
               fill="none"
@@ -29,13 +29,17 @@
         "
             />
             <text
+              stroke="black"
+              stroke-width="0.45"
               id="text"
               font-family="monospace"
-              font-size="16"
+              font-size="12.7"
               font-weight="bolder"
-              fill="white"
+              fill="#e2e2e2"
             >
-              <textPath id="textPath" href="#circlePath">Foodster Foodster Foodster</textPath>
+              <textPath id="textPath" href="#circlePath">
+                Foodster Foodster Foodster Foodster
+              </textPath>
             </text>
           </svg>
         </section>
@@ -106,7 +110,7 @@
         <div class="mt-4 text-sm text-gray-600 text-center">
           <p>or with email</p>
         </div>
-        <form action="#" method="POST" class="space-y-4">
+        <form action="/home" method="POST" class="space-y-4">
           <!-- Your form elements go here -->
           <div>
             <label
@@ -176,8 +180,17 @@ const includedFeatures = [
 
 <style scoped>
 .rotate {
-  animation: spin 2s linear infinite; /* Aquí se define la animación */
+  position: fixed;
+  width: 30rem;
+  animation: spin 50s linear infinite;
+  padding: 20px;
 }
+
+.logo {
+  height: 30rem;
+  width: 30rem;
+}
+
 
 @keyframes spin {
   0% {
