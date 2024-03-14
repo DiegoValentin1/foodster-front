@@ -14,12 +14,22 @@ const router = new VueRouter({
       component: Login
     },
     {
-      path: '/home',
-      name: 'home',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../components/admin/components/SidebarNavbar.vue')
+      path: '/admin',
+      name: 'admin',
+      component: () => import('../components/admin/components/SidebarNavbar.vue'),
+      children: [
+        {
+          path: '/',
+          name: 'dashboard',
+          component: () => import('../components/admin/Dashboard.vue')
+        },
+        // {
+        //   path: 'profile',
+        //   name: 'profile',
+        //   component: () => import('../components/admin/Profile.vue')
+        // },
+        // Puedes agregar más rutas secundarias según tus necesidades
+      ]
     }
   ]
 })

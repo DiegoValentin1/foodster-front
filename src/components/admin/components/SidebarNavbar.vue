@@ -564,7 +564,7 @@
             class="min-w-0 flex-1 h-full flex flex-col lg:order-last p-3"
           >
             <h1 id="primary-heading" class="sr-only">Photos</h1>
-            asdad
+            <router-view/>
           </section>
         </main>
       </div>
