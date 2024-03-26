@@ -47,6 +47,11 @@ const router = new VueRouter({
           path: '/admin/eventos',
           name: 'eventos',
           component: ()=> import('../components/admin/eventos/TableEventos.vue')
+        },
+        {
+          path: '/admin/roles',
+          name: 'roles',
+          component: () => import('../components/admin/roles/TableRoles.vue')
         }
       ]
     },

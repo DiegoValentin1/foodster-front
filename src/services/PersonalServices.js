@@ -11,7 +11,22 @@ const getPersonal = async () => {
     }
 }
 
+const insert = async (personal) =>{
+    try {
+        const response = await axios.post(API_URL + "personal", personal)
+        if (response) {
+            return response.data;
+          } else {
+            throw new Error('La respuesta del servidor es undefined');
+          }
+    } catch (error) {
+        console.log(error)
+        
+    }
+}
+
 
 export default {
-    getPersonal
+    getPersonal,
+    insert
 }
