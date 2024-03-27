@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../components/public/Login.vue'
 import TableUsers from '../components/admin/users/TableUsers.vue';
+import Profile from '../components/public/Profile.vue';
 Vue.use(VueRouter)
 
 const router = new VueRouter({
@@ -58,17 +59,27 @@ const router = new VueRouter({
     {
       path: '/home',
       name: 'home',
-      component: () => import('../components/admin/components/Home.vue'),
+      component: () => import('../components/cliente/components/Home.vue'),
       children: [
         {
           path: '/home/entradas',
           name: 'entradas',
-          component: () => import('../components/admin/components/Inicio.vue')
+          component: () => import('../components/cliente/components/Inicio.vue')
         },
         {
           path: '/home/utencilios',
           name: 'utencilios',
           component: () => import('../components/public/error/ErrorPage.vue')
+        },
+        {
+          path: '/profile',
+          name: 'profile',
+          component: Profile
+        },
+        {
+          path: '/home/pedido',
+          name: 'pedido',
+          component: () => import('../components/cliente/Pedido.vue')
         }
       ]
     }
