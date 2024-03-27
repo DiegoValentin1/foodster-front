@@ -257,7 +257,7 @@
 
     <!-- Content area -->
     <div class="flex-1 flex flex-col overflow-hidden">
-      <!-- <header class="w-full">
+      <header class="w-full">
         <div
           class="relative z-10 flex-shrink-0 h-16 bg-white border-b border-gray-200 shadow-sm flex"
         >
@@ -395,7 +395,7 @@
             </div>
           </div>
         </div>
-      </header> -->
+      </header>
 
       <!-- Main content -->
       <div class="flex-1 flex items-stretch overflow-hidden">
