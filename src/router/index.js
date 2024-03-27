@@ -54,12 +54,12 @@ const router = new VueRouter({
     {
       path: '/home',
       name: 'home',
-      component: () => import('../components/admin/components/Home.vue'),
+      component: () => import('../components/cliente/components/Home.vue'),
       children: [
         {
           path: '/home/entradas',
           name: 'entradas',
-          component: () => import('../components/admin/components/Inicio.vue')
+          component: () => import('../components/cliente/components/Inicio.vue')
         },
         {
           path: '/home/utencilios',
@@ -70,6 +70,11 @@ const router = new VueRouter({
           path: '/profile',
           name: 'profile',
           component: Profile
+        },
+        {
+          path: '/home/pedido',
+          name: 'pedido',
+          component: () => import('../components/cliente/Pedido.vue')
         }
       ]
     }
