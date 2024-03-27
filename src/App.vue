@@ -2,7 +2,7 @@
 </script>
 
 <template>
-   <v-app style="background-color: lightgrey;">
+   <v-app style="background-color: #fafafa;">
     <div>
       <router-view/>
     </div>
