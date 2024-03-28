@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../components/public/Login.vue'
-import Profile from '../components/public/Profile.vue';
+import Profile from '../components/cliente/components/Profile.vue';
 import {useAuthStore} from "@/stores";
 
 Vue.use(VueRouter)
@@ -40,7 +40,7 @@ const router = new VueRouter({
         }]
     }, {
         path: '/home',
-        meta: {roles: ['CLIENTE']},
+        // meta: {roles: ['CLIENTE']},
         name: 'home',
         component: () => import('../components/cliente/components/Home.vue'),
         children: [{
