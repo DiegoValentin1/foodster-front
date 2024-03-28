@@ -117,18 +117,18 @@ export default {
         async getRoles() {
             try {
                 const response = await rolesServices.getRoles();
-                console.log("DATA ROLE->", response.data);
-                if (Array.isArray(response.data)) {
-                    this.roles = response.data;
-                } else if (typeof response.data === 'object') {
-                    this.roles = [response.data];
+                console.log("DATA ROLE->", response);
+                if (Array.isArray(response)) {
+                    this.roles = response;
+                } else if (typeof response === 'object') {
+                    this.roles = [response];
                 } else {
                     console.error('La respuesta de la API no es un array ni un objeto válido:', response);
                 }
             } catch (error) {
                 if (error.response) {
                     // Error en la respuesta de la API (por ejemplo, código de estado no 200)
-                    console.error('Error en la respuesta de la API:', error.response.data);
+                    console.error('Error en la respuesta de la API:', error.response);
                 } else if (error.request) {
                     // Error de red (por ejemplo, solicitud no completada)
                     console.error('Error de red:', error.request);

@@ -1,12 +1,17 @@
 <template>
   <div>
+<<<<<<< HEAD
     <header class="w-full" >
       <v-tabs fixed-tabs background-color="#6A040F" dark>
+=======
+    <header class="w-full">
+      <v-tabs fixed-tabs  dark class="bg-gray-900">
+>>>>>>> 9fcb32154591a193c09834bcc751b54adc7f1cc6
         <v-tab to="/home">
-          Banquetes
+          Paquetes
         </v-tab>
         <v-tab to="/home/entradas">
-          Entradas
+          Servicios
         </v-tab>
         <v-tab to="/home/fuertes">
           Fuertes

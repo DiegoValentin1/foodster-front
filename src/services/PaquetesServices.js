@@ -1,10 +1,10 @@
-import axios from 'axios';
+import {axiosClient} from "@/utils/axios-client";
 
-let API_URL = 'http://localhost:8080/foodster-api';
+let baseUrl = `/paquetes`;
 
 const getAllPaquetes = async () => {
     try {
-        const response = await axios.get(API_URL + "/");
+        const response = await axiosClient.get(`${baseUrl}/`);
         return response.data;
     } catch (error) {
         console.error(error)
