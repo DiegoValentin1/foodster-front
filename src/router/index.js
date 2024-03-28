@@ -2,7 +2,6 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../components/public/Login.vue'
 import Profile from '../components/public/Profile.vue';
-<<<<<<< HEAD
 import LandingPage from '../components/public/Landing-pages/LandingPage.vue'
 import ErrorPage from '../components/public/error/ErrorPage.vue';
 Vue.use(VueRouter)
@@ -96,7 +95,7 @@ const router = new VueRouter({
       ]
     }
   ]
-=======
+
 import {useAuthStore} from "@/stores";
 
 Vue.use(VueRouter)
@@ -152,7 +151,6 @@ const router = new VueRouter({
             path: '/home/pedido', name: 'pedido', component: () => import('../components/cliente/Pedido.vue')
         }]
     }]
->>>>>>> 9fcb32154591a193c09834bcc751b54adc7f1cc6
 })
 
 router.beforeEach(async (to, from, next) => {
