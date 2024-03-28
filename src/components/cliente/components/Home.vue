@@ -1,6 +1,6 @@
 <template>
   <div>
-    <header class="w-full">
+    <header class="w-full" >
       <v-tabs fixed-tabs background-color="#6A040F" dark>
         <v-tab to="/home">
           Banquetes
@@ -14,12 +14,9 @@
         <v-tab to="/home/utencilios">
           Utencilios
         </v-tab>
-        <!-- Icono de carrito de compras -->
-        <v-spacer></v-spacer>
-        <v-tab icon @click="showCart = !showCart">
-          <v-icon>mdi-cart</v-icon>
-        </v-tab>
-      </v-tabs>
+        
+       </v-tabs>
+       
     </header>
 
     <!-- Renderizar el componente correspondiente a la ruta activa -->
@@ -38,5 +35,21 @@ export default {
 </script>
 
 <style scoped>
+.v-app-bar {
+  background-color: #6A040F;
+}
+
+.v-toolbar {
+  color: white;
+}
+
+.v-btn {
+  color: white;
+}
+
+.v-icon {
+  color: white;
+}
+
 /* Estilos personalizados según sea necesario */
 </style>

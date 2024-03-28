@@ -1,0 +1,155 @@
+<template>
+  <div class="landing-page">
+    <!-- Navbar -->
+    <v-app-bar dense color="transparent" dark flat>
+      <v-toolbar-title class="white--text">FOODSTER</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn href="/register" outlined class="mr-4 primary--text"> <!-- Agrega clase de margen para separar y color verde al borde -->
+        Registrarse
+      </v-btn>
+      <v-btn href="/login" outlined class="primary--text"> <!-- Agrega clase de margen para separar y color verde al borde -->
+        Iniciar Sesión
+      </v-btn>
+    </v-app-bar>
+
+    <!-- Carousel -->
+    <div class="carousel-container">
+      <v-carousel cycle>
+        <v-carousel-item v-for="(item, i) in items" :key="i" :src="item.src" reverse-transition="fade-transition"
+          transition="fade-transition"></v-carousel-item>
+      </v-carousel>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Título y descripción -->
+      <div class="container mx-auto text-center mt-12">
+        <h2 class="text-3xl font-bold mb-4 text-white">Bienvenido a FOODSTER</h2>
+        <p class="text-lg mb-6 text-white">Descubre los mejores buffets cerca de ti.</p>
+        <v-divider class="mb-6"></v-divider>
+        <p class="text-lg text-white">Aquí encontrarás una amplia variedad de buffets para tus eventos especiales.</p>
+      </div>
+
+      <!-- CTA Section -->
+      <div class="bg-gray-900 py-12">
+        <div class="container mx-auto text-center">
+          <h3 class="text-2xl font-semibold mb-4 text-white">¡Únete a Foodtser hoy mismo!</h3>
+          <p class="text-lg mb-6 text-white">Regístrate ahora para acceder a los mejores buffets y ofertas especiales.</p>
+          <v-btn href="/register" outlined class="mr-4 primary--text"> 
+            Registrarse
+          </v-btn>
+        </div>
+      </div>
+
+      <!-- Testimonials Section -->
+      <div class="container mx-auto py-12">
+        <div class="text-center">
+          <h3 class="text-3xl font-bold mb-4 text-white">Lo que nuestros clientes dicen</h3>
+          <v-divider class="mb-6"></v-divider>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Testimonial Card -->
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+              <p class="text-lg mb-4">"Foodster me ayudó a encontrar el buffet perfecto para mi fiesta de cumpleaños.
+                ¡Altamente recomendado!"</p>
+              <p class="font-semibold">- María Sánchez</p>
+            </div>
+            <!-- Testimonial Card -->
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+              <p class="text-lg mb-4">"¡Increíble variedad de opciones! Encontré exactamente lo que necesitaba para mi
+                evento corporativo."</p>
+              <p class="font-semibold">- Juan Pérez</p>
+            </div>
+            <!-- Testimonial Card -->
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+              <p class="text-lg mb-4">"La experiencia de usuario en Foodster es excepcional. ¡No podría estar más feliz
+                con el servicio!"</p>
+              <p class="font-semibold">- Ana Martínez</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Section -->
+      <div class="bg-gray-900 py-12">
+        <div class="container mx-auto text-center">
+          <h3 class="text-3xl font-bold mb-4 text-white">¿Tienes alguna pregunta?</h3>
+          <p class="text-lg mb-6 text-white">¡No dudes en contactarnos!</p>
+          <v-btn href="/register" outlined class="mr-4 primary--text"> 
+            Contactar
+          </v-btn>
+        </div>
+      </div>
+       <!-- Footer -->
+    <footer class="bg-gray-800 py-8">
+      <div class="container mx-auto text-center text-white">
+        <p class="text-lg font-semibold">Información de contacto:</p>
+        <p class="mt-2">Dirección: Calle Principal, Ciudad, País</p>
+        <p>Teléfono: (123) 456-7890</p>
+        <p>Email: info@example.com</p>
+      </div>
+    </footer>
+    </div>
+  </div>
+</template>
+
+<script>
+import { ref } from 'vue';
+
+export default {
+  name: 'LandingPage',
+  data() {
+    return {
+      items: [
+        { src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg' },
+        { src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg' },
+        { src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg' },
+        { src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg' },
+      ],
+    };
+  },
+  methods: {
+    login() {
+      // Implementar redirección a la página de inicio de sesión
+    },
+    register() {
+      // Implementar redirección a la página de registro
+    }
+  }
+};
+</script>
+
+<style scoped>
+.carousel-container {
+  margin-top: 2%;
+  width: 100%;
+  height: 100vh;
+}
+.landing-page {
+  /* Fondo con degradado */
+  background: linear-gradient(135deg, #161b22, #03071E);
+  /* Animación de movimiento */
+  animation: gradientAnimation 10s linear infinite alternate;
+}
+.footer {
+  background-color: #333; /* Color de fondo */
+  color: #fff; /* Color de texto */
+  padding: 20px; /* Espaciado interno */
+}
+
+.footer p {
+  margin: 5px 0;
+}
+
+.footer .font-semibold {
+  font-weight: 600; 
+}
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+</style>

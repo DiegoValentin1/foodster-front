@@ -1,43 +1,24 @@
 <template>
   <div class="flex h-screen">
     <!-- Left Pane -->
-    <div class="hidden lg:flex w-1/2 items-center justify-center bg-fdoscuro text-fdoscuro"
-    >
+    <div class="hidden lg:flex w-1/2 items-center justify-center bg-fdoscuro text-fdoscuro">
       <!-- <div
         id="glowcircle"
         class="absolute w-[300px] h-[400px] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 rounded-[100%] fixed z-10 left-[20%] translate-x-[-40%] translate-y-[0%] blur-[100px]"
       ></div> -->
       <div class="max-w-md text-center">
-        <img
-          class="fixed left-[7%] top-[15%] logo"
-          src="../../assets/images/logorealista.png"
-          alt=""
-          srcset=""
-        />
+        <img class="fixed left-[7%] top-[15%] logo" src="../../assets/images/logorealista.png" alt="" srcset="" />
         <section class="rotate left-[7%] top-[15%]">
           <svg viewBox="0 0 100 100" class="">
-            <path
-              id="circlePath"
-              fill="none"
-              stroke-width="5"
-              stroke="none"
-              d="
+            <path id="circlePath" fill="none" stroke-width="5" stroke="none" d="
           M 10, 50
           a 40,40 0 1,1 80,0
           a 40,40 0 1,1 -80,0
-        "
-            />
-            <text
-              stroke="black"
-              stroke-width="0.45"
-              id="text"
-              font-family="monospace"
-              font-size="12.7"
-              font-weight="bolder"
-              fill="#e2e2e2"
-            >
+        " />
+            <text stroke="black" stroke-width="0.45" id="text" font-family="monospace" font-size="12.7"
+              font-weight="bolder" fill="#e2e2e2">
               <textPath id="textPath" href="#circlePath">
-                🍱 Foodster 🍚 Foodster 🥗 Foodster 
+                🍱 Foodster 🍚 Foodster 🥗 Foodster
               </textPath>
             </text>
           </svg>
@@ -59,47 +40,23 @@
         <form action="/home" method="POST" class="space-y-4">
           <!-- Your form elements go here -->
           <div>
-            <label
-              for="username"
-              class="block text-sm font-medium text-gray-700"
-              >Username</label
-            >
-            <input
-              type="text"
-              id="username"
-              name="username"
-              class="mt-1 p-2 w-full bg-gray-100 border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
-            />
+            <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+            <input type="text" id="username" name="username"
+              class="mt-1 p-2 w-full bg-gray-100 border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300" />
           </div>
           <div>
-            <label for="email" class="block text-sm font-medium text-gray-700"
-              >Email</label
-            >
-            <input
-              type="text"
-              id="email"
-              name="email"
-              class="mt-1 p-2 w-full bg-gray-100 border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
-            />
+            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+            <input type="text" id="email" name="email"
+              class="mt-1 p-2 w-full bg-gray-100 border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300" />
           </div>
           <div>
-            <label
-              for="password"
-              class="block text-sm font-medium text-gray-700"
-              >Contraseña</label
-            >
-            <input
-              type="password"
-              id="password"
-              name="password"
-              class="mt-1 p-2 w-full bg-gray-100 border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
-            />
+            <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+            <input type="password" id="password" name="password"
+              class="mt-1 p-2 w-full bg-gray-100 border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300" />
           </div>
           <div>
-            <button
-              type="submit"
-              class="w-full bg-fdoscuro text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300"
-            >
+            <button type="submit"
+              class="w-full bg-fdoscuro text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300">
               Registrate
             </button>
           </div>
@@ -140,10 +97,13 @@ const includedFeatures = [
 
 @keyframes spin {
   0% {
-    transform: rotate(0deg); /* Rotación inicial */
+    transform: rotate(0deg);
+    /* Rotación inicial */
   }
+
   100% {
-    transform: rotate(360deg); /* Rotación completa */
+    transform: rotate(360deg);
+    /* Rotación completa */
   }
 }
 </style>

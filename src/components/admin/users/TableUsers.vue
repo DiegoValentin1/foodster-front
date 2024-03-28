@@ -53,7 +53,7 @@
         </v-card>
       </v-dialog>
     </v-card-title>
-    <v-data-table :headers="headers" :items="users" :search="search">
+    <v-data-table class="mx-auto" style="height: 400px;" :headers="headers" :items="users" :search="search" >
       <template v-slot:item="{ item }">
         <tr>
           <td class="text-start">{{ item.nombres }}</td>

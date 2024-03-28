@@ -34,7 +34,7 @@
         </v-card>
       </v-dialog>
     </v-card-title>
-    <v-data-table :headers="headers" :items="desserts" :search="search">
+    <v-data-table class="mx-auto" style="height: 400px;" :headers="headers" :items="desserts" :search="search">
       <template v-slot:item="{ item }">
         <tr>
           <td class="text-start">{{ item.nombre }}</td>
@@ -78,6 +78,7 @@
 </template>
 
 <script>
+
 export default {
   data() {
     return {
