@@ -10,7 +10,7 @@ const router = new VueRouter({
 
     }, {
         path: '/admin',
-        meta: {roles: ['ADMIN']},
+        // meta: {roles: ['ADMIN']},
         name: 'admin',
         component: () => import('../components/admin/components/SidebarNavbar.vue'),
         children: [{
