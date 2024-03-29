@@ -28,6 +28,7 @@ const router = new VueRouter({
     {
       path: '/admin',
       name: 'admin',
+      meta: {roles: ['ADMIN']},
       component: () => import('../components/admin/components/SidebarNavbar.vue'),
       children: [
         {
@@ -70,6 +71,7 @@ const router = new VueRouter({
     {
       path: '/home',
       name: 'home',
+    //   meta: {roles: ['CLIENTE']},
       component: () => import('../components/cliente/components/Home.vue'),
       children: [
         {
