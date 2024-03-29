@@ -53,7 +53,7 @@
         </v-card>
       </v-dialog>
     </v-card-title>
-    <v-data-table :headers="headers" :items="users" :search="search">
+    <v-data-table class="mx-auto" style="height: 400px;" :headers="headers" :items="users" :search="search" >
       <template v-slot:item="{ item }">
         <tr>
           <td class="text-start">{{ item.nombres }}</td>
@@ -178,10 +178,11 @@ export default {
     async getUsers() {
       try {
         const response = await usersServices.getUsers();
-        if (Array.isArray(response.data)) {
-          this.users = response.data;
-        } else if (typeof response.data === 'object') {
-          this.users = [response.data];
+        console.log(response)
+        if (Array.isArray(response)) {
+          this.users = response;
+        } else if (typeof response === 'object') {
+          this.users = [response];
         } else {
           console.error('La respuesta de la API no es un array ni un objeto válido:', response);
         }
@@ -194,7 +195,6 @@ export default {
       try {
         const response = await usersServices.changeStatus(idUsuario);
         this.getUsers();
-        console.log(response.data)
       } catch (error) {
         console.log(error)
       }

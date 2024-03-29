@@ -49,7 +49,7 @@
         </v-card>
       </v-dialog>
     </v-card-title>
-    <v-data-table :headers="headers" :items="eventos" :search="search">
+    <v-data-table class="mx-auto" style="height: 400px;" :headers="headers" :items="eventos" :search="search">
       <template v-slot:item="{ item }">
         <tr>
           <td class="text-start">{{ item.idEvento }}</td>
@@ -148,10 +148,10 @@ export default {
     async getEventos() {
       try {
         const response = await eventosService.getEventos();
-        if (Array.isArray(response.data)) {
-          this.eventos = response.data;
-        } else if (typeof response.data === 'object') {
-          this.eventos = [response.data];
+        if (Array.isArray(response)) {
+          this.eventos = response;
+        } else if (typeof response === 'object') {
+          this.eventos = [response];
         } else {
 
           console.error('La respuesta de la API no es un array ni un objeto válido:', response);

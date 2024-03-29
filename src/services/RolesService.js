@@ -1,7 +1,8 @@
 import {axiosClient} from "@/utils/axios-client";
-const baseUrl = `/eventos`;
 
-const getEventos = async () => {
+let baseUrl = `/roles`;
+
+const getRoles = async () => {
     try {
         const response = await axiosClient.get(`${baseUrl}/`);
         return response.data;
@@ -12,5 +13,5 @@ const getEventos = async () => {
 
 
 export default {
-   getEventos
+   getRoles,
 }

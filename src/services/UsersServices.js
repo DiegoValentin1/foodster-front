@@ -1,10 +1,10 @@
-import axios from 'axios';
+import {axiosClient} from "@/utils/axios-client";
 
-let API_URL = 'http://localhost:8080/foodster-api';
+let baseUrl = `/usuarios`;
 
 const getUsers = async () => {
     try {
-        const response = await axios.get(API_URL + "/usuarios/");
+        const response = await axiosClient.get(`${baseUrl}/`);
         return response.data;
     } catch (error) {
         console.log(error);
@@ -13,7 +13,7 @@ const getUsers = async () => {
 
 const changeStatus = async (idUsuario) => {
     try {
-        const response = await axios.delete(`${API_URL}/usuarios/${idUsuario}`);
+        const response = await axiosClient.delete(`${baseUrl}/${idUsuario}`)
         if (response) {
             return response.data;
         } else {
@@ -27,7 +27,7 @@ const changeStatus = async (idUsuario) => {
 
 const insert = async (usuario) => {
     try {
-      const response = await axios.post(`${API_URL}/usuarios/`, usuario);
+      const response = await axiosClient.post(`${baseUrl}/`, usuario);
       if (response) {
         return response.data;
       } else {
@@ -42,7 +42,7 @@ const insert = async (usuario) => {
 
 const update = async (usuario) => {
     try {
-        const response = await axios.put(`${API_URL}/usuarios/`, usuario);
+        const response = await axiosClient.put(`${baseUrl}/`, usuario);
         if (response) {
             return response.data;
         } else {
