@@ -18,22 +18,31 @@
             <v-container>
               <v-row>
                 <v-col cols="12" sm="6" md="4">
-                  <v-text-field v-model="nuevoUsuario.nombre" label="Nombre"></v-text-field>
+                  <v-text-field v-model="nuevoUsuario.nombres" label="Nombre"></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
-                  <v-text-field v-model="nuevoUsuario.apellidos" label="Apellidos"></v-text-field>
+                  <v-text-field v-model="nuevoUsuario.primerApellido" label="Primer Apellido"></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
-                  <v-text-field v-model="nuevoUsuario.cargo" label="Cargo"></v-text-field>
+                  <v-text-field v-model="nuevoUsuario.segundoApellido" label="Segundo Apellido"></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="6" md="4">
+                  <v-text-field v-model="nuevoUsuario.telefono" label="Telefono"></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
                   <v-text-field v-model="nuevoUsuario.correo" :rules="emailRules" label="Correo"
                     required></v-text-field>
                 </v-col>
-
                 <v-col cols="12" sm="6" md="4">
-                  <v-text-field v-model="nuevoUsuario.numero" label="Numero"></v-text-field>
+                  <v-text-field v-model="nuevoUsuario.contrasena" label="Contraseña" required></v-text-field>
                 </v-col>
+                <v-col cols="12" sm="6" md="4">
+                  <v-text-field label="Confirmar contraseña"></v-text-field>
+                </v-col>
+                <v-select label="Cargo" v-model="nuevoUsuario.categoria.idCategoria" :items="categoriasPersonal"
+                  item-text="nombre" item-value="idCategoria">
+                </v-select>
+
               </v-row>
             </v-container>
           </v-card-text>
@@ -54,21 +63,21 @@
           <td class="text-start">{{ item.usuarios.segundoApellido }}</td>
           <td class="text-start">{{ item.usuarios.telefono }}</td>
           <td class="text-start">{{ item.usuarios.correo }}</td>
-          <td class="text-start">{{ item.usuarios.roles[0] }}</td>
+          <td class="text-start">{{ item.usuarios.roles[0]?.nombre }}</td>
           <td class="text-start">{{ item.categoria.nombre }}</td>
           <td class="text-start">{{ item.ultimaModificacion }}</td>
           <td class="text-start">
-            <v-chip :color="item.estado === 'Activo' ? 'green' : 'red'" outlined small>{{ item.active }}</v-chip>
+            <v-chip @click="changeStatus(item.idPersonal)" :color="item.active === true ? 'green' : 'red'" outlined
+              small>{{ item.active === true ? 'Activo' :
+        "Inactivo" }}</v-chip>
           </td>
-
           <td class="text-center">
             <v-icon color="blue" @click="editItem(item)">mdi-pencil</v-icon>
-            <v-icon color="red" @click="deleteItem(item)">mdi-delete</v-icon>
+            <v-icon color="red" @click="deleteItem(item.idPersonal)">mdi-delete</v-icon>
           </td>
         </tr>
       </template>
     </v-data-table>
-
     <v-dialog v-model="editDialog" max-width="500px">
       <v-card>
         <v-card-title>
@@ -78,20 +87,25 @@
           <v-container>
             <v-row>
               <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="editedItem.nombre" label="Nombre"></v-text-field>
+                <v-text-field v-model="editedItem.usuarios.nombres" label="Nombre"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="editedItem.apellidos" label="Apellidos"></v-text-field>
+                <v-text-field v-model="editedItem.usuarios.primerApellido" label="Primer Apellido"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="editedItem.cargo" label="Cargo"></v-text-field>
+                <v-text-field v-model="editedItem.usuarios.segundoApellido" label="Segundo Apellido"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="editedItem.correo" label="Correo"></v-text-field>
+                <v-text-field v-model="editedItem.usuarios.telefono" label="Telefono"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="editedItem.numero" label="Numero"></v-text-field>
+                <v-text-field v-model="editedItem.usuarios.correo" :rules="emailRules" label="Correo"
+                  required></v-text-field>
               </v-col>
+              <v-select label="Cargo" v-model="editedItem.categoria.idCategoria" :items="categoriasPersonal"
+                item-text="nombre" item-value="idCategoria">
+              </v-select>
+
             </v-row>
           </v-container>
         </v-card-text>
@@ -107,26 +121,49 @@
 
 <script>
 import personalServices from '../../../services/PersonalServices'
+import categoriasPersonal from '../../../services/CategoriasPersonal';
 export default {
   data() {
     return {
       personal: [],
+      categoriasPersonal: [],
       search: '',
       dialog: false,
       editDialog: false,
       valid: false,
       nuevoUsuario: {
-        nombre: '',
-        apellidos: '',
-        cargo: '',
-        numero: '',
-        status: ''
+        nombres: '',
+        primerApellido: '',
+        segundoApellido: '',
+        telefono: '',
+        correo: '',
+        contrasena: '',
+        idRol: "3ab228ec-a90d-496c-811b-d404347f1d24",
+        categoria: {
+          idCategoria: ''
+        },
       },
       editedItem: {
-        nombre: '',
-        apellidos: '',
-        cargo: '',
-        numero: ''
+        idPersonal: "",
+        usuarios: {
+          idUsuario: "",
+          nombres: "",
+          primerApellido: "",
+          segundoApellido: "",
+          telefono: "",
+          correo: "",
+          contrasena: "",
+          active: '',
+          roles: [
+            {
+              idRol: "",
+            }
+          ]
+        },
+        categoria: {
+          idCategoria: "",
+        },
+        active: ''
       },
       headers: [
         { text: '#', align: 'start', sortable: true, value: 'idPersonal' },
@@ -139,7 +176,7 @@ export default {
         { text: 'Cargo', align: 'start', sortable: false, value: 'cargo' },
         { text: 'Ultima Modificación', align: 'start', sortable: false, value: 'ultimaModificacion' },
         { text: 'Estado', align: 'start', sortable: false, value: 'estado' },
-        
+
         { text: 'Acciones', align: 'center', sortable: false, value: 'acciones' },
       ],
 
@@ -156,21 +193,30 @@ export default {
   },
   mounted() {
     this.getPersonal();
+    this.getCategoriasPersonal();
   },
   methods: {
+    async getCategoriasPersonal() {
+      try {
+        const response = await categoriasPersonal.getCategoriasPersonalByStatus(true);
+        console.log(response)
+        this.categoriasPersonal = response;
+      } catch (error) {
+        console.log(error)
+      }
+    },
     async getPersonal() {
       try {
         const response = await personalServices.getPersonal();
+        console.log(response)
         this.personal = response;
       } catch (error) {
         console.error(error);
       }
     },
-
     editItem(item) {
-      // Copiar los datos de la persona a editar
+      console.log(item)
       this.editedItem = { ...item };
-      // Abrir el modal de edición
       this.editDialog = true;
     },
     cancelEdit() {
@@ -178,32 +224,94 @@ export default {
       this.editDialog = false;
       // Restablecer los datos de la persona en edición
       this.editedItem = {
-       
+        idPersonal: "",
+        usuarios: {
+          idUsuario: "",
+          nombres: "",
+          primerApellido: "",
+          segundoApellido: "",
+          telefono: "",
+          correo: "",
+          contrasena: "",
+          active: '',
+          roles: [
+            {
+              idRol: "",
+            }
+          ]
+        },
+        categoria: {
+          idCategoria: "",
+        },
+        active: ''
       };
     },
     saveEdit() {
-      // Aquí implementarías la lógica para guardar los cambios de la persona editada
       console.log("Persona editada:", this.editedItem);
-      // Cerrar el modal de edición
-      this.editDialog = false;
-      // Limpiar los datos de la persona editada
-      this.editedItem = {
-       
-      };
+      try {
+        const response = personalServices.update(this.editedItem);
+      } catch (error) {
+        console.log(error)
+      } finally {
+        this.editDialog = false;
+        this.editedItem = {
+          idPersonal: "",
+          usuarios: {
+            idUsuario: "",
+            nombres: "",
+            primerApellido: "",
+            segundoApellido: "",
+            telefono: "",
+            correo: "",
+            contrasena: "",
+            active: '',
+            roles: [
+              {
+                idRol: "",
+              }
+            ]
+          },
+          categoria: {
+            idCategoria: "",
+          },
+          active: ''
+        };
+      }
+
     },
-    addPersonal() {
-      console.log("METHOD ADD PERSONAL")
+    deleteItem(idPersonal) {
+      const res = personalServices.delete_(idPersonal);
     },
-    deleteItem(item) {
-      // Cambiar el estado de la persona de activo a inactivo o viceversa
-      item.status = item.status === 'Activo' ? 'Inactivo' : 'Activo';
+    changeStatus(idPersonal) {
+      const res = personalServices.changeStatus(idPersonal);
     },
     closeModalAddPersonal() {
       this.dialog = false;
-      // Limpiar el formulario al cerrar el modal
+    },
+    resetNuevoPersona() {
+      this.nuevoUsuario = {
+        nombres: '',
+        primerApellido: '',
+        segundoApellido: '',
+        telefono: '',
+        correo: '',
+        contrasena: '',
+        idRol: "3ab228ec-a90d-496c-811b-d404347f1d24",
+        categoria: {
+          idCategoria: ''
+        },
+      }
     },
     async addPersonal() {
-      console.log("METHOD ADD PERSONAL")
+      try {
+        const res = personalServices.insert(this.nuevoUsuario);
+      } catch (error) {
+        console.log(error)
+      } finally {
+        this.resetNuevoPersona();
+        this.closeModalAddPersonal();
+        this.getPersonal()
+      }
     }
 
 
