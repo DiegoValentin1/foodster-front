@@ -49,16 +49,16 @@
       <template v-slot:item="{ item }">
         <tr>
           <td class="text-start">{{ item.idPersonal }}</td>
-          <td class="text-start">{{ item.nombres }}</td>
-          <td class="text-start">{{ item.pApellodo }}</td>
-          <td class="text-start">{{ item.sApellido }}</td>
-          <td class="text-start">{{ item.telefono }}</td>
-          <td class="text-start">{{ item.correo }}</td>
-          <td class="text-start">{{ item.rol }}</td>
-          <td class="text-start">{{ item.categoria }}</td>
+          <td class="text-start">{{ item.usuarios.nombres }}</td>
+          <td class="text-start">{{ item.usuarios.primerApellido }}</td>
+          <td class="text-start">{{ item.usuarios.segundoApellido }}</td>
+          <td class="text-start">{{ item.usuarios.telefono }}</td>
+          <td class="text-start">{{ item.usuarios.correo }}</td>
+          <td class="text-start">{{ item.usuarios.roles[0] }}</td>
+          <td class="text-start">{{ item.categoria.nombre }}</td>
           <td class="text-start">{{ item.ultimaModificacion }}</td>
           <td class="text-start">
-            <v-chip :color="item.estado === 'Activo' ? 'green' : 'red'" outlined small>{{ item.estado }}</v-chip>
+            <v-chip :color="item.estado === 'Activo' ? 'green' : 'red'" outlined small>{{ item.active }}</v-chip>
           </td>
 
           <td class="text-center">
@@ -161,36 +161,7 @@ export default {
     async getPersonal() {
       try {
         const response = await personalServices.getPersonal();
-        if (Array.isArray(response.data)) {
-          this.personal = response.data.map(persona => ({
-            idPersonal: persona.idPersonal,
-            nombres: persona.usuarios.nombres,
-            pApellodo: persona.usuarios.primerApellido,
-            sApellido: persona.usuarios.segundoApellido,
-            apellidos: `${persona.usuarios.primerApellido} ${persona.usuarios.segundoApellido}`,
-            telefono: persona.usuarios.telefono,
-            correo: persona.usuarios.correo,
-            rol: persona.usuarios.roles.length > 0 ? persona.usuarios.roles[0].nombre : '',
-            categoria: persona.categoria.nombre,
-            ultimaModificacion: persona.ultimaModificacion,
-            estado: persona.active ? 'Activo' : 'Inactivo'
-          }));
-        } else if (typeof response.data === 'object') {
-          const persona = response.data;
-          this.personal = [{
-            idPersonal: persona.idPersonal,
-            nombre: persona.usuarios.nombres,
-            apellidos: `${persona.usuarios.primerApellido} ${persona.usuarios.segundoApellido}`,
-            telefono: persona.usuarios.telefono,
-            correo: persona.usuarios.correo,
-            rol: persona.usuarios.roles.length > 0 ? persona.usuarios.roles[0].nombre : '',
-            categoria: persona.categoria.nombre,
-            ultimaModificacion: persona.ultimaModificacion,
-            estado: persona.active ? 'Activo' : 'Inactivo'
-          }];
-        } else {
-          console.error('La respuesta de la API no es un array ni un objeto válido:', response);
-        }
+        this.personal = response;
       } catch (error) {
         console.error(error);
       }
