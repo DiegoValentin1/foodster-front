@@ -16,7 +16,7 @@
         </v-tab>
         <!-- Icono de carrito de compras -->
         <v-spacer></v-spacer>
-        <v-tab icon @click="showCart = !showCart">
+        <v-tab icon to="/home/carrito/">
           <v-icon>mdi-cart</v-icon>
         </v-tab>
       </v-tabs>
