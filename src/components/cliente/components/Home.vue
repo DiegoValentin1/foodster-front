@@ -14,9 +14,12 @@
         <v-tab to="/home/utencilios">
           Utencilios
         </v-tab>
-        
-       </v-tabs>
-       
+        <!-- Icono de carrito de compras -->
+        <v-spacer></v-spacer>
+        <v-tab icon @click="showCart = !showCart">
+          <v-icon>mdi-cart</v-icon>
+        </v-tab>
+      </v-tabs>
     </header>
 
     <!-- Renderizar el componente correspondiente a la ruta activa -->
