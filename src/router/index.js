@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../components/public/Login.vue'
-import Profile from '../components/cliente/components/Profile.vue';
 import {useAuthStore} from "@/stores";
 
 Vue.use(VueRouter)
@@ -52,10 +51,19 @@ const router = new VueRouter({
             name: 'utencilios',
             component: () => import('../components/public/error/ErrorPage.vue')
         }, {
-            path: '/profile', name: 'profile', component: Profile
+            path: '/profile/',
+            name: 'profile',
+            component: () => import('../components/cliente/components/Profile.vue')
         }, {
-            path: '/home/pedido', name: 'pedido', component: () => import('../components/cliente/Pedido.vue')
-        }]
+             path: '/home/pedido', name: 'pedido', component: () => import('../components/cliente/Pedido.vue')
+        }, {
+            path:'/home/carrito', name: 'carrito', component: () => import('../components/cliente/components/ShoppingCart.vue')
+        }
+    ],
+    }, {
+        path: '/404', name: '404', component: () => import('../components/public/error/ErrorPage.vue')
+    }, {
+        path: '*', redirect: '/404'
     }]
 })
 
