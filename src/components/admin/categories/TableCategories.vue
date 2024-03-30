@@ -163,7 +163,7 @@
       <v-tab-item>
         <v-card>
           <v-card-title>
-            Categoría Servicios
+            Categoría Servicio
             <v-divider class="mx-4" inset vertical></v-divider>
             <v-spacer></v-spacer>
             <v-text-field
@@ -182,12 +182,14 @@
                   class="mb-2"
                   v-bind="attrs"
                   v-on="on"
-                  >Nuevo Servicio</v-btn
+                  >Nuevo servicio</v-btn
                 >
               </template>
               <v-card>
                 <v-card-title>
-                  <span class="text-h5">Agregar nuevo servicio</span>
+                  <span class="text-h5"
+                    >Agregar nueva categoría de servicio</span
+                  >
                 </v-card-title>
                 <v-card-text>
                   <v-container>
@@ -216,10 +218,13 @@
                   <v-btn
                     color="blue darken-1"
                     text
-                    @click="cerrarModalAgregarServicio"
+                    @click="cerrarModalAgregarCategoriaServicio"
                     >Cancelar</v-btn
                   >
-                  <v-btn color="blue darken-1" text @click="agregarServicio"
+                  <v-btn
+                    color="blue darken-1"
+                    text
+                    @click="agregarCategoriaServicio"
                     >Guardar</v-btn
                   >
                 </v-card-actions>
@@ -241,10 +246,66 @@
                 </td>
                 <td class="text-start">{{ item.ultimaModificacion }}</td>
                 <td class="text-center">
-                  <v-icon color="blue" @click="editItemServicio(item)"
-                    >mdi-pencil</v-icon
+                  <v-dialog
+                    v-model="dialogosEditarServicio[item.idCategoria]"
+                    max-width="500px"
                   >
-                  <v-icon color="red" @click="deleteItemServicio(item)"
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-icon
+                        color="blue"
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="openEditServicioDialog(item.idCategoria)"
+                        >mdi-pencil</v-icon
+                      >
+                    </template>
+                    <v-card>
+                      <v-card-title>
+                        Editar categoría de servicio
+                      </v-card-title>
+                      <v-card-text>
+                        <v-container>
+                          <v-row>
+                            <v-col cols="12" sm="6" md="4">
+                              <v-text-field
+                                v-model="item.nombre"
+                                label="Nombre"
+                              ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6" md="4">
+                              <v-select
+                                v-model="item.active"
+                                :items="[
+                                  { text: 'Activo', value: true },
+                                  { text: 'Inactivo', value: false },
+                                ]"
+                                label="Estado"
+                              ></v-select>
+                            </v-col>
+                          </v-row>
+                        </v-container>
+                      </v-card-text>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                          color="blue darken-1"
+                          text
+                          @click="cancelEditItemServicio(item)"
+                          >Cerrar</v-btn
+                        >
+
+                        <v-btn
+                          color="blue darken-1"
+                          text
+                          @click="editItemServicio(item)"
+                          >Guardar</v-btn
+                        >
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                  <v-icon
+                    color="red"
+                    @click="deleteItemServicio(item.idCategoria)"
                     >mdi-delete</v-icon
                   >
                 </td>
@@ -263,6 +324,12 @@ import {
   actualizarCategoriaPersonal,
   crearCategoriaPersonal,
   eliminarCategoriaPersonal,
+  getCategoriasServicios,
+  actualizarCategoriaServicio,
+  crearCategoriaServicio,
+  getCategoriasServiciosPorEstado,
+  eliminarCategoriaServicio,
+  eliminarCategoriaServicioPorEstado,
 } from "../../../services/CategoryServices.js";
 
 export default {
@@ -271,7 +338,9 @@ export default {
       tab: null,
       searchPersonal: "",
       dialogPersonal: false,
+      dialogServicios: false,
       dialogosEditar: {},
+      dialogosEditarServicio: {},
       nuevaCategoriaPersonal: {
         nombre: "",
         active: true, // Por defecto, nueva categoría activa
@@ -329,11 +398,25 @@ export default {
         console.error(error);
       }
     },
+    async getCategoriasServicios() {
+      try {
+        const response = await getCategoriasServicios();
+        if (response) {
+          this.categoriasServicios = response;
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
     cancelEditItemPersonal(item) {
       // Close the edit dialog without saving
       this.dialogosEditar[item.idCategoria] = false;
     },
-
+    cancelEditItemServicio(item) {
+      // Close the edit dialog without saving
+      this.dialogosEditarServicio[item.idCategoria] = false;
+    },
     async editItemPersonal(item) {
       try {
         // Set the edit dialog state for this row to true
@@ -363,6 +446,35 @@ export default {
         console.error("Error al editar categoría personal:", error);
       }
     },
+    async editItemServicio(item) {
+      try {
+        // Set the edit dialog state for this row to true
+        this.$set(this.dialogosEditar, item.idCategoria, true);
+        console.log("Editando categoría de servicio:", item);
+
+        // Find the index of the object in categoriasServicios and update it
+        const index = this.categoriasServicios.findIndex(
+          (category) => category.idCategoria === item.idCategoria
+        );
+        if (index !== -1) {
+          // Update the object in the categoriasServicios list
+          this.categoriasServicios[index].nombre = item.nombre;
+          this.categoriasServicios[index].active = item.active;
+
+          // Call the service to update the category
+          await actualizarCategoriaServicio(item);
+        }
+
+        // Print the modified data to the console
+        console.log("Nombre modificado:", item.nombre);
+        console.log("Estado modificado:", item.active);
+
+        // Close the edit dialog after saving
+        this.dialogosEditarServicio[item.idCategoria] = false;
+      } catch (error) {
+        console.error("Error al editar categoría de servicio:", error);
+      }
+    },
 
     async deleteItemPersonal(item) {
       try {
@@ -380,6 +492,22 @@ export default {
         console.error("Error al eliminar categoría personal:", error);
       }
     },
+    async deleteItemServicio(item) {
+      try {
+        // Call the service to delete the category
+        console.log("Eliminando categoría de servicio:", item);
+        await eliminarCategoriaServicio(item);
+        // Remove the deleted category from the list
+        const index = this.categoriasServicios.findIndex(
+          (category) => category.uid === item.uid
+        );
+        if (index !== -1) {
+          this.categoriasServicios.splice(index, 1);
+        }
+      } catch (error) {
+        console.error("Error al eliminar categoría de servicio:", error);
+      }
+    },
     cerrarModalAgregarCategoriaPersonal() {
       this.dialogPersonal = false;
       // Limpiar el formulario al cerrar el modal
@@ -388,17 +516,22 @@ export default {
         active: true, // Por defecto, nueva categoría activa
       };
     },
+    cerrarModalAgregarCategoriaServicio() {
+      this.dialogServicios = false;
+      // Limpiar el formulario al cerrar el modal
+      this.nuevoServicio = {
+        nombre: "",
+        active: true, // Por defecto, nuevo servicio activo
+      };
+    },
     async agregarCategoriaPersonal() {
       try {
-        // Llamada al servicio para crear una nueva categoría personal
         const nuevaCategoria = await crearCategoriaPersonal(
           this.nuevaCategoriaPersonal
         );
-
-        // Verificar si la categoría se creó exitosamente
         if (nuevaCategoria) {
-          // Agregar la nueva categoría a la lista de categorías personales
-          this.categoriasPersonal.push(nuevaCategoria);
+          this.getCategoriasPersonales();
+          this.getCategoriasServicios();
 
           // Cerrar el modal
           this.dialogPersonal = false;
@@ -413,21 +546,29 @@ export default {
         console.error("Error al agregar categoría personal:", error);
       }
     },
-    editItemServicio(item) {
-      console.log("Edit Servicio");
+    async agregarCategoriaServicio() {
+      try {
+        const nuevoServicio = await crearCategoriaServicio(this.nuevoServicio);
+        if (nuevoServicio) {
+          this.getCategoriasPersonales();
+          this.getCategoriasServicios();
+          this.dialogServicios = false;
+          this.nuevoServicio = {
+            nombre: "",
+            active: true, // Por defecto, nuevo servicio activo
+          };
+        }
+      } catch (error) {
+        console.error("Error al agregar categoría de servicio:", error);
+      }
+    },
+    openEditDialog(idCategoria) {
+      this.$set(this.dialogosEditar, idCategoria, true);
+    },
+    openEditServicioDialog(idCategoria) {
+      this.$set(this.dialogosEditarServicio, idCategoria, true);
     },
     cerrarModalAgregarServicio() {
-      this.dialogServicios = false;
-      // Limpiar el formulario al cerrar el modal
-      this.nuevoServicio = {
-        nombre: "",
-        active: true, // Por defecto, nuevo servicio activo
-      };
-    },
-    agregarServicio() {
-      // Lógica para agregar el nuevo servicio
-      console.log("Nuevo servicio guardado:", this.nuevoServicio);
-      // Cerrar el modal
       this.dialogServicios = false;
       // Limpiar el formulario al cerrar el modal
       this.nuevoServicio = {
@@ -438,6 +579,7 @@ export default {
   },
   mounted() {
     this.getCategoriasPersonales();
+    this.getCategoriasServicios();
   },
 };
 </script>
