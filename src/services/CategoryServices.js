@@ -1,55 +1,53 @@
 import { axiosClient } from "@/utils/axios-client";
 
-const baseUrl = `http://localhost:8080/foodster-api`; // Ruta base de la API
-
 const getCategoriasPersonales = async () => {
     try {
         const response = await axiosClient.get(`/categorias-personal/`);
-        console.log("Categorias personales:", response.data);
         return response.data;
     } catch (error) {
-        console.error("Error al obtener categorías personales:", error);
-        throw error; // Propaga el error para que pueda ser manejado en el nivel superior
+        throw error;
     }
 }
 
-const actualizarCategoriaPersonal = async (categoriaPersonal) => {
+const actualizarCategoriaPersonal = async (item) => {
     try {
-        const response = await axiosClient.put(`${baseUrl}/categorias-personal`, categoriaPersonal);
+        const response = await axiosClient.put(`/categorias-personal/`, item);
         return response.data;
     } catch (error) {
         console.error("Error al actualizar categoría personal:", error);
-        throw error; // Propaga el error para que pueda ser manejado en el nivel superior
+        throw error;
     }
 }
 
 const crearCategoriaPersonal = async (categoriaPersonal) => {
+    console.log("Categoria Personal holaaaaa");
     try {
-        const response = await axiosClient.post(`${baseUrl}/categorias-personal`, categoriaPersonal);
+        const response = await axiosClient.post(`/categorias-personal/`, categoriaPersonal);
         return response.data;
     } catch (error) {
         console.error("Error al crear categoría personal:", error);
-        throw error; // Propaga el error para que pueda ser manejado en el nivel superior
+        throw error;
     }
 }
 
 const getCategoriasPersonalesPorEstado = async (status) => {
     try {
-        const response = await axiosClient.get(`${baseUrl}/categorias-personal/status/${status}`);
+        const response = await axiosClient.get(`/categorias-personal/status/${status}`);
         return response.data;
     } catch (error) {
         console.error("Error al obtener categorías personales por estado:", error);
-        throw error; // Propaga el error para que pueda ser manejado en el nivel superior
+        throw error;
     }
 }
 
 const eliminarCategoriaPersonal = async (uid) => {
+    console.log("-----uid", uid)
     try {
-        const response = await axiosClient.delete(`${baseUrl}/categorias-personal/${uid}`);
+        const response = await axiosClient.delete(`/categorias-personal/${uid}`);
         return response.data;
     } catch (error) {
         console.error("Error al eliminar categoría personal:", error);
-        throw error; // Propaga el error para que pueda ser manejado en el nivel superior
+        throw error;
     }
 }
 
