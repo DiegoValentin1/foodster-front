@@ -49,7 +49,8 @@
         </v-card>
       </v-dialog>
     </v-card-title>
-    <v-data-table class="mx-auto" style="height: 400px;" :headers="headers" :items="eventos" :search="search">
+    <v-data-table class="mx-auto" style="height: 400px;" :headers="headers" :items="eventos" :search="search" loading:false
+      loading-text="Cargando... Espere un momento">
       <template v-slot:item="{ item }">
         <tr>
           <td class="text-start">{{ item.idEvento }}</td>

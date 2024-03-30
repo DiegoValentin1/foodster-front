@@ -178,14 +178,7 @@ export default {
     async getUsers() {
       try {
         const response = await usersServices.getUsers();
-        console.log(response)
-        if (Array.isArray(response)) {
-          this.users = response;
-        } else if (typeof response === 'object') {
-          this.users = [response];
-        } else {
-          console.error('La respuesta de la API no es un array ni un objeto válido:', response);
-        }
+        this.users = response;
       } catch (error) {
         console.log(error)
       }

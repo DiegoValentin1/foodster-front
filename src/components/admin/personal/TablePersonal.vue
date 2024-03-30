@@ -49,16 +49,18 @@
       <template v-slot:item="{ item }">
         <tr>
           <td class="text-start">{{ item.idPersonal }}</td>
-          <td class="text-start">{{ item.nombres }}</td>
-          <td class="text-start">{{ item.pApellodo }}</td>
-          <td class="text-start">{{ item.sApellido }}</td>
-          <td class="text-start">{{ item.telefono }}</td>
-          <td class="text-start">{{ item.correo }}</td>
-          <td class="text-start">{{ item.rol }}</td>
-          <td class="text-start">{{ item.categoria }}</td>
+          <td class="text-start">{{ item.usuarios.nombres }}</td>
+          <td class="text-start">{{ item.usuarios.primerApellido }}</td>
+          <td class="text-start">{{ item.usuarios.segundoApellido }}</td>
+          <td class="text-start">{{ item.usuarios.telefono }}</td>
+          <td class="text-start">{{ item.usuarios.correo }}</td>
+          <td class="text-start">{{ item.usuarios.roles.nombre }}</td>
+          <td class="text-start">{{ item.categoria.nombre }}</td>
           <td class="text-start">{{ item.ultimaModificacion }}</td>
           <td class="text-start">
-            <v-chip :color="item.estado === 'Activo' ? 'green' : 'red'" outlined small>{{ item.estado }}</v-chip>
+            <v-chip :color="item.active ? 'green' : 'red'" outlined small>
+              {{ item.active ? 'Activo' : 'Inactivo' }}
+            </v-chip>
           </td>
 
           <td class="text-center">
@@ -72,29 +74,34 @@
     <v-dialog v-model="editDialog" max-width="500px">
       <v-card>
         <v-card-title>
-          <span class="text-h5">Editar persona</span>
+          <span class="text-h5">Editar Personal</span>
         </v-card-title>
+        <v-divider></v-divider>
         <v-card-text>
           <v-container>
             <v-row>
               <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="editedItem.nombre" label="Nombre"></v-text-field>
+                <v-text-field v-model="perosnalEditado.nombre" label="Nombre"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="editedItem.apellidos" label="Apellidos"></v-text-field>
+                <v-text-field v-model="perosnalEditado.apellidos" label="Primer Apellido"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="editedItem.cargo" label="Cargo"></v-text-field>
+                <v-text-field v-model="perosnalEditado.apellidos" label="Segundo Apellido"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="editedItem.correo" label="Correo"></v-text-field>
+                <v-text-field v-model="perosnalEditado.cargo" label="Telefono" type="number"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="editedItem.numero" label="Numero"></v-text-field>
+                <v-text-field v-model="perosnalEditado.correo" label="Correo"></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="4">
+                <v-text-field v-model="perosnalEditado.numero" label="Cargo"></v-text-field>
               </v-col>
             </v-row>
           </v-container>
         </v-card-text>
+        <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="cancelEdit">Cancelar</v-btn>
@@ -122,7 +129,7 @@ export default {
         numero: '',
         status: ''
       },
-      editedItem: {
+      perosnalEditado: {
         nombre: '',
         apellidos: '',
         cargo: '',
@@ -139,7 +146,7 @@ export default {
         { text: 'Cargo', align: 'start', sortable: false, value: 'cargo' },
         { text: 'Ultima Modificación', align: 'start', sortable: false, value: 'ultimaModificacion' },
         { text: 'Estado', align: 'start', sortable: false, value: 'estado' },
-        
+
         { text: 'Acciones', align: 'center', sortable: false, value: 'acciones' },
       ],
 
@@ -161,36 +168,7 @@ export default {
     async getPersonal() {
       try {
         const response = await personalServices.getPersonal();
-        if (Array.isArray(response.data)) {
-          this.personal = response.data.map(persona => ({
-            idPersonal: persona.idPersonal,
-            nombres: persona.usuarios.nombres,
-            pApellodo: persona.usuarios.primerApellido,
-            sApellido: persona.usuarios.segundoApellido,
-            apellidos: `${persona.usuarios.primerApellido} ${persona.usuarios.segundoApellido}`,
-            telefono: persona.usuarios.telefono,
-            correo: persona.usuarios.correo,
-            rol: persona.usuarios.roles.length > 0 ? persona.usuarios.roles[0].nombre : '',
-            categoria: persona.categoria.nombre,
-            ultimaModificacion: persona.ultimaModificacion,
-            estado: persona.active ? 'Activo' : 'Inactivo'
-          }));
-        } else if (typeof response.data === 'object') {
-          const persona = response.data;
-          this.personal = [{
-            idPersonal: persona.idPersonal,
-            nombre: persona.usuarios.nombres,
-            apellidos: `${persona.usuarios.primerApellido} ${persona.usuarios.segundoApellido}`,
-            telefono: persona.usuarios.telefono,
-            correo: persona.usuarios.correo,
-            rol: persona.usuarios.roles.length > 0 ? persona.usuarios.roles[0].nombre : '',
-            categoria: persona.categoria.nombre,
-            ultimaModificacion: persona.ultimaModificacion,
-            estado: persona.active ? 'Activo' : 'Inactivo'
-          }];
-        } else {
-          console.error('La respuesta de la API no es un array ni un objeto válido:', response);
-        }
+        this.personal = response;
       } catch (error) {
         console.error(error);
       }
@@ -207,7 +185,7 @@ export default {
       this.editDialog = false;
       // Restablecer los datos de la persona en edición
       this.editedItem = {
-       
+
       };
     },
     saveEdit() {
@@ -217,7 +195,7 @@ export default {
       this.editDialog = false;
       // Limpiar los datos de la persona editada
       this.editedItem = {
-       
+
       };
     },
     addPersonal() {
