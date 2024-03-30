@@ -41,7 +41,16 @@
             </svg>
             <span class="mt-2">Banquetes</span>
           </a>
-
+          <a href="/admin/categorias"
+          class="text-indigo-100 hover:bg-gray-800 hover:text-white group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium">
+            <!-- Heroicon name: outline/collection -->
+            <svg class="text-indigo-300 group-hover:text-white h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
+                 viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+            </svg>
+            <span class="mt-2">Categorias</span>
+          </a>
           <a href="/admin/descuentos"
              class="bg-gray-800 text-white group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium"
              aria-current="page">
@@ -95,7 +104,16 @@
             </svg> -->
             <span class="mt-2">Roles</span>
           </a>
-
+          <a href="/admin/servicios"
+             class="text-indigo-100 hover:bg-gray-800 hover:text-white group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium">
+            <!-- Heroicon name: outline/collection -->
+            <svg class="text-indigo-300 group-hover:text-white h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
+                 viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+            </svg>
+            <span class="mt-2">Servicios</span>
+          </a>
           <a href="#"
              class="text-indigo-100 hover:bg-gray-800 hover:text-white group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium">
             <!-- Heroicon name: outline/cog -->

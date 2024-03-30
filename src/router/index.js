@@ -35,7 +35,19 @@ const router = new VueRouter({
             component: () => import('../components/admin/eventos/TableEventos.vue')
         }, {
             path: '/admin/roles', name: 'roles', component: () => import('../components/admin/roles/TableRoles.vue')
-        }]
+        },{
+             path:'/admin/servicios',
+             name:'servicios',
+             component:()=>import('../components/admin/services/TableServices.vue')
+        },
+        {
+            path:'/admin/categorias',
+            name:'categorias',
+            component:()=>import('../components/admin/categories/TableCategories.vue')
+        }
+
+    
+    ]
     }, {
         path: '/home',
         // meta: {roles: ['CLIENTE']},
