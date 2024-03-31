@@ -80,7 +80,7 @@
           </v-card-title>
           <v-data-table
             class="mx-auto"
-            style="height: 400px"
+            style="height: auto; max-height: 500px; overflow-y: auto;"
             :headers="headersPersonal"
             :items="categoriasPersonal"
             :search="searchPersonal"
@@ -235,7 +235,7 @@
           </v-card-title>
           <v-data-table
             class="mx-auto"
-            style="height: 400px"
+            style="height: auto; max-height: 500px; overflow-y: auto;"
             :headers="headersServicios"
             :items="categoriasServicios"
             :search="searchServicios"

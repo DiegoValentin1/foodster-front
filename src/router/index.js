@@ -44,8 +44,12 @@ const router = new VueRouter({
             path:'/admin/categorias',
             name:'categorias',
             component:()=>import('../components/admin/categories/TableCategories.vue')
+        },
+        {
+            path:'/admin/paquete',
+            name:'package',
+            component:()=>import('../components/admin/paquete/TablePackages.vue')
         }
-
     
     ]
     }, {

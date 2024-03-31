@@ -114,7 +114,7 @@
           </v-card-title>
           <v-data-table
             class="mx-auto"
-            style="height: 400px"
+            style="height: auto; max-height: 500px; overflow-y: auto"
             :headers="headersServicios"
             :items="servicios"
             :search="searchServicios"
@@ -137,7 +137,18 @@
                 <td class="text-start">
                   {{ item.active ? "Activo" : "Inactivo" }}
                 </td>
-                <td class="text-start">{{ new Date(item.ultimaModificacion).toLocaleString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }) }}</td>
+                <td class="text-start">
+                  {{
+                    new Date(item.ultimaModificacion).toLocaleString("es-ES", {
+                      year: "numeric",
+                      month: "2-digit",
+                      day: "2-digit",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      second: "2-digit",
+                    })
+                  }}
+                </td>
                 <td class="text-center">
                   <v-dialog
                     v-model="dialogosEditarServicio[item.idServicio]"
@@ -330,16 +341,27 @@
           </v-card-title>
           <v-data-table
             class="mx-auto"
-            style="height: 400px"
+            style="height: auto; max-height: 500px; overflow-y: auto"
             :headers="headersPaquete"
             :items="servicioPaquete"
             :search="searchServicios"
           >
             <template v-slot:item="{ item }">
               <tr>
-              <td class="text-start">{{ item.paquete.nombre }}</td>
+                <td class="text-start">{{ item.paquete.nombre }}</td>
                 <td class="text-start">{{ item.servicio.nombre }}</td>
-                <td class="text-start">{{ new Date(item.ultimaModificacion).toLocaleString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }) }}</td>
+                <td class="text-start">
+                  {{
+                    new Date(item.ultimaModificacion).toLocaleString("es-ES", {
+                      year: "numeric",
+                      month: "2-digit",
+                      day: "2-digit",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      second: "2-digit",
+                    })
+                  }}
+                </td>
                 <td class="text-start">
                   {{ item.active ? "Activo" : "Inactivo" }}
                 </td>
@@ -573,7 +595,6 @@ export default {
         const response = await getServiciosPaquete();
         if (response) {
           this.servicioPaquete = response;
-          console.log("servicioPaquete", this.servicioPaquete);
         }
       } catch (error) {
         console.error(error);
@@ -627,14 +648,11 @@ export default {
     async editItemServicio(nuevoServicio) {
       nuevoServicio.ultimaModificacion = new Date().toISOString(); // Esto generará la fecha actual en el formato correcto
       nuevoServicio.categoria.ultimaModificacion = new Date().toISOString(); // Esto generará la fecha actual en el formato correcto
-      console.log("servicoo imagen a enviar", this.nuevoServicio.imagen);
       nuevoServicio.imagen = this.nuevoServicio.imagen;
       try {
-        // Call the service to update the service
-        console.log("Actualizando servicio:", nuevoServicio);
+
         await updateServicio(nuevoServicio);
         this.fetchServicios(); // Llamada al método renombrado
-        // Close the edit dialog
         this.dialogosEditarServicio[nuevoServicio.idServicio] = false;
       } catch (error) {
         console.error("Error al actualizar categoría de servicio:", error);
@@ -644,7 +662,6 @@ export default {
       nuevoPaquete.ultimaModificacion = new Date().toISOString(); // Esto generará la fecha actual en el formato correcto
       try {
         // Call the service to update the service
-        console.log("Actualizando servicio paquete:", nuevoPaquete);
         await updateServicioPaquete(nuevoPaquete);
         this.fetchServiciosPaquete(); // Llamada al método renombrado
         // Close the edit dialog
@@ -653,27 +670,17 @@ export default {
         console.error("Error al actualizar categoría de servicio:", error);
       }
     },
-
-    async deleteItemServicio(item) {
+    async deleteItemServicio(idServicio) {
       try {
-        // Call the service to delete the service
-        console.log("Eliminando servicio:", item);
-        await deleteServicio(item);
-
-        const index = this.servicios.findIndex(
-          (service) => service.uid === item.uid
-        );
-        if (index !== -1) {
-          this.servicios.splice(index, 1);
-        }
+        await deleteServicio(idServicio);
+        this.fetchServicios(); // Recargar la lista de servicios
       } catch (error) {
-        console.error("Error al eliminar categoría de servicio:", error);
+        console.error("Error al eliminar servicio:", error);
       }
     },
     async deleteItemServicioPaquete(idServicioPaquete) {
       try {
-        // Call the service to delete the service
-        console.log("Eliminando servicio paquete:", idServicioPaquete);
+
         await deleteServicioPaquete(idServicioPaquete);
 
         const index = this.servicioPaquete.findIndex(
@@ -716,7 +723,6 @@ export default {
       }
     },
     async agregarPaquete() {
-      console.log("nuevoPaquete", this.nuevoPaquete);
       try {
         const nuevoPaquete = await createServicioPaquete(this.nuevoPaquete);
         if (nuevoPaquete) {
@@ -746,9 +752,7 @@ export default {
     },
     onFileChange(event) {
       const file = event.target.files[0];
-      console.log("Imagen seleccionada:", file);
       if (file) {
-        console.log("Convirtiendo imagen a base64");
         this.convertToBase64(file);
       }
     },
@@ -756,12 +760,8 @@ export default {
     convertToBase64(file) {
       const reader = new FileReader();
       reader.readAsDataURL(file);
-      console.log("Convirtiendo imagen a base64");
       reader.onload = () => {
-        console.log("Imagen convertida a base64 exitosamente");
         this.$set(this.nuevoServicio, "imagen", reader.result);
-        console.log("Imagen en base64:", reader.result);
-        console.log("nuevoServicio:", this.nuevoServicio.imagen);
       };
       reader.onerror = (error) => {
         console.error("Error al leer la imagen:", error);
