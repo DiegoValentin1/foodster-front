@@ -91,7 +91,7 @@
                 <td class="text-start">
                   {{ item.active ? "Activo" : "Inactivo" }}
                 </td>
-                <td class="text-start">{{ item.ultimaModificacion }}</td>
+                <td class="text-start">{{ new Date(item.ultimaModificacion).toLocaleString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }) }}</td>
                 <td class="text-center">
                   <v-dialog
                     v-model="dialogosEditar[item.idCategoria]"
@@ -246,7 +246,7 @@
                 <td class="text-start">
                   {{ item.active ? "Activo" : "Inactivo" }}
                 </td>
-                <td class="text-start">{{ item.ultimaModificacion }}</td>
+                <td class="text-start">{{ new Date(item.ultimaModificacion).toLocaleString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }) }}</td>
                 <td class="text-center">
                   <v-dialog
                     v-model="dialogosEditarServicio[item.idCategoria]"

@@ -137,7 +137,7 @@
                 <td class="text-start">
                   {{ item.active ? "Activo" : "Inactivo" }}
                 </td>
-                <td class="text-start">{{ item.ultimaModificacion }}</td>
+                <td class="text-start">{{ new Date(item.ultimaModificacion).toLocaleString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }) }}</td>
                 <td class="text-center">
                   <v-dialog
                     v-model="dialogosEditarServicio[item.idServicio]"
@@ -252,7 +252,7 @@
           </v-data-table>
         </v-card>
       </v-tab-item>
-      <!-- <v-tab-item>
+      <v-tab-item>
         <v-card>
           <v-card-title>
             Servicio Paquete
@@ -266,7 +266,7 @@
               hide-details
             ></v-text-field>
             <v-spacer></v-spacer>
-            <v-dialog v-model="dialogServicios" max-width="500px">
+            <v-dialog v-model="dialogPaquete" max-width="500px">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   color="primary"
@@ -285,34 +285,20 @@
                   <v-container>
                     <v-row>
                       <v-col cols="12" sm="6" md="4">
-                        <v-text-field
-                          v-model="nuevoPaquete.nombre"
-                          label="Nombre"
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="6" md="4">
-                        <v-text-field
-                          v-model="nuevoPaquete.descripcion"
-                          label="Descripcion"
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="6" md="4">
-                        <v-text-field
-                          v-model="nuevoPaquete.recomendado"
-                          label="Recomendado Para"
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="6" md="4">
-                        <v-text-field
-                          v-model="nuevoPaquete.imagen"
-                          label="Imagen"
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="6" md="4">
-                        <v-text-field
-                          v-model="nuevoPaquete.num_pedidos"
-                          label="Numéro Pedidos"
-                        ></v-text-field>
+                        <v-select
+                          v-model="nuevoPaquete.paquete.idPaquete"
+                          :items="paquete"
+                          item-text="nombre"
+                          item-value="idPaquete"
+                          label="Paquete"
+                        ></v-select>
+                        <v-select
+                          v-model="nuevoPaquete.servicio.idServicio"
+                          :items="servicios"
+                          item-text="nombre"
+                          item-value="idServicio"
+                          label="Servicio"
+                        ></v-select>
                       </v-col>
                       <v-col cols="12" sm="6" md="4">
                         <v-select
@@ -335,7 +321,7 @@
                     @click="cerrarModalAgregarServicio"
                     >Cancelar</v-btn
                   >
-                  <v-btn color="blue darken-1" text @click="agregarServicio"
+                  <v-btn color="blue darken-1" text @click="agregarPaquete"
                     >Guardar</v-btn
                   >
                 </v-card-actions>
@@ -346,25 +332,87 @@
             class="mx-auto"
             style="height: 400px"
             :headers="headersPaquete"
-            :items="paquete"
+            :items="servicioPaquete"
             :search="searchServicios"
           >
             <template v-slot:item="{ item }">
               <tr>
-                <td class="text-start">{{ item.nombre }}</td>
-                <td class="text-start">{{ item.descripcion }}</td>
-                <td class="text-start">{{ item.recomendado }}</td>
-                <td class="text-start">{{ item.imagen }}</td>
-                <td class="text-start">{{ item.num_pedidos }}</td>
+              <td class="text-start">{{ item.paquete.nombre }}</td>
+                <td class="text-start">{{ item.servicio.nombre }}</td>
+                <td class="text-start">{{ new Date(item.ultimaModificacion).toLocaleString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }) }}</td>
                 <td class="text-start">
                   {{ item.active ? "Activo" : "Inactivo" }}
                 </td>
                 <td class="text-start">{{ item.ultima_modificacion }}</td>
                 <td class="text-center">
-                  <v-icon color="blue" @click="editItemServicio(item)"
-                    >mdi-pencil</v-icon
+                  <v-dialog
+                    v-model="dialogosEditarPaquete[item.idServicioPaquete]"
+                    max-width="500px"
                   >
-                  <v-icon color="red" @click="deleteItemServicio(item)"
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-icon
+                        color="blue"
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="openEditServicioDialog(item.idServicioPaquete)"
+                        >mdi-pencil</v-icon
+                      >
+                    </template>
+                    <v-card>
+                      <v-card-title> Editar servicio paquete </v-card-title>
+                      <v-card-text>
+                        <v-container>
+                          <v-row>
+                            <v-col cols="12" sm="6" md="4">
+                              <v-select
+                                v-model="item.paquete.idPaquete"
+                                :items="paquete"
+                                item-text="nombre"
+                                item-value="idPaquete"
+                                label="Paquete"
+                              ></v-select>
+                              <v-select
+                                v-model="item.servicio.idServicio"
+                                :items="servicios"
+                                item-text="nombre"
+                                item-value="idServicio"
+                                label="Servicio"
+                              ></v-select>
+                            </v-col>
+                            <v-col cols="12" sm="6" md="4">
+                              <v-select
+                                v-model="item.active"
+                                :items="[
+                                  { text: 'Activo', value: true },
+                                  { text: 'Inactivo', value: false },
+                                ]"
+                                label="Estado"
+                              ></v-select>
+                            </v-col>
+                          </v-row>
+                        </v-container>
+                      </v-card-text>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                          color="blue darken-1"
+                          text
+                          @click="cancelEditItemServicio(item)"
+                          >Cerrar</v-btn
+                        >
+
+                        <v-btn
+                          color="blue darken-1"
+                          text
+                          @click="editarServicioPaquete(item)"
+                          >Guardar</v-btn
+                        >
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                  <v-icon
+                    color="red"
+                    @click="deleteItemServicioPaquete(item.idServicioPaquete)"
                     >mdi-delete</v-icon
                   >
                 </td>
@@ -372,7 +420,7 @@
             </template>
           </v-data-table>
         </v-card>
-      </v-tab-item> -->
+      </v-tab-item>
     </v-tabs-items>
   </v-card>
 </template>
@@ -383,17 +431,17 @@ import {
   updateServicio,
   createServicio,
   deleteServicio,
-  // Remove unused variables and functions
-  // deleteServicioPaqueteByStatus,
-  // deleteServicioPaquete,
-  // getServiciosPaqueteByStatus,
-  // createServicioPaquete,
-  // updateServicioPaquete,
-  // getServiciosPaquete,
-  // deleteServicioByStatus,
-  // getServiciosByStatus,
+  deleteServicioPaqueteByStatus,
+  deleteServicioPaquete,
+  getServiciosPaqueteByStatus,
+  createServicioPaquete,
+  updateServicioPaquete,
+  getServiciosPaquete,
+  deleteServicioByStatus,
+  getServiciosByStatus,
 } from "../../../services/ServicesServices.js";
 import { getCategoriasServicios } from "../../../services/CategoryServices.js";
+import { getAllPaquetes } from "../../../services/PaquetesServices.js";
 export default {
   data() {
     return {
@@ -423,11 +471,14 @@ export default {
       },
 
       nuevoPaquete: {
-        nombre: "",
-        descripcion: "",
-        recomendado: "",
-        imagen: "",
-        num_pedidos: "",
+        paquete: {
+          idPaquete: "",
+        },
+
+        servicio: {
+          idServicio: "",
+        },
+        ultimaModificacion: new Date().toISOString(),
         active: true,
       },
       headersServicios: [
@@ -475,33 +526,25 @@ export default {
 
       servicios: [],
       headersPaquete: [
-        { text: "Nombre", align: "start", sortable: false, value: "nombre" },
         {
-          text: "Descripcion",
+          text: "Nombre paquete",
           align: "start",
           sortable: false,
-          value: "descripcion",
+          value: "nombrePaquete",
         },
         {
-          text: "Recomendado Para",
+          text: "Nombre servicio",
           align: "start",
           sortable: false,
-          value: "recomendado",
+          value: "nombrePaquete",
         },
-        { text: "Imagen", align: "start", sortable: false, value: "imagen" },
         {
-          text: "Numéro Pedidos",
-          align: "start",
-          sortable: false,
-          value: "num_pedidos",
-        },
-        { text: "Estado", align: "start", sortable: false, value: "active" },
-        {
-          text: "Última Modificación",
+          text: "Última modificación",
           align: "start",
           sortable: false,
           value: "ultimaModificacion",
         },
+        { text: "Estado", align: "start", sortable: false, value: "active" },
         {
           text: "Acciones",
           align: "center",
@@ -510,6 +553,7 @@ export default {
         },
       ],
       paquete: [],
+      servicioPaquete: [],
     };
   },
   methods: {
@@ -524,13 +568,32 @@ export default {
         console.error(error);
       }
     },
+    async fetchServiciosPaquete() {
+      try {
+        const response = await getServiciosPaquete();
+        if (response) {
+          this.servicioPaquete = response;
+          console.log("servicioPaquete", this.servicioPaquete);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
     async getCategoriasServicios() {
-      console.log("Obteniendo categorías de servicios");
       try {
         const response = await getCategoriasServicios();
-        console.log("Categorías de servicios:", response);
         if (response) {
           this.categoriasServicios = response;
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async getAllPaquetes() {
+      try {
+        const response = await getAllPaquetes();
+        if (response) {
+          this.paquete = response;
         }
       } catch (error) {
         console.error(error);
@@ -564,7 +627,7 @@ export default {
     async editItemServicio(nuevoServicio) {
       nuevoServicio.ultimaModificacion = new Date().toISOString(); // Esto generará la fecha actual en el formato correcto
       nuevoServicio.categoria.ultimaModificacion = new Date().toISOString(); // Esto generará la fecha actual en el formato correcto
-      console.log("servicoo imagen a enviar",this.nuevoServicio.imagen)
+      console.log("servicoo imagen a enviar", this.nuevoServicio.imagen);
       nuevoServicio.imagen = this.nuevoServicio.imagen;
       try {
         // Call the service to update the service
@@ -573,6 +636,19 @@ export default {
         this.fetchServicios(); // Llamada al método renombrado
         // Close the edit dialog
         this.dialogosEditarServicio[nuevoServicio.idServicio] = false;
+      } catch (error) {
+        console.error("Error al actualizar categoría de servicio:", error);
+      }
+    },
+    async editarServicioPaquete(nuevoPaquete) {
+      nuevoPaquete.ultimaModificacion = new Date().toISOString(); // Esto generará la fecha actual en el formato correcto
+      try {
+        // Call the service to update the service
+        console.log("Actualizando servicio paquete:", nuevoPaquete);
+        await updateServicioPaquete(nuevoPaquete);
+        this.fetchServiciosPaquete(); // Llamada al método renombrado
+        // Close the edit dialog
+        this.dialogosEditarPaquete[nuevoPaquete.idServicioPaquete] = false;
       } catch (error) {
         console.error("Error al actualizar categoría de servicio:", error);
       }
@@ -594,24 +670,21 @@ export default {
         console.error("Error al eliminar categoría de servicio:", error);
       }
     },
-    cerrarModalAgregarServicio() {
-      this.dialogServicios = false;
-      // Limpiar el formulario al cerrar el modal
-      this.nuevoServicio = {
-        nombre: "",
-        descripcion: "",
-        precio: 0,
-        precioDescuento: 0,
-        imagen: "",
-        existencias: 0, // Corregido aquí
-        categoria: {
-          idCategoria: "", // Deberías decidir si este campo es generado automáticamente o si el usuario lo ingresa
-          nombre: "",
-          ultimaModificacion: new Date().toISOString(), // Esto generará la fecha actual en el formato correcto
-          active: true,
-        },
-        active: true, // Por defecto, nuevo servicio activo
-      };
+    async deleteItemServicioPaquete(idServicioPaquete) {
+      try {
+        // Call the service to delete the service
+        console.log("Eliminando servicio paquete:", idServicioPaquete);
+        await deleteServicioPaquete(idServicioPaquete);
+
+        const index = this.servicioPaquete.findIndex(
+          (service) => service.idServicioPaquete === idServicioPaquete
+        );
+        if (index !== -1) {
+          this.servicioPaquete.splice(index, 1);
+        }
+      } catch (error) {
+        console.error("Error al eliminar categoría de servicio:", error);
+      }
     },
     async agregarServicio() {
       try {
@@ -642,28 +715,34 @@ export default {
         console.error("Error al agregar categoría de servicio:", error);
       }
     },
+    async agregarPaquete() {
+      console.log("nuevoPaquete", this.nuevoPaquete);
+      try {
+        const nuevoPaquete = await createServicioPaquete(this.nuevoPaquete);
+        if (nuevoPaquete) {
+          this.dialogPaquete = false;
+          this.nuevoPaquete = {
+            paquete: {
+              idPaquete: "",
+            },
+
+            servicio: {
+              idServicio: "",
+            },
+            ultimaModificacion: new Date().toISOString(),
+            active: true,
+          };
+          this.cerrarModalAgregarServicio();
+          this.getAllPaquetes(); // Llamada al método renombrado
+          this.fetchServiciosPaquete();
+        }
+      } catch (error) {
+        console.error("Error al agregar categoría de servicio:", error);
+      }
+    },
+
     openEditServicioDialog(idServicio) {
       this.$set(this.dialogosEditarServicio, idServicio, true);
-    },
-    cerrarModalAgregarServicio() {
-      this.dialogServicios = false;
-      // Limpiar el formulario al cerrar el modal
-      this.nuevoServicio = {
-        nombre: "",
-        descripcion: "",
-        precio: 0,
-        precioDescuento: 0,
-        imagen: "",
-        existencias: 0, // Corregido aquí
-        categoria: {
-          idCategoria: "", // Deberías decidir si este campo es generado automáticamente o si el usuario lo ingresa
-          nombre: "",
-          ultimaModificacion: new Date().toISOString(), // Esto generará la fecha actual en el formato correcto
-          active: true,
-        },
-        ultimaModificacion: new Date().toISOString(), // Esto generará la fecha actual en el formato correcto
-        active: true, // Por defecto, nuevo servicio activo
-      };
     },
     onFileChange(event) {
       const file = event.target.files[0];
@@ -695,8 +774,9 @@ export default {
   },
   mounted() {
     this.fetchServicios(); // Llamada al método renombrado
+    this.fetchServiciosPaquete();
     this.getCategoriasServicios();
-  }
+    this.getAllPaquetes();
+  },
 };
-
 </script>

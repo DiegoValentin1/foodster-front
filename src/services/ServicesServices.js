@@ -70,7 +70,6 @@ const getServiciosPaquete = async () => {
 };
 
 const updateServicioPaquete = async (servicioPaquete) => {
-    
   try {
     const response = await axiosClient.put(
       "/servicios-paquete/",
