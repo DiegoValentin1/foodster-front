@@ -44,6 +44,7 @@
                         <v-text-field
                           v-model="nuevaCategoriaPersonal.nombre"
                           label="Nombre"
+                          :rules="[v => !!v || 'El nombre es requerido', v => /^[a-zA-Z0-9\s]+$/.test(v) || 'El nombre solo puede contener letras y números']"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12" sm="6" md="4">
@@ -116,6 +117,7 @@
                               <v-text-field
                                 v-model="item.nombre"
                                 label="Nombre"
+                                :rules="[v => !!v || 'El nombre es requerido', v => /^[a-zA-Z0-9\s]+$/.test(v) || 'El nombre solo puede contener letras y números']"
                               ></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6" md="4">
