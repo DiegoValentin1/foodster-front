@@ -20,7 +20,7 @@
         </template>
         <v-card>
           <v-card-title>
-            <span class="text-h5">Agregar nuevo paquete</span>
+            <span class="text-h5">Agregar nuevo evento</span>
           </v-card-title>
           <v-card-text>
             <v-container>
@@ -141,7 +141,7 @@
                 >
               </template>
               <v-card>
-                <v-card-title> Editar servicio </v-card-title>
+                <v-card-title> Editar evento </v-card-title>
                 <v-card-text>
                   <v-container>
                     <v-row>

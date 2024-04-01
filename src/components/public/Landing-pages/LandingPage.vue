@@ -1,18 +1,5 @@
 <template>
   <div class="landing-page">
-    <!-- Navbar -->
-    <v-app-bar dense color="transparent" dark flat>
-      <v-toolbar-title class="white--text">FOODSTER</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn href="/register" outlined class="mr-4 primary--text"> <!-- Agrega clase de margen para separar y color verde al borde -->
-        Registrarse
-      </v-btn>
-      <v-btn href="/login" outlined class="primary--text"> <!-- Agrega clase de margen para separar y color verde al borde -->
-        Iniciar Sesión
-      </v-btn>
-    </v-app-bar>
-
-    <!-- Carousel -->
     <div class="carousel-container">
       <v-carousel cycle>
         <v-carousel-item v-for="(item, i) in items" :key="i" :src="item.src" reverse-transition="fade-transition"
@@ -35,8 +22,11 @@
         <div class="container mx-auto text-center">
           <h3 class="text-2xl font-semibold mb-4 text-white">¡Únete a Foodtser hoy mismo!</h3>
           <p class="text-lg mb-6 text-white">Regístrate ahora para acceder a los mejores buffets y ofertas especiales.</p>
-          <v-btn href="/register" outlined class="mr-4 primary--text"> 
+          <v-btn href="/register" outlined class="mr-4 primary--text"> <!-- Agrega clase de margen para separar y color verde al borde -->
             Registrarse
+          </v-btn>
+          <v-btn href="/login" outlined class="primary--text"> <!-- Agrega clase de margen para separar y color verde al borde -->
+            Iniciar Sesión
           </v-btn>
         </div>
       </div>
@@ -69,16 +59,6 @@
         </div>
       </div>
 
-      <!-- Contact Section -->
-      <div class="bg-gray-900 py-12">
-        <div class="container mx-auto text-center">
-          <h3 class="text-3xl font-bold mb-4 text-white">¿Tienes alguna pregunta?</h3>
-          <p class="text-lg mb-6 text-white">¡No dudes en contactarnos!</p>
-          <v-btn href="/register" outlined class="mr-4 primary--text"> 
-            Contactar
-          </v-btn>
-        </div>
-      </div>
        <!-- Footer -->
     <footer class="bg-gray-800 py-8">
       <div class="container mx-auto text-center text-white">
@@ -93,17 +73,22 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import banquete1 from '@/assets/images/eventos/banquete1.jpg';
+import banquete2 from '@/assets/images/eventos/banquete2.jpg';
+import banquete3 from '@/assets/images/eventos/banquete3.jpg';
+import banquete4 from '@/assets/images/eventos/banquete4.jpg';
+import banquete5 from '@/assets/images/eventos/banquete5.jpg';
 
 export default {
   name: 'LandingPage',
   data() {
     return {
       items: [
-        { src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg' },
-        { src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg' },
-        { src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg' },
-        { src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg' },
+        { src: banquete1 },
+        { src: banquete2 },
+        { src: banquete3 },
+        { src: banquete4 },
+        { src: banquete5 },
       ],
     };
   },
@@ -120,7 +105,6 @@ export default {
 
 <style scoped>
 .carousel-container {
-  margin-top: 2%;
   width: 100%;
   height: 100vh;
 }
