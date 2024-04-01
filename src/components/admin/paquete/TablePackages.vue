@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title>
-      Servicios
+      Paquete
       <v-divider class="mx-4" inset vertical></v-divider>
       <v-spacer></v-spacer>
       <v-text-field
@@ -37,6 +37,14 @@
                     :rules="[(v) => !!v || 'La descripción es requerida']"
                     type="text"
                   ></v-text-field>
+                  <v-select
+                    v-model="nuevoPaquete.active"
+                    :items="[
+                      { text: 'Activo', value: true },
+                      { text: 'Inactivo', value: false }
+                    ]"
+                    label="Estado"
+                  ></v-select>
                 </v-col>
                 <v-col cols="12" sm="6" md="6">
                   <v-text-field
@@ -52,13 +60,13 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" text @click="cerrarModalAgregarPaquete"
+              >Cancelar</v-btn
+            >
             <v-btn
               color="blue darken-1"
               text
-              @click="cerrarModalAgregarPaquete"
-              >Cancelar</v-btn
-            >
-            <v-btn color="blue darken-1" text @click="agregarPaquete(nuevoPaquete)"
+              @click="agregarPaquete(nuevoPaquete)"
               >Guardar</v-btn
             >
           </v-card-actions>
@@ -78,15 +86,12 @@
           <td class="text-start">{{ item.descripcion }}</td>
           <td class="text-start">{{ item.recomendadoPara }}</td>
           <td class="text-start">
-                  <img
-                    :src="item.imagen"
-                    style="max-width: 100px; max-height: 100px"
-                  />
-                </td>
-          <td class="text-start">{{ item.numeroPedidos }}</td>
-          <td class="text-start">
-            {{ item.active ? "Activo" : "Inactivo" }}
+            <img
+              :src="item.imagen"
+              style="max-width: 100px; max-height: 100px"
+            />
           </td>
+          <td class="text-start">{{ item.numeroPedidos }}</td>
           <td class="text-start">
             {{
               new Date(item.ultimaModificacion).toLocaleString("es-ES", {
@@ -98,6 +103,11 @@
                 second: "2-digit",
               })
             }}
+          </td>
+          <td class="text-start">
+            <v-chip :color="item.active ? 'green' : 'red'" outlined small>{{
+              item.active ? "Activo" : "Inactivo"
+            }}</v-chip>
           </td>
           <td class="text-center">
             <v-dialog
@@ -122,7 +132,7 @@
                         <v-text-field
                           v-model="item.nombre"
                           label="Nombre"
-                            :rules="[(v) => !!v || 'El nombre es requerido']"
+                          :rules="[(v) => !!v || 'El nombre es requerido']"
                         ></v-text-field>
                         <v-text-field
                           v-model="item.descripcion"
@@ -130,15 +140,29 @@
                           :rules="[(v) => !!v || 'La descripción es requerida']"
                           type="text"
                         ></v-text-field>
+                        <v-select
+                                v-model="item.active"
+                                :items="[
+                                  { text: 'Activo', value: true },
+                                  { text: 'Inactivo', value: false }
+                                ]"
+                                label="Estado"
+                              ></v-select>
                       </v-col>
                       <v-col cols="12" sm="6" md="6">
                         <v-text-field
                           v-model="item.recomendadoPara"
                           label="Recomendado para"
-                          :rules="[(v) => !!v || 'El recomendado para es requerido']"
+                          :rules="[
+                            (v) => !!v || 'El recomendado para es requerido',
+                          ]"
                           type="text"
                         ></v-text-field>
-                        <input type="file" @change="onFileChange" accept="image/*" />
+                        <input
+                          type="file"
+                          @change="onFileChange"
+                          accept="image/*"
+                        />
                       </v-col>
                     </v-row>
                   </v-container>
@@ -159,7 +183,7 @@
                     >Guardar</v-btn
                   >
                 </v-card-actions>
-              </v-card> 
+              </v-card>
             </v-dialog>
             <v-icon color="red" @click="deleteItemPaquete(item.idPaquete)"
               >mdi-delete</v-icon
@@ -224,6 +248,7 @@ export default {
           sortable: false,
           value: "ultimaModificacion",
         },
+        { text: "Estado", align: "start", sortable: false, value: "active" },
         {
           text: "Acciones",
           align: "center",
@@ -274,8 +299,8 @@ export default {
       nuevoPaquete.ultimaModificacion = new Date().toISOString(); // Esto generará la fecha actual en el formato correcto
       nuevoPaquete.imagen = this.nuevoPaquete.imagen;
       try {
-        await updatePaquete (nuevoPaquete);
-        this.getAllPaquetes
+        await updatePaquete(nuevoPaquete);
+        this.getAllPaquetes;
         this.dialogosEditarPaquete[nuevoPaquete.idPaquete] = false;
       } catch (error) {
         console.error("Error al actualizar paquete", error);
@@ -290,7 +315,7 @@ export default {
       }
     },
     async agregarPaquete(nuevoPaquete) {
-        console.log(nuevoPaquete);
+      console.log(nuevoPaquete);
       try {
         const nuevoPaquete = await createPaquete(this.nuevoPaquete);
         if (nuevoPaquete) {
@@ -309,7 +334,7 @@ export default {
             active: true,
           };
           this.cerrarModalAgregarServicio();
-          this.getAllPaquetes(); 
+          this.getAllPaquetes();
         }
       } catch (error) {
         console.error("Error al agregar categoría de servicio:", error);

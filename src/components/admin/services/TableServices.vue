@@ -135,8 +135,10 @@
                 <td class="text-start">{{ item.existencias }}</td>
                 <td class="text-start">{{ item.categoria.nombre }}</td>
                 <td class="text-start">
-                  {{ item.active ? "Activo" : "Inactivo" }}
-                </td>
+            <v-chip :color="item.active ? 'green' : 'red'" outlined small>{{
+              item.active ? "Activo" : "Inactivo"
+            }}</v-chip>
+          </td>
                 <td class="text-start">
                   {{
                     new Date(item.ultimaModificacion).toLocaleString("es-ES", {
@@ -356,17 +358,18 @@
                       year: "numeric",
                       month: "2-digit",
                       day: "2-digit",
-                      hour: "2-digit",
+                      hour: "2-digit", 
                       minute: "2-digit",
                       second: "2-digit",
                     })
                   }}
                 </td>
                 <td class="text-start">
-                  {{ item.active ? "Activo" : "Inactivo" }}
-                </td>
+            <v-chip :color="item.active ? 'green' : 'red'" outlined small>{{
+              item.active ? "Activo" : "Inactivo"
+            }}</v-chip>
+          </td>
                 <td class="text-start">{{ item.ultima_modificacion }}</td>
-                <td class="text-center">
                   <v-dialog
                     v-model="dialogosEditarPaquete[item.idServicioPaquete]"
                     max-width="500px"

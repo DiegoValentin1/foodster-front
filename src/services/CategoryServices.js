@@ -20,9 +20,12 @@ const actualizarCategoriaPersonal = async (item) => {
 }
 
 const crearCategoriaPersonal = async (categoriaPersonal) => {
+    console.log("Categoria Personal", categoriaPersonal);
+    console.log("Categoria Personal activo: ", categoriaPersonal.active);
     console.log("Categoria Personal holaaaaa");
     try {
         const response = await axiosClient.post(`/categorias-personal/`, categoriaPersonal);
+        console.log("Response", response);
         return response.data;
     } catch (error) {
         console.error("Error al crear categoría personal:", error);
