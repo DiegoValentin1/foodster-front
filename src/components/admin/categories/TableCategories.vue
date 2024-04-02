@@ -80,7 +80,7 @@
           </v-card-title>
           <v-data-table
             class="mx-auto"
-            style="height: 400px"
+            style="height: auto; max-height: 500px; overflow-y: auto;"
             :headers="headersPersonal"
             :items="categoriasPersonal"
             :search="searchPersonal"
@@ -89,8 +89,10 @@
               <tr>
                 <td class="text-start">{{ item.nombre }}</td>
                 <td class="text-start">
-                  {{ item.active ? "Activo" : "Inactivo" }}
-                </td>
+            <v-chip :color="item.active ? 'green' : 'red'" outlined small>{{
+              item.active ? "Activo" : "Inactivo"
+            }}</v-chip>
+          </td>
                 <td class="text-start">{{ new Date(item.ultimaModificacion).toLocaleString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }) }}</td>
                 <td class="text-center">
                   <v-dialog
@@ -235,7 +237,7 @@
           </v-card-title>
           <v-data-table
             class="mx-auto"
-            style="height: 400px"
+            style="height: auto; max-height: 500px; overflow-y: auto;"
             :headers="headersServicios"
             :items="categoriasServicios"
             :search="searchServicios"
@@ -244,8 +246,10 @@
               <tr>
                 <td class="text-start">{{ item.nombre }}</td>
                 <td class="text-start">
-                  {{ item.active ? "Activo" : "Inactivo" }}
-                </td>
+            <v-chip :color="item.active ? 'green' : 'red'" outlined small>{{
+              item.active ? "Activo" : "Inactivo"
+            }}</v-chip>
+          </td>
                 <td class="text-start">{{ new Date(item.ultimaModificacion).toLocaleString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }) }}</td>
                 <td class="text-center">
                   <v-dialog
@@ -420,10 +424,10 @@ export default {
       this.dialogosEditarServicio[item.idCategoria] = false;
     },
     async editItemPersonal(item) {
-      try {
+      console.log("Editando categoría personal:", item);
+      try{
         // Set the edit dialog state for this row to true
         this.$set(this.dialogosEditar, item.idCategoria, true);
-        console.log("Editando categoría personal:", item);
 
         // Find the index of the object in categoriasPersonal and update it
         const index = this.categoriasPersonal.findIndex(
@@ -437,11 +441,6 @@ export default {
           // Call the service to update the category
           await actualizarCategoriaPersonal(item);
         }
-
-        // Print the modified data to the console
-        console.log("Nombre modificado:", item.nombre);
-        console.log("Estado modificado:", item.active);
-
         // Close the edit dialog after saving
         this.dialogosEditar[item.idCategoria] = false;
       } catch (error) {
@@ -466,11 +465,6 @@ export default {
           // Call the service to update the category
           await actualizarCategoriaServicio(item);
         }
-
-        // Print the modified data to the console
-        console.log("Nombre modificado:", item.nombre);
-        console.log("Estado modificado:", item.active);
-
         // Close the edit dialog after saving
         this.dialogosEditarServicio[item.idCategoria] = false;
       } catch (error) {

@@ -2,22 +2,25 @@
   <div>
     <header class="w-full">
       <v-tabs fixed-tabs  dark class="bg-gray-900">
-        <v-tab to="/home">
+        <v-tab to="/home/inicio">
+          Inicio
+          <v-icon>mdi-home</v-icon>
+        </v-tab>
+        <v-tab to="/home/paquetes">
           Paquetes
+          <v-icon>mdi-package-variant-closed</v-icon>
         </v-tab>
-        <v-tab to="/home/entradas">
+        <v-tab to="/home/servicios">
           Servicios
+          <v-icon>mdi-food</v-icon>
         </v-tab>
-        <v-tab to="/home/fuertes">
-          Fuertes
-        </v-tab>
-        <v-tab to="/home/utencilios">
-          Utencilios
-        </v-tab>
-        <!-- Icono de carrito de compras -->
-        <v-spacer></v-spacer>
         <v-tab icon to="/home/carrito/">
+          Carrito
           <v-icon>mdi-cart</v-icon>
+        </v-tab>
+        <v-tab icon to="/home/perfil/">
+          Perfil
+          <v-icon>mdi-account</v-icon>
         </v-tab>
       </v-tabs>
     </header>

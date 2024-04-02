@@ -44,8 +44,12 @@ const router = new VueRouter({
             path:'/admin/categorias',
             name:'categorias',
             component:()=>import('../components/admin/categories/TableCategories.vue')
+        },
+        {
+            path:'/admin/paquete',
+            name:'package',
+            component:()=>import('../components/admin/paquete/TablePackages.vue')
         }
-
     
     ]
     }, {
@@ -54,15 +58,19 @@ const router = new VueRouter({
         name: 'home',
         component: () => import('../components/cliente/components/Home.vue'),
         children: [{
-            path: '/home/entradas',
-            name: 'entradas',
+            path: '/home/paquetes/',
+            name: 'paquetes',
             component: () => import('../components/cliente/components/Inicio.vue')
         }, {
-            path: '/home/utencilios',
-            name: 'utencilios',
-            component: () => import('../components/public/error/ErrorPage.vue')
+            path: '/home/servicios/',
+            name: 'servicios',
+            component: () => import('../components/cliente/components/Inicio.vue')
         }, {
-            path: '/profile', name: 'profile', 
+            path: '/home/inicio/',
+            name: 'inicio',
+            component: () => import('../components/public/Landing-pages/LandingPage.vue')
+        }, {
+            path: '/home/perfil/',
             component: () => import('../components/cliente/components/Profile.vue')
         },{
             path:'/home/carrito/',
