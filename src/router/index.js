@@ -1,10 +1,13 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Login from '../components/public/Login.vue'
-import {useAuthStore} from "@/stores";
-Vue.use(VueRouter)
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Login from "../components/public/Login.vue";
+import { useAuthStore } from "@/stores";
+import TableDirecciones from '../components/admin/personal/direcciones/TableDirecciones.vue'
+import Landing from "../components/public/Landing-pages/LandingPage.vue";
+Vue.use(VueRouter);
 
 const router = new VueRouter({
+
     mode: 'history', base: import.meta.env.BASE_URL, routes: [{
         path: '/', name: 'login', component: Login, // que el login solamente se muestre si no hay un usuario logueado
 
@@ -49,6 +52,11 @@ const router = new VueRouter({
             path:'/admin/paquete',
             name:'package',
             component:()=>import('../components/admin/paquete/TablePackages.vue')
+        },
+        {
+          path: '/admin/direcciones',
+          name: 'direcciones',
+          component: TableDirecciones
         }
     
     ]
@@ -76,32 +84,39 @@ const router = new VueRouter({
             path:'/home/carrito/',
             name:'carrito',
             component:()=>import('../components/cliente/components/ShoppingCart.vue')
+
         },
         {
-            path: '/home/pedido', name: 'pedido', component: () => import('../components/cliente/Pedido.vue')
-        }]
+          path: "/home/pedido",
+          name: "pedido",
+          component: () => import("../components/cliente/Pedido.vue"),
+        },
+      ],
     },
     {
-        path: '/404', name: '404', component: () => import('../components/public/error/ErrorPage.vue')
-    }, {
-        path: '*', redirect: '/404'
-    }
-]
-})
+      path: "/404",
+      name: "404",
+      component: () => import("../components/public/error/ErrorPage.vue"),
+    },
+    {
+      path: "*",
+      redirect: "/404",
+    },
+  ],
+});
 
 router.beforeEach(async (to, from, next) => {
-    const auth = useAuthStore();
-    let userRoles = [];
-    if (auth.user && auth.user.usuarios) {
-        userRoles = auth.user.usuarios.roles.map(role => role.nombre);
+  const auth = useAuthStore();
+  let userRoles = [];
+  if (auth.user && auth.user.usuarios) {
+    userRoles = auth.user.usuarios.roles.map((role) => role.nombre);
+  }
+  if (to.matched.some((record) => record.meta && record.meta.roles)) {
+    if (!auth.user) {
+      auth.returnUrl = to.fullPath;
+      return next({ name: "login" });
     }
-    if (to.matched.some(record => record.meta && record.meta.roles)) {
-        if (!auth.user) {
-            auth.returnUrl = to.fullPath;
-            return next({name: 'login'});
-        }
-
-    }
-    next();
+  }
+  next();
 });
-export default router
+export default router;

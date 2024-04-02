@@ -73,6 +73,7 @@
         </v-card>
       </v-dialog>
     </v-card-title>
+
     <v-data-table
       class="mx-auto"
       style="height: auto; max-height: 500px; overflow-y: auto"

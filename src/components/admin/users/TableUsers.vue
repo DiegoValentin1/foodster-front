@@ -26,21 +26,20 @@
                 <v-col cols="12" sm="6" md="4">
                   <v-text-field v-model="nuevoUsuario.segundoApellido" label="Segundo Apellido"></v-text-field>
                 </v-col>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field v-model="nuevoUsuario.telefono" label="Teléfono"></v-text-field>
-                </v-col>
+
                 <v-col cols="12" sm="6" md="4">
                   <v-text-field v-model="nuevoUsuario.correo" label="Correo"></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
-                  <v-text-field v-model="nuevoUsuario.ultimaModificacion" label="Última Modificación"
-                    disabled></v-text-field>
+                  <v-text-field v-model="nuevoUsuario.ultimaModificacion" label="Contraseña"></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
-                  <v-text-field v-model="nuevoUsuario.estado" label="Estado"></v-text-field>
+                  <v-text-field v-model="nuevoUsuario.estado" label="Confirmar contraseña"></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
-                  <v-text-field v-model="nuevoUsuario.rolNombre" label="Nombre del Rol"></v-text-field>
+                  <v-select label="Rol" v-model="nuevoUsuario.roles.idRol" :items="roles" item-text="nombre"
+                    item-value="idRole">
+                  </v-select>
                 </v-col>
               </v-row>
             </v-container>
@@ -53,7 +52,7 @@
         </v-card>
       </v-dialog>
     </v-card-title>
-    <v-data-table class="mx-auto" style="height: 400px;" :headers="headers" :items="users" :search="search" >
+    <v-data-table class="mx-auto" style="height: 400px;" :headers="headers" :items="users" :search="search">
       <template v-slot:item="{ item }">
         <tr>
           <td class="text-start">{{ item.nombres }}</td>
@@ -61,17 +60,18 @@
           <td class="text-start">{{ item.segundoApellido }}</td>
           <td class="text-start">{{ item.telefono }}</td>
           <td class="text-start">{{ item.correo }}</td>
+          <td class="text-start">{{ item.contrasena }}</td>
           <td class="text-start">{{ item.ultimaModificacion }}</td>
           <td class="text-start">
-            <v-chip :color="item.active ? 'green' : 'red'" outlined small>
+            <v-chip @click="changeStatus(item.idUsuario)" :color="item.active ? 'green' : 'red'" outlined small>
               {{ item.active ? 'Activo' : 'Inactivo' }}
             </v-chip>
           </td>
-          <td class="text-start">{{ item.roles && item.roles.length > 0 ? item.roles[0].nombre : '' }}</td>
+          <td class="text-start">{{ item.roles && item.roles.length > 0 ? item.roles[0].nombre : 'SN' }}</td>
 
           <td class="text-center">
             <v-icon color="blue" @click="editItem(item)">mdi-pencil</v-icon>
-            <v-icon color="red" @click="changeStatus(item.idUsuario)">mdi-delete</v-icon>
+            <v-icon color="red" @click="deleteUser(item.idUsuario)">mdi-delete</v-icon>
           </td>
         </tr>
       </template>
@@ -100,18 +100,12 @@
                 <v-text-field v-model="usuarioEditado.correo" label="Correo"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="usuarioEditado.ultimaModificacion" label="Última Modificación"
-                  disabled></v-text-field>
+                <v-text-field v-model="usuarioEditado.contrasena" label="Contraseña"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="usuarioEditado.active" label="Estado" disabled></v-text-field>
-              </v-col>
-              <v-col cols="6">
-                <v-row v-for="(rol, index) in usuarioEditado.roles" :key="index">
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="rol.nombre" label="Nombre del Rol" disabled></v-text-field>
-                  </v-col>
-                </v-row>
+                <v-select label="Rol" v-model="nuevoUsuario.roles.idRol" :items="roles" item-text="nombre"
+                  item-value="idRole">
+                </v-select>
               </v-col>
 
             </v-row>
@@ -119,8 +113,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="closeModalUpdateUsuario">Cancelar</v-btn>
-          <v-btn color="blue darken-1" text @click="updateUsuario">Guardar</v-btn>
+          <v-btn color="blue darken-1" text @click="cancelEdit">Cancelar</v-btn>
+          <v-btn color="blue darken-1" text @click="saveEdit">Guardar</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -129,12 +123,14 @@
 </template>
 
 <script>
+import RolesService from '../../../services/RolesService'
 import usersServices from '../../../services/UsersServices'
-
+import rolesService from '../../../services/RolesService'
 export default {
   data() {
     return {
       users: [],
+      roles: [],
       search: '',
       dialog: false,
       editDialog: false,
@@ -146,7 +142,9 @@ export default {
         correo: '',
         ultimaModificacion: '',
         estado: '',
-        rolNombre: ''
+        roles: {
+          idRol: ''
+        }
       },
       usuarioEditado: {
         nombres: '',
@@ -154,9 +152,13 @@ export default {
         segundoApellido: '',
         telefono: '',
         correo: '',
-        ultimaModificacion: '',
-        estado: '',
-        roles: []
+        contrasena: "",
+        active: '',
+        roles: [
+          {
+            idRol: "",
+          }
+        ]
       },
       headers: [
         { text: 'Nombres', align: 'start', sortable: true, value: 'nombres' },
@@ -164,6 +166,7 @@ export default {
         { text: 'Segundo Apellido', align: 'start', sortable: true, value: 'segundoApellido' },
         { text: 'Teléfono', align: 'start', sortable: false, value: 'telefono' },
         { text: 'Correo', align: 'start', sortable: false, value: 'correo' },
+        { text: 'Contraseña', align: 'start', sortable: false, value: 'contrasena' },
         { text: 'Última Modificación', align: 'start', sortable: true, value: 'ultimaModificacion' },
         { text: 'Estado', align: 'start', sortable: false, value: 'active' },
         { text: 'Nombre del Rol', align: 'start', sortable: false, value: 'rolNombre' },
@@ -173,19 +176,23 @@ export default {
   },
   mounted() {
     this.getUsers();
+    this.getRoles();
   },
   methods: {
     async getUsers() {
       try {
         const response = await usersServices.getUsers();
         console.log(response)
-        if (Array.isArray(response)) {
-          this.users = response;
-        } else if (typeof response === 'object') {
-          this.users = [response];
-        } else {
-          console.error('La respuesta de la API no es un array ni un objeto válido:', response);
-        }
+        this.users = response;
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async getRoles() {
+      try {
+        const response = await rolesService.getRoles();
+        console.log(response)
+        this.roles = response;
       } catch (error) {
         console.log(error)
       }
@@ -201,7 +208,7 @@ export default {
     },
     closeModalAddUsuario() {
       this.dialog = false;
-      this.nuevoUsuario = {};
+      
     },
 
     async addUsuario() {
@@ -211,8 +218,60 @@ export default {
       this.usuarioEditado = { ...item };
       this.editDialog = true;
     },
-    async updateUsuario() {
-      console.log("METHOD UPDATE USER");
+    cancelEdit(){
+      this.editDialog = false;
+     this.usuarioEditado = {
+          nombres: '',
+          primerApellido: '',
+          segundoApellido: '',
+          telefono: '',
+          correo: '',
+          contrasena: "",
+          active: '',
+          roles: [
+            {
+              idRol: "",
+            }
+          ]
+        }
+    },
+     saveEdit() {
+      console.log("Usuario Editado: ", this.usuarioEditado);
+      try {
+        const response = usersServices.update(this.usuarioEditado)
+      } catch (error) {
+        console.log(error)
+      } finally {
+        this.editDialog = false;
+        this.usuarioEditado = {
+          nombres: '',
+          primerApellido: '',
+          segundoApellido: '',
+          telefono: '',
+          correo: '',
+          contrasena: "",
+          active: '1',
+          roles: [
+            {
+              idRol: "",
+            }
+          ]
+        }
+      }
+    },
+    deleteUser(idUsuario){
+      try {
+        const response = usersServices.delete_(idUsuario)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    changeStatus(idUsuario){
+      try {
+        const response = usersServices.changeStatus(idUsuario)
+      } catch (error) {
+        console.log(error)
+      }
     },
 
 
