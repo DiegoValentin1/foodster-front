@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Login from "../components/public/Login.vue";
 import { useAuthStore } from "@/stores";
+import TableDirecciones from '../components/admin/personal/direcciones/TableDirecciones.vue'
 import Landing from "../components/public/Landing-pages/LandingPage.vue";
 Vue.use(VueRouter);
 
@@ -67,6 +68,11 @@ const router = new VueRouter({
           name: "roles",
           component: () => import("../components/admin/roles/TableRoles.vue"),
         },
+        {
+          path: '/admin/direcciones',
+          name: 'direcciones',
+          component: TableDirecciones
+        }
       ],
     },
     {

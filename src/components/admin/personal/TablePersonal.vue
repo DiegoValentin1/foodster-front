@@ -1,5 +1,7 @@
 <template>
+
   <v-card>
+    <v-breadcrumbs :items="items" large> </v-breadcrumbs>
     <v-card-title>
       Personal
       <v-divider class="mx-4" inset vertical></v-divider>
@@ -39,9 +41,11 @@
                 <v-col cols="12" sm="6" md="4">
                   <v-text-field label="Confirmar contraseña"></v-text-field>
                 </v-col>
-                <v-select label="Cargo" v-model="nuevoUsuario.categoria.idCategoria" :items="categoriasPersonal"
-                  item-text="nombre" item-value="idCategoria">
-                </v-select>
+                <v-col cols="12" sm="6" md="4">
+                  <v-select label="Cargo" v-model="nuevoUsuario.categoria.idCategoria" :items="categoriasPersonal"
+                    item-text="nombre" item-value="idCategoria">
+                  </v-select>
+                </v-col>
 
               </v-row>
             </v-container>
@@ -69,7 +73,7 @@
           <td class="text-start">
             <v-chip @click="changeStatus(item.idPersonal)" :color="item.active === true ? 'green' : 'red'" outlined
               small>{{ item.active === true ? 'Activo' :
-        "Inactivo" }}</v-chip>
+      "Inactivo" }}</v-chip>
           </td>
           <td class="text-center">
             <v-icon color="blue" @click="editItem(item)">mdi-pencil</v-icon>
@@ -81,9 +85,8 @@
     <v-dialog v-model="editDialog" max-width="500px">
       <v-card>
         <v-card-title>
-          <span class="text-h5">Editar Personal</span>
+          <span class="text-h5">Editar persona</span>
         </v-card-title>
-        <v-divider></v-divider>
         <v-card-text>
           <v-container>
             <v-row>
@@ -103,14 +106,16 @@
                 <v-text-field v-model="editedItem.usuarios.correo" :rules="emailRules" label="Correo"
                   required></v-text-field>
               </v-col>
-              <v-select label="Cargo" v-model="editedItem.categoria.idCategoria" :items="categoriasPersonal"
-                item-text="nombre" item-value="idCategoria">
-              </v-select>
+              <v-col cols="12" sm="6" md="4">
+                <v-select label="Cargo" v-model="editedItem.categoria.idCategoria" :items="categoriasPersonal"
+                  item-text="nombre" item-value="idCategoria">
+                </v-select>
+              </v-col>
+
 
             </v-row>
           </v-container>
         </v-card-text>
-        <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="cancelEdit">Cancelar</v-btn>
@@ -133,6 +138,11 @@ export default {
       dialog: false,
       editDialog: false,
       valid: false,
+      items: [
+        { text: 'Personal', disabled: false, href: '/admin/personal' },
+        { text: 'Direcciones', disabled: false, href: '/admin/direcciones' },
+        
+      ],
       nuevoUsuario: {
         nombres: '',
         primerApellido: '',
@@ -180,6 +190,11 @@ export default {
         { text: 'Estado', align: 'start', sortable: false, value: 'estado' },
         { text: 'Acciones', align: 'center', sortable: false, value: 'acciones' },
       ],
+
+      nameRules: [
+        v => !!v || 'Name is required',
+        v => v.length <= 10 || 'Name must be less than 10 characters',
+      ],
       email: '',
       emailRules: [
         v => !!v || 'E-mail is required',
@@ -195,6 +210,7 @@ export default {
     async getCategoriasPersonal() {
       try {
         const response = await categoriasPersonal.getCategoriasPersonalByStatus(true);
+        console.log(response)
         this.categoriasPersonal = response;
       } catch (error) {
         console.log(error)
@@ -203,17 +219,21 @@ export default {
     async getPersonal() {
       try {
         const response = await personalServices.getPersonal();
+        console.log(response)
         this.personal = response;
       } catch (error) {
         console.error(error);
       }
     },
     editItem(item) {
+      console.log(item)
       this.editedItem = { ...item };
       this.editDialog = true;
     },
     cancelEdit() {
+      // Cerrar el modal de edición
       this.editDialog = false;
+      // Restablecer los datos de la persona en edición
       this.editedItem = {
         idPersonal: "",
         usuarios: {
@@ -238,6 +258,7 @@ export default {
       };
     },
     saveEdit() {
+      console.log("Persona editada:", this.editedItem);
       try {
         const response = personalServices.update(this.editedItem);
       } catch (error) {
@@ -267,6 +288,7 @@ export default {
           active: ''
         };
       }
+
     },
     deleteItem(idPersonal) {
       const res = personalServices.delete_(idPersonal);
@@ -302,6 +324,8 @@ export default {
         this.getPersonal()
       }
     }
+
+
   }
 }
 </script>
