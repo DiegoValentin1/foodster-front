@@ -51,7 +51,7 @@ export default {
         this.value--;
         if (this.value === 0) {
           clearInterval(interval);
-          this.$router.push({ path: '/' });
+          this.$router.push({ path: '/home' });
         }
       }, 1000);
     },
