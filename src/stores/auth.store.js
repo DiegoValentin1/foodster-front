@@ -20,7 +20,7 @@ export const useAuthStore = defineStore({
                     route = '/admin'
                     break;
                 case 'CLIENTE':
-                    route = '/home'
+                    route = '/home/inicio'
                     break;
                 case 'PERSONAL':
                     route = '/personal'
@@ -33,7 +33,7 @@ export const useAuthStore = defineStore({
         }, logout() {
             this.user = null;
             localStorage.removeItem('user');
-            router.push('/');
+            router.push('/home/perfil');
         }
     }
 });

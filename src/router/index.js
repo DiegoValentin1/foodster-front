@@ -1,22 +1,17 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Login from "../components/public/Login.vue";
-import { useAuthStore } from "@/stores";
+import {useAuthStore} from "@/stores";
 import TableDirecciones from '../components/admin/personal/direcciones/TableDirecciones.vue'
-import Landing from "../components/public/Landing-pages/LandingPage.vue";
-Vue.use(VueRouter);
 
+Vue.use(VueRouter);
 const router = new VueRouter({
 
     mode: 'history', base: import.meta.env.BASE_URL, routes: [{
-        path: '/', name: 'login', component: Login, // que el login solamente se muestre si no hay un usuario logueado
+        path: '/', redirect: '/home/inicio',
 
     }, {
-        path: '/admin',
-        // meta: {roles: ['ADMIN']},
-        name: 'admin',
-        component: () => import('../components/admin/components/SidebarNavbar.vue'),
-        children: [{
+        path: '/admin', // meta: {roles: ['ADMIN']},
+        name: 'admin', component: () => import('../components/admin/components/SidebarNavbar.vue'), children: [{
             path: '/', name: 'dashboard', component: () => import('../components/admin/Dashboard.vue')
         }, {
             path: '/admin/users', name: 'users', component: () => import('../components/admin/users/TableUsers.vue')
@@ -38,85 +33,77 @@ const router = new VueRouter({
             component: () => import('../components/admin/eventos/TableEventos.vue')
         }, {
             path: '/admin/roles', name: 'roles', component: () => import('../components/admin/roles/TableRoles.vue')
-        },{
-             path:'/admin/servicios',
-             name:'servicios',
-             component:()=>import('../components/admin/services/TableServices.vue')
-        },
-        {
-            path:'/admin/categorias',
-            name:'categorias',
-            component:()=>import('../components/admin/categories/TableCategories.vue')
-        },
-        {
-            path:'/admin/paquete',
-            name:'package',
-            component:()=>import('../components/admin/paquete/TablePackages.vue')
-        },
-        {
-          path: '/admin/direcciones',
-          name: 'direcciones',
-          component: TableDirecciones
+        }, {
+            path: '/admin/servicios',
+            name: 'servicios',
+            component: () => import('../components/admin/services/TableServices.vue')
+        }, {
+            path: '/admin/categorias',
+            name: 'categorias',
+            component: () => import('../components/admin/categories/TableCategories.vue')
+        }, {
+            path: '/admin/paquete',
+            name: 'package',
+            component: () => import('../components/admin/paquete/TablePackages.vue')
+        }, {
+            path: '/admin/direcciones', name: 'direcciones', component: TableDirecciones
         }
-    
-    ]
+
+        ]
     }, {
-        path: '/home',
-        // meta: {roles: ['CLIENTE']},
+        path: '/home', // meta: {roles: ['CLIENTE']},
         name: 'home',
         component: () => import('../components/cliente/components/Home.vue'),
+        redirect: '/home/inicio',
         children: [{
             path: '/home/paquetes/',
             name: 'paquetes',
             component: () => import('../components/cliente/components/Inicio.vue')
         }, {
             path: '/home/servicios/',
-            name: 'servicios',
-            component: () => import('../components/cliente/components/Inicio.vue')
+            name: 'serviciosCliente',
+            component: () => import('../components/cliente/components/Servicios.vue')
         }, {
             path: '/home/inicio/',
             name: 'inicio',
             component: () => import('../components/public/Landing-pages/LandingPage.vue')
         }, {
-            path: '/home/perfil/',
-            component: () => import('../components/cliente/components/Profile.vue')
-        },{
-            path:'/home/carrito/',
-            name:'carrito',
-            component:()=>import('../components/cliente/components/ShoppingCart.vue')
+            path: '/home/perfil/', name: 'perfil', component: () => {
+                const user = JSON.parse(localStorage.getItem('user'));
+                console.log(user);
+                if (user) { // Si el usuario está logueado
+                    return import('../components/cliente/components/Profile.vue');
+                } else { // Si el usuario no está logueado
+                    return import('../components/public/Login.vue');
+                }
+            }
+        }, {
+            path: '/home/carrito/',
+            name: 'carrito',
+            component: () => import('../components/cliente/components/ShoppingCart.vue')
 
-        },
-        {
-          path: "/home/pedido",
-          name: "pedido",
-          component: () => import("../components/cliente/Pedido.vue"),
-        },
-      ],
-    },
-    {
-      path: "/404",
-      name: "404",
-      component: () => import("../components/public/error/ErrorPage.vue"),
-    },
-    {
-      path: "*",
-      redirect: "/404",
-    },
-  ],
+        }, {
+            path: "/home/pedido", name: "pedido", component: () => import("../components/cliente/Pedido.vue"),
+        },],
+    }, {
+        path: "/404", name: "404", component: () => import("../components/public/error/ErrorPage.vue"),
+    }, {
+        path: "*", redirect: "/404",
+    },],
 });
 
 router.beforeEach(async (to, from, next) => {
-  const auth = useAuthStore();
-  let userRoles = [];
-  if (auth.user && auth.user.usuarios) {
-    userRoles = auth.user.usuarios.roles.map((role) => role.nombre);
-  }
-  if (to.matched.some((record) => record.meta && record.meta.roles)) {
-    if (!auth.user) {
-      auth.returnUrl = to.fullPath;
-      return next({ name: "login" });
+    const auth = useAuthStore();
+    let userRoles = [];
+    if (auth.user && auth.user.usuarios) {
+        userRoles = auth.user.usuarios.roles.map((role) => role.nombre);
     }
-  }
-  next();
+    if (to.matched.some((record) => record.meta && record.meta.roles)) {
+        if (!auth.user) {
+            auth.returnUrl = to.fullPath;
+            return next({name: "login"});
+        }
+    }
+    next();
 });
 export default router;

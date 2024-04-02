@@ -23,11 +23,11 @@
                     :rules="[(v) => !!v || 'El nombre es requerido']"></v-text-field>
                   <v-text-field v-model="nuevoPaquete.descripcion" label="Descripción"
                     :rules="[(v) => !!v || 'La descripción es requerida']" type="text"></v-text-field>
-                  
+
                     <v-file-input  type="file" @change="onFileChange" accept="image/*" label="File input" filled
                     prepend-icon="mdi-camera"></v-file-input>
 
-                    
+
                 </v-col>
                 <v-col cols="12" sm="6" md="6">
 

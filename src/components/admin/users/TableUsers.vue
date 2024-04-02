@@ -266,13 +266,6 @@ export default {
         console.log(error)
       }
     },
-    changeStatus(idUsuario){
-      try {
-        const response = usersServices.changeStatus(idUsuario)
-      } catch (error) {
-        console.log(error)
-      }
-    },
 
 
     closeModalUpdateUsuario() {
