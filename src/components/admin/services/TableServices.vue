@@ -7,7 +7,7 @@
 
     <v-tabs-items v-model="tab">
       <v-tab-item>
-        <v-card>
+        <v-card >
           <v-card-title>
             Servicios
             <v-divider class="mx-4" inset vertical></v-divider>
@@ -31,7 +31,7 @@
                   >Nuevo servicio</v-btn
                 >
               </template>
-              <v-card>
+              <v-card >
                 <v-card-title>
                   <span class="text-h5">Agregar nuevo servicio</span>
                 </v-card-title>
@@ -75,17 +75,8 @@
                           item-value="idCategoria"
                           label="Categoria"
                         ></v-select>
-                        <v-col cols="12" sm="6" md="6">
-                          <input
-                            type="file"
-                            @change="onFileChange"
-                            accept="image/*"
-                          />
-                        </v-col>
-                      </v-col>
-
-                      <v-col cols="12" sm="6" md="4">
-                        <v-select
+                        
+                          <v-select
                           v-model="nuevoServicio.active"
                           :items="[
                             { text: 'Activo', value: true },
@@ -93,6 +84,13 @@
                           ]"
                           label="Estado"
                         ></v-select>
+                      </v-col>
+
+                      <v-col cols="12" sm="6" md="12">
+
+                        <v-file-input  @change="onFileChange"  type="file" accept="image/*" label="Imagen" filled
+                          prepend-icon="mdi-camera">
+                        </v-file-input>
                       </v-col>
                     </v-row>
                   </v-container>
