@@ -33,7 +33,8 @@ export const useAuthStore = defineStore({
         }, logout() {
             this.user = null;
             localStorage.removeItem('user');
-            router.push('/home/perfil');
+            router.push('/home/inicio');
+
         }
     }
 });

@@ -11,6 +11,16 @@ const getUsers = async () => {
     }
 }
 
+const getUser = async (id) => {
+    try {
+        const response = await axiosClient.get(`${baseUrl}/${id}`);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+
+}
+
 
 const insert = async (personal) => {
     try {
@@ -86,6 +96,7 @@ const insert = async (personal) => {
 
 export default {
     getUsers,
+    getUser,
     insert,
     delete_,
     changeStatus,

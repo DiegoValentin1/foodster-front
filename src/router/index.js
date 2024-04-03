@@ -70,7 +70,6 @@ const router = new VueRouter({
         }, {
             path: '/home/perfil/', name: 'perfil', component: () => {
                 const user = JSON.parse(localStorage.getItem('user'));
-                console.log(user);
                 if (user) { // Si el usuario está logueado
                     return import('../components/cliente/components/Profile.vue');
                 } else { // Si el usuario no está logueado

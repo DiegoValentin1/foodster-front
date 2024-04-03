@@ -12,66 +12,6 @@
         hide-details
       ></v-text-field>
       <v-spacer></v-spacer>
-      <v-dialog v-model="dialogEvento" max-width="500px">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on"
-            >Nuevo servicio</v-btn
-          >
-        </template>
-        <v-card>
-          <v-card-title>
-            <span class="text-h5">Agregar nuevo evento</span>
-          </v-card-title>
-          <v-card-text>
-            <v-container>
-              <v-row>
-                <v-col cols="12" sm="6" md="6">
-                  <v-text-field
-                    v-model="nuevoEvento.nombre"
-                    label="Nombre"
-                    :rules="[(v) => !!v || 'El nombre es requerido']"
-                  ></v-text-field>
-                  <v-text-field
-                    v-model="nuevoEvento.descripcion"
-                    label="Descripción"
-                    :rules="[(v) => !!v || 'La descripción es requerida']"
-                    type="text"
-                  ></v-text-field>
-                  <v-select
-                    v-model="nuevoEvento.active"
-                    :items="[
-                      { text: 'Activo', value: true },
-                      { text: 'Inactivo', value: false },
-                    ]"
-                    label="Estado"
-                  ></v-select>
-                </v-col>
-                <v-col cols="12" sm="6" md="6">
-                  <v-text-field
-                    v-model="nuevoEvento.recomendadoPara"
-                    label="Recomendado para"
-                    :rules="[(v) => !!v || 'El recomendado para es requerido']"
-                    type="text"
-                  ></v-text-field>
-                  <input type="file" @change="onFileChange" accept="image/*" />
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click="cerrarModalAgregarEvento"
-              >Cancelar</v-btn
-            >
-            <v-btn
-              color="blue darken-1"
-              text
-              @click="agregarEvento(nuevoEvento)"
-              >Guardar</v-btn
-            >
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
     </v-card-title>
 
     <v-data-table
@@ -152,6 +92,8 @@
                           label="Número de Personas"
                           :rules="[
                             (v) => !!v || 'El número de personas es requerido',
+                            (v) => (v && v > 0) || 'El número de personas debe ser mayor a 0',
+                            (v) => (v && v < 1000) || 'El número de personas debe ser menor a 1000',
                           ]"
                         ></v-text-field>
                         <v-text-field
