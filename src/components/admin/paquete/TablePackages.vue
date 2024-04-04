@@ -24,8 +24,7 @@
                   <v-text-field v-model="nuevoPaquete.descripcion" label="Descripción"
                     :rules="[(v) => !!v || 'La descripción es requerida']" type="text"></v-text-field>
 
-                    <v-file-input  type="file" @change="onFileChange" accept="image/*" label="File input" filled
-                    prepend-icon="mdi-camera"></v-file-input>
+                    <input type="file" @change="onFileChange" accept="image/*" />
 
 
                 </v-col>
@@ -262,7 +261,7 @@ export default {
             ultimaModificacion: new Date().toISOString(),
             active: true,
           };
-          this.cerrarModalAgregarServicio();
+          this.cerrarModalAgregarPaquete();
           this.getAllPaquetes();
         }
       } catch (error) {

@@ -59,6 +59,12 @@
                           type="number"
                           step="0.01"
                         ></v-text-field>
+                                          
+                        <input
+                            type="file"
+                            @change="onFileChange"
+                            accept="image/*"
+                          />
                       </v-col>
 
                       <!-- Segunda columna -->
@@ -75,17 +81,7 @@
                           item-value="idCategoria"
                           label="Categoria"
                         ></v-select>
-                        <v-col cols="12" sm="6" md="6">
-                          <input
-                            type="file"
-                            @change="onFileChange"
-                            accept="image/*"
-                          />
-                        </v-col>
-                      </v-col>
-
-                      <v-col cols="12" sm="6" md="4">
-                        <v-select
+                          <v-select
                           v-model="nuevoServicio.active"
                           :items="[
                             { text: 'Activo', value: true },
@@ -171,36 +167,40 @@
                         <v-container>
                           <v-row>
                             <v-col cols="12" sm="6" md="4">
-                              <v-text-field
-                                v-model="item.nombre"
-                                label="Nombre"
-                              ></v-text-field>
+                              <v-text-field v-model="item.nombre" label="Nombre"></v-text-field>
                               <v-text-field
                                 v-model="item.descripcion"
                                 label="Descripcion"
-                                :rules="[
-                                  (v) => !!v || 'La descripción es requerida',
-                                ]"
+                                :rules="[(v) => !!v || 'La descripción es requerida']"
                                 type="text"
                               ></v-text-field>
                               <v-text-field
                                 v-model="item.precio"
                                 label="Precio"
-                                :rules="[
-                                  (v) => !!v || 'El precio es requerido',
-                                ]"
+                                :rules="[(v) => !!v || 'El precio es requerido']"
                                 type="number"
                               ></v-text-field>
                               <v-text-field
                                 v-model="item.precioDescuento"
                                 label="Precio Descuento"
-                                :rules="[
-                                  (v) =>
-                                    !!v ||
-                                    'El precio de descuento es requerido',
-                                ]"
+                                :rules="[(v) => !!v || 'El precio de descuento es requerido']"
                                 type="number"
                               ></v-text-field>
+                              <v-text-field
+                                v-model="item.existencias"
+                                label="Existencias"
+                                :rules="[(v) => !!v || 'Las existencias son requeridas']"
+                                type="number"
+                              ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6" md="4">
+                              <v-select
+                                v-model="item.categoria.idCategoria"
+                                :items="categoriasServicios"
+                                item-text="nombre"
+                                item-value="idCategoria"
+                                label="Categoria"
+                              ></v-select>
                               <v-select
                                 v-model="item.active"
                                 :items="[
@@ -209,29 +209,7 @@
                                 ]"
                                 label="Estado"
                               ></v-select>
-                            </v-col>
-                            <v-col cols="12" sm="6" md="4">
-                              <v-text-field
-                                v-model="item.existencias"
-                                label="Existencias"
-                                :rules="[
-                                  (v) =>
-                                    !!v || 'Las existencias son requeridas',
-                                ]"
-                                type="number"
-                              ></v-text-field>
-                              <v-select
-                                v-model="item.categoria.idCategoria"
-                                :items="categoriasServicios"
-                                item-text="nombre"
-                                item-value="idCategoria"
-                                label="Categoria"
-                              ></v-select>
-                              <input
-                                type="file"
-                                @change="onFileChange"
-                                accept="image/*"
-                              />
+                              <input type="file" @change="onFileChange" accept="image/*" />
                             </v-col>
                           </v-row>
                         </v-container>
@@ -653,7 +631,6 @@ export default {
       nuevoServicio.categoria.ultimaModificacion = new Date().toISOString(); // Esto generará la fecha actual en el formato correcto
       nuevoServicio.imagen = this.nuevoServicio.imagen;
       try {
-
         await updateServicio(nuevoServicio);
         this.fetchServicios(); // Llamada al método renombrado
         this.dialogosEditarServicio[nuevoServicio.idServicio] = false;
@@ -683,7 +660,6 @@ export default {
     },
     async deleteItemServicioPaquete(idServicioPaquete) {
       try {
-
         await deleteServicioPaquete(idServicioPaquete);
 
         const index = this.servicioPaquete.findIndex(
