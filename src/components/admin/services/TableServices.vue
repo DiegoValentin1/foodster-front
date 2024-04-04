@@ -7,7 +7,7 @@
 
     <v-tabs-items v-model="tab">
       <v-tab-item>
-        <v-card >
+        <v-card>
           <v-card-title>
             Servicios
             <v-divider class="mx-4" inset vertical></v-divider>
@@ -31,7 +31,7 @@
                   >Nuevo servicio</v-btn
                 >
               </template>
-              <v-card >
+              <v-card>
                 <v-card-title>
                   <span class="text-h5">Agregar nuevo servicio</span>
                 </v-card-title>
@@ -59,6 +59,12 @@
                           type="number"
                           step="0.01"
                         ></v-text-field>
+                                          
+                        <input
+                            type="file"
+                            @change="onFileChange"
+                            accept="image/*"
+                          />
                       </v-col>
 
                       <!-- Segunda columna -->
@@ -75,7 +81,6 @@
                           item-value="idCategoria"
                           label="Categoria"
                         ></v-select>
-                        
                           <v-select
                           v-model="nuevoServicio.active"
                           :items="[
@@ -84,13 +89,6 @@
                           ]"
                           label="Estado"
                         ></v-select>
-                      </v-col>
-
-                      <v-col cols="12" sm="6" md="12">
-
-                        <v-file-input  @change="onFileChange"  type="file" accept="image/*" label="Imagen" filled
-                          prepend-icon="mdi-camera">
-                        </v-file-input>
                       </v-col>
                     </v-row>
                   </v-container>
@@ -169,36 +167,40 @@
                         <v-container>
                           <v-row>
                             <v-col cols="12" sm="6" md="4">
-                              <v-text-field
-                                v-model="item.nombre"
-                                label="Nombre"
-                              ></v-text-field>
+                              <v-text-field v-model="item.nombre" label="Nombre"></v-text-field>
                               <v-text-field
                                 v-model="item.descripcion"
                                 label="Descripcion"
-                                :rules="[
-                                  (v) => !!v || 'La descripción es requerida',
-                                ]"
+                                :rules="[(v) => !!v || 'La descripción es requerida']"
                                 type="text"
                               ></v-text-field>
                               <v-text-field
                                 v-model="item.precio"
                                 label="Precio"
-                                :rules="[
-                                  (v) => !!v || 'El precio es requerido',
-                                ]"
+                                :rules="[(v) => !!v || 'El precio es requerido']"
                                 type="number"
                               ></v-text-field>
                               <v-text-field
                                 v-model="item.precioDescuento"
                                 label="Precio Descuento"
-                                :rules="[
-                                  (v) =>
-                                    !!v ||
-                                    'El precio de descuento es requerido',
-                                ]"
+                                :rules="[(v) => !!v || 'El precio de descuento es requerido']"
                                 type="number"
                               ></v-text-field>
+                              <v-text-field
+                                v-model="item.existencias"
+                                label="Existencias"
+                                :rules="[(v) => !!v || 'Las existencias son requeridas']"
+                                type="number"
+                              ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6" md="4">
+                              <v-select
+                                v-model="item.categoria.idCategoria"
+                                :items="categoriasServicios"
+                                item-text="nombre"
+                                item-value="idCategoria"
+                                label="Categoria"
+                              ></v-select>
                               <v-select
                                 v-model="item.active"
                                 :items="[
@@ -207,29 +209,7 @@
                                 ]"
                                 label="Estado"
                               ></v-select>
-                            </v-col>
-                            <v-col cols="12" sm="6" md="4">
-                              <v-text-field
-                                v-model="item.existencias"
-                                label="Existencias"
-                                :rules="[
-                                  (v) =>
-                                    !!v || 'Las existencias son requeridas',
-                                ]"
-                                type="number"
-                              ></v-text-field>
-                              <v-select
-                                v-model="item.categoria.idCategoria"
-                                :items="categoriasServicios"
-                                item-text="nombre"
-                                item-value="idCategoria"
-                                label="Categoria"
-                              ></v-select>
-                              <input
-                                type="file"
-                                @change="onFileChange"
-                                accept="image/*"
-                              />
+                              <input type="file" @change="onFileChange" accept="image/*" />
                             </v-col>
                           </v-row>
                         </v-container>
@@ -439,7 +419,6 @@
                     >mdi-delete</v-icon
                   >
                 </td>
-                
               </tr>
             </template>
           </v-data-table>
@@ -652,7 +631,6 @@ export default {
       nuevoServicio.categoria.ultimaModificacion = new Date().toISOString(); // Esto generará la fecha actual en el formato correcto
       nuevoServicio.imagen = this.nuevoServicio.imagen;
       try {
-
         await updateServicio(nuevoServicio);
         this.fetchServicios(); // Llamada al método renombrado
         this.dialogosEditarServicio[nuevoServicio.idServicio] = false;
@@ -682,7 +660,6 @@ export default {
     },
     async deleteItemServicioPaquete(idServicioPaquete) {
       try {
-
         await deleteServicioPaquete(idServicioPaquete);
 
         const index = this.servicioPaquete.findIndex(
