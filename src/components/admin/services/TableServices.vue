@@ -367,7 +367,7 @@
               item.active ? "Activo" : "Inactivo"
             }}</v-chip>
           </td>
-                <td class="text-start">{{ item.ultima_modificacion }}</td>
+                <td class="text-start">{{ item.ultima_modificacion }}
                   <v-dialog
                     v-model="dialogosEditarPaquete[item.idServicioPaquete]"
                     max-width="500px"
