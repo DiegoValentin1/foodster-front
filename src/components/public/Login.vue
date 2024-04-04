@@ -3,34 +3,16 @@
     <div class="hidden lg:flex w-1/2 items-center justify-center bg-fdoscuro text-fdoscuro">
 
       <div class="max-w-md text-center">
-        <img
-            class="fixed left-[7%] top-[15%] logo"
-            src="../../assets/images/logorealista.png"
-            alt=""
-            srcset=""
-        />
+        <img class="fixed left-[7%] top-[15%] logo" src="../../assets/images/logorealista.png" alt="" srcset="" />
         <section class="rotate left-[7%] top-[15%]">
           <svg viewBox="0 0 100 100" class="">
-            <path
-                id="circlePath"
-                fill="none"
-                stroke-width="5"
-                stroke="none"
-                d="
+            <path id="circlePath" fill="none" stroke-width="5" stroke="none" d="
           M 10, 50
           a 40,40 0 1,1 80,0
           a 40,40 0 1,1 -80,0
-        "
-            />
-            <text
-                stroke="black"
-                stroke-width="0.45"
-                id="text"
-                font-family="monospace"
-                font-size="12.7"
-                font-weight="bolder"
-                fill="#e2e2e2"
-            >
+        " />
+            <text stroke="black" stroke-width="0.45" id="text" font-family="monospace" font-size="12.7"
+              font-weight="bolder" fill="#e2e2e2">
               <textPath id="textPath" href="#circlePath">
                 🍱 Foodster 🍚 Foodster 🥗 Foodster
               </textPath>
@@ -41,6 +23,7 @@
     </div>
     <!-- Right Pane -->
     <div class="w-full bg-gray-200 lg:w-1/2 flex items-center justify-center">
+      
       <div class="max-w-md w-full p-6">
         <h1 class="text-3xl font-bold mb-6 text-black text-center lg:hidden">
           Foodster
@@ -51,62 +34,55 @@
         <h1 class="text-sm font-semibold mb-6 text-gray-500 text-center">
           Bienvenido a Foodster, inicia sesión para continuar
         </h1>
-        <ValidationObserver v-slot="{ invalid }" ref="observer">
           <form class="space-y-4" @submit.prevent="onSubmit">
             <div>
-              <label for="email" class="block text-sm font-medium text-gray-700"
-              >Correo</label
-              >
-              <ValidationProvider rules="required|email" v-slot="{ errors }" name="Correo">
-                <input
-                    :class="{ 'border-red-500': errors[0] }"
-                    type="text"
-                    id="correo"
-                    name="correo"
-                    v-model="correo"
-                    class="mt-1 p-2 w-full bg-gray-100 border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
-                />
+              <v-text-field for="email" id="correo" name="correo" v-model="correo" :rules="emailRules" label="Correo electonico" required></v-text-field>
+              
+              <!-- <label for="email" class="block text-sm font-medium text-gray-700">Correo</label> -->
+             
+              <!-- <ValidationProvider rules="required|email" v-slot="{ errors }" name="Correo">
+                <input :class="{ 'border-red-500': errors[0] }" type="text" id="correo" name="correo" v-model="correo"
+                  class="mt-1 p-2 w-full bg-gray-100 border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300" />
                 <div v-if="errors[0]" class="text-red-500 text-sm">
                   {{ errors[0] }}
                 </div>
-              </ValidationProvider>
+              </ValidationProvider> -->
             </div>
 
             <div>
-              <label
-                  for="password"
-                  class="block text-sm font-medium text-gray-700"
-              >Contraseña</label
-              >
+              <v-text-field
+            v-model="contrasenia"
+            :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+            :rules="[rules.required, rules.min]"
+            :type="show1 ? 'text' : 'password'"
+            name="input-10-1"
+            label="Contraseña"
+            hint="La contraseña es requerida"
+            counter
+            @click:append="show1 = !show1"
+          ></v-text-field>
+              <!-- <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
               <validation-provider rules="required" v-slot="{ errors }" name="Contraseña">
-                <input
-                    :class="{ 'border-red-500': errors[0] }"
-                    type="password"
-                    id="contrasenia"
-                    name="contrasenia"
-                    v-model="contrasenia"
-                    class="mt-1 p-2 w-full bg-gray-100 border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
-                />
+                <input :class="{ 'border-red-500': errors[0] }" type="password" id="contrasenia" name="contrasenia"
+                  v-model="contrasenia"
+                  class="mt-1 p-2 w-full bg-gray-100 border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300" />
                 <div v-if="errors[0]" class="text-red-500 text-sm">
                   {{ errors[0] }}
                 </div>
-              </validation-provider>
+              </validation-provider> -->
 
             </div>
             <div>
-              <button
-                  type="submit"
-                  class="w-full bg-fdoscuro text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300"
-              >
-                Registrate
+              <button type="submit"
+                class="w-full bg-fdoscuro text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300">
+                Iniciar Sesión
               </button>
             </div>
           </form>
-        </ValidationObserver>
         <div class="mt-4 text-sm text-gray-600 text-center">
           <p>
-            Ya eres parte de Foodster?
-            <a href="#" class="text-black hover:underline">Inicia sesión</a>
+            ¿Aun no eres parte de Foodster?
+            <a href="/registrarse" class="text-black hover:underline">Registrate Aqui..!</a>
           </p>
         </div>
       </div>
@@ -115,8 +91,8 @@
 </template>
 
 <script>
-import {extend, ValidationObserver, ValidationProvider,} from 'vee-validate';
-import {useAuthStore} from "@/stores";
+import { extend, ValidationObserver, ValidationProvider, } from 'vee-validate';
+import { useAuthStore } from "@/stores";
 
 extend('email', {
   validate: value => {
@@ -137,14 +113,24 @@ extend('required', {
 });
 
 export default {
-  components: {
-    ValidationObserver,
-    ValidationProvider
-  },
+  
   data() {
     return {
       correo: '',
       contrasenia: '',
+     
+      email: '',
+      emailRules: [
+        v => !!v || 'E-mail is required',
+        v => /.+@.+/.test(v) || 'El correo electronico es necesario',
+      ],
+      show1: false,
+        
+        password: 'Password',
+        rules: {
+          required: value => !!value || 'la contraseña es requerida',
+          emailMatch: () => (`The email and password you entered don't match`),
+        },
     };
   },
   methods: {
