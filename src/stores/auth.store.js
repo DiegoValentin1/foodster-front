@@ -1,5 +1,5 @@
 import {defineStore} from 'pinia';
-
+import {showNotification} from "@/utils/notification";
 import {axiosClient} from "@/utils/axios-client";
 import router from "@/router";
 
@@ -34,6 +34,7 @@ export const useAuthStore = defineStore({
             this.user = null;
             localStorage.removeItem('user');
             router.push('/home/inicio');
+            showNotification('success', 'Sesión cerrada');
 
         }
     }

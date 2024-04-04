@@ -1,4 +1,5 @@
 import {axiosClient} from "@/utils/axios-client";
+import {showNotification} from "@/utils/notification";
 
 const baseUrl = '/categoria-personal';
 
@@ -7,7 +8,7 @@ const getCategoriasPersonal = async () => {
         const response = await axiosClient.get(`${baseUrl}/`)
         return response.data;
     } catch (error) {
-        console.log(error);
+        showNotification("error", "Error al obtener categorias personal");
     }
 }
 const getCategoriasPersonalByStatus = async (status) => {
@@ -15,7 +16,7 @@ const getCategoriasPersonalByStatus = async (status) => {
         const response = await axiosClient.get(`${baseUrl}/status/${status}`)
         return response.data;
     } catch (error) {
-        console.log(error);
+        showNotification("error", "Error al obtener categorias personal por estado");
     }
 }
 

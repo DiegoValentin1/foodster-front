@@ -1,4 +1,5 @@
 import {axiosClient} from "@/utils/axios-client";
+import {showNotification} from "@/utils/notification";
 
 let baseUrl = `/roles`;
 
@@ -7,7 +8,7 @@ const getRoles = async () => {
         const response = await axiosClient.get(`${baseUrl}/`);
         return response.data;
     } catch (error) {
-        console.log(error);
+        showNotification("error", "Error al obtener roles")
     }
 }
 

@@ -124,6 +124,7 @@
                 <td class="text-start">
                   <img
                     :src="item.imagen"
+                    alt="Servicio"
                     style="max-width: 100px; max-height: 100px"
                   />
                 </td>
@@ -434,17 +435,14 @@ import {
   updateServicio,
   createServicio,
   deleteServicio,
-  deleteServicioPaqueteByStatus,
   deleteServicioPaquete,
-  getServiciosPaqueteByStatus,
   createServicioPaquete,
   updateServicioPaquete,
   getServiciosPaquete,
-  deleteServicioByStatus,
-  getServiciosByStatus,
-} from "../../../services/ServicesServices.js";
-import { getCategoriasServicios } from "../../../services/CategoryServices.js";
-import { getAllPaquetes } from "../../../services/PaquetesServices.js";
+
+} from "@/services/ServicesServices";
+import { getCategoriasServicios } from "@/services/CategoryServices";
+import { getAllPaquetes } from "@/services/PaquetesServices";
 export default {
   data() {
     return {
@@ -709,10 +707,6 @@ export default {
           this.nuevoPaquete = {
             paquete: {
               idPaquete: "",
-            },
-
-            servicio: {
-              idServicio: "",
             },
             ultimaModificacion: new Date().toISOString(),
             active: true,

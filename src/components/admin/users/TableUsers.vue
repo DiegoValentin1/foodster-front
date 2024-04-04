@@ -8,7 +8,9 @@
       <v-spacer></v-spacer>
       <v-dialog v-model="dialog" max-width="500px">
         <template v-slot:activator="{ on }">
-          <v-btn color="#0091EA" dark class="mb-2" v-on="on"><v-icon dark>mdi-plus</v-icon></v-btn>
+          <v-btn color="#0091EA" dark class="mb-2" v-on="on">
+            <v-icon dark>mdi-plus</v-icon>
+          </v-btn>
         </template>
         <v-card>
           <v-card-title>
@@ -38,7 +40,7 @@
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
                   <v-select label="Rol" v-model="nuevoUsuario.roles.idRol" :items="roles" item-text="nombre"
-                    item-value="idRole">
+                            item-value="idRole">
                   </v-select>
                 </v-col>
               </v-row>
@@ -52,7 +54,8 @@
         </v-card>
       </v-dialog>
     </v-card-title>
-    <v-data-table class="mx-auto" style="height: auto; max-height: 500px; overflow-y: auto" :headers="headers" :items="users" :search="search">
+    <v-data-table class="mx-auto" style="height: auto; max-height: 500px; overflow-y: auto" :headers="headers"
+                  :items="users" :search="search">
       <template v-slot:item="{ item }">
         <tr>
           <td class="text-start">{{ item.nombres }}</td>
@@ -60,8 +63,14 @@
           <td class="text-start">{{ item.segundoApellido }}</td>
           <td class="text-start">{{ item.telefono }}</td>
           <td class="text-start">{{ item.correo }}</td>
-          <td class="text-start">{{ item.contrasena }}</td>
-          <td class="text-start">{{ item.ultimaModificacion }}</td>
+          <td class="text-start">{{ new Date(item.ultimaModificacion).toLocaleString("es-ES", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          }) }}</td>
           <td class="text-start">
             <v-chip @click="changeStatus(item.idUsuario)" :color="item.active ? 'green' : 'red'" outlined small>
               {{ item.active ? 'Activo' : 'Inactivo' }}
@@ -104,7 +113,7 @@
               </v-col>
               <v-col cols="12" sm="6" md="4">
                 <v-select label="Rol" v-model="nuevoUsuario.roles.idRol" :items="roles" item-text="nombre"
-                  item-value="idRole">
+                          item-value="idRole">
                 </v-select>
               </v-col>
 
@@ -123,9 +132,9 @@
 </template>
 
 <script>
-import RolesService from '../../../services/RolesService'
 import usersServices from '../../../services/UsersServices'
 import rolesService from '../../../services/RolesService'
+
 export default {
   data() {
     return {
@@ -161,16 +170,15 @@ export default {
         ]
       },
       headers: [
-        { text: 'Nombres', align: 'start', sortable: true, value: 'nombres' },
-        { text: 'Primer Apellido', align: 'start', sortable: true, value: 'primerApellido' },
-        { text: 'Segundo Apellido', align: 'start', sortable: true, value: 'segundoApellido' },
-        { text: 'Teléfono', align: 'start', sortable: false, value: 'telefono' },
-        { text: 'Correo', align: 'start', sortable: false, value: 'correo' },
-        { text: 'Contraseña', align: 'start', sortable: false, value: 'contrasena' },
-        { text: 'Última Modificación', align: 'start', sortable: true, value: 'ultimaModificacion' },
-        { text: 'Estado', align: 'start', sortable: false, value: 'active' },
-        { text: 'Nombre del Rol', align: 'start', sortable: false, value: 'rolNombre' },
-        { text: 'Acciones', value: 'actions', sortable: false }
+        {text: 'Nombres', align: 'start', sortable: true, value: 'nombres'},
+        {text: 'Primer Apellido', align: 'start', sortable: true, value: 'primerApellido'},
+        {text: 'Segundo Apellido', align: 'start', sortable: true, value: 'segundoApellido'},
+        {text: 'Teléfono', align: 'start', sortable: false, value: 'telefono'},
+        {text: 'Correo', align: 'start', sortable: false, value: 'correo'},
+        {text: 'Última Modificación', align: 'start', sortable: true, value: 'ultimaModificacion'},
+        {text: 'Estado', align: 'start', sortable: false, value: 'active'},
+        {text: 'Nombre del Rol', align: 'start', sortable: false, value: 'rolNombre'},
+        {text: 'Acciones', value: 'actions', sortable: false}
       ],
     }
   },
@@ -200,47 +208,53 @@ export default {
     //NOT FOUND, THIS METHOD NOT EXIST IN THE API
     async changeStatus(idUsuario) {
       try {
-        const response = await usersServices.changeStatus(idUsuario);
-        this.getUsers();
+        await usersServices.changeStatus(idUsuario);
+        await this.getUsers();
       } catch (error) {
         console.log(error)
       }
     },
     closeModalAddUsuario() {
       this.dialog = false;
-      
+
     },
 
     async addUsuario() {
-      console.log("METHOD ADD USER")
+      try {
+        await usersServices.insert(this.nuevoUsuario);
+        await this.getUsers();
+        this.dialog = false;
+      } catch (error) {
+        console.log(error);
+      }
     },
     editItem(item) {
-      this.usuarioEditado = { ...item };
+      this.usuarioEditado = {...item};
       this.editDialog = true;
     },
-    cancelEdit(){
+    cancelEdit() {
       this.editDialog = false;
-     this.usuarioEditado = {
-          nombres: '',
-          primerApellido: '',
-          segundoApellido: '',
-          telefono: '',
-          correo: '',
-          contrasena: "",
-          active: '',
-          roles: [
-            {
-              idRol: "",
-            }
-          ]
-        }
+      this.usuarioEditado = {
+        nombres: '',
+        primerApellido: '',
+        segundoApellido: '',
+        telefono: '',
+        correo: '',
+        contrasena: "",
+        active: '',
+        roles: [
+          {
+            idRol: "",
+          }
+        ]
+      }
     },
-     saveEdit() {
-      console.log("Usuario Editado: ", this.usuarioEditado);
+    async saveEdit() {
       try {
-        const response = usersServices.update(this.usuarioEditado)
+        await usersServices.update(this.usuarioEditado);
+        await this.getUsers();
       } catch (error) {
-        console.log(error)
+        console.log(error);
       } finally {
         this.editDialog = false;
         this.usuarioEditado = {
@@ -259,11 +273,12 @@ export default {
         }
       }
     },
-    deleteUser(idUsuario){
+    async deleteUser(idUsuario) {
       try {
-        const response = usersServices.delete_(idUsuario)
+        await usersServices.deleteUser(idUsuario);
+        await this.getUsers();
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     },
 

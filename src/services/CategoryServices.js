@@ -1,11 +1,12 @@
 import { axiosClient } from "@/utils/axios-client";
+import {showNotification} from "@/utils/notification";
 
 const getCategoriasPersonales = async () => {
     try {
         const response = await axiosClient.get(`/categorias-personal/`);
         return response.data;
     } catch (error) {
-        throw error;
+        showNotification("error", "Error al obtener categorías personales")
     }
 }
 
@@ -14,22 +15,17 @@ const actualizarCategoriaPersonal = async (item) => {
         const response = await axiosClient.put(`/categorias-personal/`, item);
         return response.data;
     } catch (error) {
-        console.error("Error al actualizar categoría personal:", error);
-        throw error;
+        showNotification("error", "Error al actualizar categoría personal")
     }
 }
 
 const crearCategoriaPersonal = async (categoriaPersonal) => {
-    console.log("Categoria Personal", categoriaPersonal);
-    console.log("Categoria Personal activo: ", categoriaPersonal.active);
-    console.log("Categoria Personal holaaaaa");
     try {
         const response = await axiosClient.post(`/categorias-personal/`, categoriaPersonal);
-        console.log("Response", response);
+        response.data ? showNotification("success", "Categoría personal creada") : showNotification("error", "Error al crear categoría personal")
         return response.data;
     } catch (error) {
-        console.error("Error al crear categoría personal:", error);
-        throw error;
+        showNotification("error", "Error al crear categoría personal")
     }
 }
 
@@ -37,20 +33,20 @@ const getCategoriasPersonalesPorEstado = async (status) => {
     try {
         const response = await axiosClient.get(`/categorias-personal/status/${status}`);
         return response.data;
+
     } catch (error) {
-        console.error("Error al obtener categorías personales por estado:", error);
-        throw error;
+        showNotification("error", "Error al obtener categorías personales por estado")
     }
 }
 
 const eliminarCategoriaPersonal = async (uid) => {
-    console.log("-----uid", uid)
+
     try {
         const response = await axiosClient.delete(`/categorias-personal/${uid}`);
+        response.data ? showNotification("success", "Categoría personal eliminada") : showNotification("error", "Error al eliminar categoría personal")
         return response.data;
     } catch (error) {
-        console.error("Error al eliminar categoría personal:", error);
-        throw error;
+        showNotification("error", "Error al eliminar categoría personal")
     }
 }
 const getCategoriasServicios = async () => {
@@ -58,57 +54,57 @@ const getCategoriasServicios = async () => {
         const response = await axiosClient.get(`/categorias-servicios/`);
         return response.data;
     } catch (error) {
-        throw error;
+        showNotification("error", "Error al obtener categorías de servicios")
     }
 }
 
 const actualizarCategoriaServicio = async (item) => {
     try {
         const response = await axiosClient.put(`/categorias-servicios/`, item);
+        response.data ? showNotification("success", "Categoría de servicio actualizada") : showNotification("error", "Error al actualizar categoría de servicio")
         return response.data;
     } catch (error) {
-        console.error("Error al actualizar categoría de servicio:", error);
-        throw error;
+        showNotification("error", "Error al actualizar categoría de servicio")
     }
 }
 
 const crearCategoriaServicio = async (categoriaServicio) => {
     try {
         const response = await axiosClient.post(`/categorias-servicios/`, categoriaServicio);
+        response.data ? showNotification("success", "Categoría de servicio creada") : showNotification("error", "Error al crear categoría de servicio")
         return response.data;
     } catch (error) {
-        console.error("Error al crear categoría de servicio:", error);
-        throw error;
+        showNotification("error", "Error al crear categoría de servicio")
     }
 }
 
 const getCategoriasServiciosPorEstado = async (status) => {
     try {
         const response = await axiosClient.get(`/categorias-servicios/status/${status}`);
+        response.data ? showNotification("success", "Categorías de servicios obtenidas") : showNotification("error", "Error al obtener categorías de servicios por estado")
         return response.data;
     } catch (error) {
-        console.error("Error al obtener categorías de servicios por estado:", error);
-        throw error;
+        showNotification("error", "Error al obtener categorías de servicios por estado")
     }
 }
 
 const eliminarCategoriaServicio = async (uid) => {
     try {
         const response = await axiosClient.delete(`/categorias-servicios/${uid}`);
+        showNotification("success", "Categoría de servicio eliminada")
         return response.data;
     } catch (error) {
-        console.error("Error al eliminar categoría de servicio:", error);
-        throw error;
+        showNotification("error", "Error al eliminar categoría de servicio")
     }
 }
 
 const eliminarCategoriaServicioPorEstado = async (uid) => {
     try {
         const response = await axiosClient.delete(`/categorias-servicios/status/${uid}`);
+        response.data ? showNotification("success", "Categoría de servicio eliminada") : showNotification("error", "Error al eliminar categoría de servicio")
         return response.data;
     } catch (error) {
-        console.error("Error al eliminar categoría de servicio por estado:", error);
-        throw error;
+        showNotification("error", "Error al eliminar categoría de servicio")
     }
 }
 

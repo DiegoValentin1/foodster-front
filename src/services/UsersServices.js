@@ -1,5 +1,6 @@
 import {axiosClient} from "@/utils/axios-client";
-import { API_URL } from "../utils/constants";
+import {showNotification} from "@/utils/notification";
+
 let baseUrl = `/usuarios`;
 
 const getUsers = async () => {
@@ -24,81 +25,52 @@ const getUser = async (id) => {
 
 const insert = async (personal) => {
     try {
-      const response = await fetch(`${API_URL}${baseUrl}/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          usuarios: {
-            nombres: nombres,
-            primerApellido: primerApellido,
-            segundoApellido: segundoApellido,
-            telefono: telefono,
-            correo: correo,
-            contrasena: contrasena,
-            active: true,
-            roles: [
-              {
-                idRol: personal.idRol,
-              },
-            ],
-          },
-        }),
-      });
-  
-      if (response.ok) {
-        console.log("DATOS ENVIADOS CORRECTAMENTE");
-      } else {
-        console.log("Error al enviar datos:", response.statusText);
-      }
+        const response = await axiosClient.post(`${baseUrl}/`, personal);
+        response.data ? showNotification("success", "Usuario creado") : showNotification("error", "Error al crear usuario")
+        return response.data;
     } catch (error) {
-      console.log("Error:", error);
+        showNotification("error", "Error al crear usuario")
     }
-  };
-  const delete_ = async (id_usuarios) => {
+};
+
+const insertPublic = async (personal) => {
     try {
-      const response = await axiosClient.delete(`${baseUrl}/${id_usuarios}`);
-      console.log(response.message);
+        const response = await axiosClient.post(`${baseUrl}/public`, personal);
+        response.data ? showNotification("success", "Se ha registrado correctamente") : showNotification("error", "Error al crear usuario")
+        return response.data;
     } catch (error) {
-      console.log(error);
+        showNotification("error", "Error al crear usuario")
     }
-  };
-  const changeStatus = async (id_usuarios) => {
+};
+const deleteUser = async (id_usuarios) => {
     try {
-      const response = await axiosClient.delete(
-        `${baseUrl}/status/${id_usuarios}`
-      );
-      console.log(response.message);
+        const response = await axiosClient.delete(`${baseUrl}/${id_usuarios}`);
+        response.data ? showNotification("success", "Usuario eliminado") : showNotification("error", "Error al eliminar usuario")
     } catch (error) {
-      console.log(error);
+        showNotification("error", "Error al eliminar usuario")
     }
-  };
-  const update = async (users) => {
+};
+const changeStatus = async (id_usuarios) => {
     try {
-      const response = await fetch(`${API_URL}${baseUrl}/`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(users),
-      });
-      if (response.ok) {
-        console.log("DATOS ENVIADOS CORRECTAMENTE");
-      } else {
-        console.log("Error al enviar datos:", response.statusText);
-      }
+        const response = await axiosClient.delete(`${baseUrl}/status/${id_usuarios}`);
+        response.data ? showNotification("success", "Estado del usuario cambiado") : showNotification("error", "Error al cambiar estado del usuario")
+        return response.data;
     } catch (error) {
-      console.log("Error:", error);
+        showNotification("error", "Error al cambiar estado del usuario")
     }
-  };
+};
+const update = async (users) => {
+    try {
+        const response = await axiosClient.put(`${baseUrl}/`, users);
+        response.data ? showNotification("success", "Usuario actualizado") : showNotification("error", "Error al actualizar usuario")
+        return response.data;
+    } catch (error) {
+        showNotification("error", "Error al actualizar usuario")
+
+    }
+};
 
 
 export default {
-    getUsers,
-    getUser,
-    insert,
-    delete_,
-    changeStatus,
-    update
+    getUsers, getUser, insert, insertPublic, deleteUser: deleteUser, changeStatus, update
 }

@@ -61,7 +61,6 @@
     <v-data-table class="mx-auto" style="height: auto; max-height: 500px; overflow-y: auto" :headers="headers" :items="personal" :search="search">
       <template v-slot:item="{ item }">
         <tr>
-          <td class="text-start">{{ item.idPersonal }}</td>
           <td class="text-start">{{ item.usuarios.nombres }}</td>
           <td class="text-start">{{ item.usuarios.primerApellido }}</td>
           <td class="text-start">{{ item.usuarios.segundoApellido }}</td>
@@ -69,7 +68,14 @@
           <td class="text-start">{{ item.usuarios.correo }}</td>
           <td class="text-start">{{ item.usuarios.roles[0].nombre }}</td>
           <td class="text-start">{{ item.categoria.nombre }}</td>
-          <td class="text-start">{{ item.ultimaModificacion }}</td>
+          <td class="text-start">{{ new Date(item.ultimaModificacion).toLocaleString("es-ES", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          }) }}</td>
           <td class="text-start">
             <v-chip @click="changeStatus(item.idPersonal)" :color="item.active === true ? 'green' : 'red'" outlined
               small>{{ item.active === true ? 'Activo' :
@@ -128,7 +134,7 @@
 
 <script>
 import personalServices from '../../../services/PersonalServices'
-import categoriasPersonal from '../../../services/CategoriasPersonal';
+import {getCategoriasPersonales} from "@/services/CategoryServices";
 export default {
   data() {
     return {
@@ -178,7 +184,7 @@ export default {
         active: ''
       },
       headers: [
-        { text: '#', align: 'start', sortable: true, value: 'idPersonal' },
+
         { text: 'Nombre', align: 'start', sortable: false, value: 'nombres' },
         { text: 'Primer Apellido', align: 'start', sortable: false, value: 'pApellido' },
         { text: 'Segundo Apellido', align: 'start', sortable: false, value: 'sApellido' },
@@ -209,7 +215,7 @@ export default {
   methods: {
     async getCategoriasPersonal() {
       try {
-        const response = await categoriasPersonal.getCategoriasPersonalByStatus(true);
+        const response = await getCategoriasPersonales();
         console.log(response)
         this.categoriasPersonal = response;
       } catch (error) {
@@ -258,7 +264,6 @@ export default {
       };
     },
     saveEdit() {
-      console.log("Persona editada:", this.editedItem);
       try {
         const response = personalServices.update(this.editedItem);
       } catch (error) {

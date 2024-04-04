@@ -1,20 +1,10 @@
 <template>
-  <form @submit.prevent="submitForm">
-    <label for="name"> Nombre:</label><br />
-    <input type="text" id="name"
-           v-model="formData.name" required />
-    <br/><br/>
-
     <div
         ref="container"
         class="frc-captcha"
         data-sitekey="FCMJTM9F6S3ERAC7"
         data-lang="es"
     ></div>
-
-    <!-- Botón de envío -->
-    <button type="submit">Enviar</button>
-  </form>
 </template>
 
 
@@ -23,33 +13,22 @@ import { WidgetInstance } from "friendly-challenge";
 
 import { ref } from "vue";
 
-import {verificarCaptcha} from "@/services/CaptchaService";
-
 export default {
   data() {
     return {
       container: ref(),
       widget: ref(),
-      formData: {
-        name: ""
-      },
     };
   },
 
   methods: {
-    //No comunicamos hacia
-    //el back de nuestra aplicación.
-
-    submitForm() {},
-
     async verifyCaptcha(solution) {
-      let response = await verificarCaptcha(solution);
-      console.log(response);
+      console.log("Captcha solution: ", solution);
+      this.$emit('solucion', solution);
     },
     doneCallback(solution) {
       this.verifyCaptcha(solution);
     },
-
     errorCallback: (err) => {
       console.log("There was an error when trying to solve the Captcha.");
       console.log(err);
@@ -75,5 +54,3 @@ export default {
   },
 };
 </script>
-
-<style></style>
