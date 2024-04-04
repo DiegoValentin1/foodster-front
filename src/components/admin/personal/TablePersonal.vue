@@ -58,7 +58,7 @@
         </v-card>
       </v-dialog>
     </v-card-title>
-    <v-data-table class="mx-auto" style="height: 400px;" :headers="headers" :items="personal" :search="search">
+    <v-data-table class="mx-auto" style="height: auto; max-height: 500px; overflow-y: auto" :headers="headers" :items="personal" :search="search">
       <template v-slot:item="{ item }">
         <tr>
           <td class="text-start">{{ item.idPersonal }}</td>
@@ -67,7 +67,7 @@
           <td class="text-start">{{ item.usuarios.segundoApellido }}</td>
           <td class="text-start">{{ item.usuarios.telefono }}</td>
           <td class="text-start">{{ item.usuarios.correo }}</td>
-          <td class="text-start">{{ item.usuarios.roles[0]?.nombre }}</td>
+          <td class="text-start">{{ item.usuarios.roles[0].nombre }}</td>
           <td class="text-start">{{ item.categoria.nombre }}</td>
           <td class="text-start">{{ item.ultimaModificacion }}</td>
           <td class="text-start">
