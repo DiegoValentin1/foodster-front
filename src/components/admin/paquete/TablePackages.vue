@@ -9,7 +9,7 @@
       <v-spacer></v-spacer>
       <v-dialog v-model="dialogPaquete" max-width="500px">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">Nuevo servicio</v-btn>
+          <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">Nuevo paquete</v-btn>
         </template>
         <v-card>
           <v-card-title>
@@ -275,7 +275,11 @@ export default {
     onFileChange(event) {
       const file = event.target.files[0];
       if (file) {
-        this.convertToBase64(file);
+        if (file.size > 16 * 1024 * 1024) {
+          alert("El tamaño máximo de la imagen es de 16 MB.");
+        } else {
+          this.convertToBase64(file);
+        }
       }
     },
 

@@ -732,7 +732,11 @@ export default {
     onFileChange(event) {
       const file = event.target.files[0];
       if (file) {
-        this.convertToBase64(file);
+        if (file.size > 16 * 1024 * 1024) {
+          alert("El tamaño máximo de la imagen es de 16 MB.");
+        } else {
+          this.convertToBase64(file);
+        }
       }
     },
 
