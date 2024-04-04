@@ -23,7 +23,7 @@
     </div>
     <!-- Right Pane -->
     <div class="w-full bg-gray-200 lg:w-1/2 flex items-center justify-center">
-      
+
       <div class="max-w-md w-full p-6">
         <h1 class="text-3xl font-bold mb-6 text-black text-center lg:hidden">
           Foodster
@@ -34,51 +34,27 @@
         <h1 class="text-sm font-semibold mb-6 text-gray-500 text-center">
           Bienvenido a Foodster, inicia sesión para continuar
         </h1>
-          <form class="space-y-4" @submit.prevent="onSubmit">
-            <div>
-              <v-text-field for="email" id="correo" name="correo" v-model="correo" :rules="emailRules" label="Correo electonico" required></v-text-field>
-              
-              <!-- <label for="email" class="block text-sm font-medium text-gray-700">Correo</label> -->
-             
-              <!-- <ValidationProvider rules="required|email" v-slot="{ errors }" name="Correo">
-                <input :class="{ 'border-red-500': errors[0] }" type="text" id="correo" name="correo" v-model="correo"
-                  class="mt-1 p-2 w-full bg-gray-100 border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300" />
-                <div v-if="errors[0]" class="text-red-500 text-sm">
-                  {{ errors[0] }}
-                </div>
-              </ValidationProvider> -->
-            </div>
+        <form class="space-y-4" @submit.prevent="onSubmit">
+          <div>
+            <v-text-field for="email" id="correo" name="correo" v-model="correo" :rules="emailRules"
+              label="Correo electonico" required></v-text-field>
 
-            <div>
-              <v-text-field
-            v-model="contrasenia"
-            :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-            :rules="[rules.required, rules.min]"
-            :type="show1 ? 'text' : 'password'"
-            name="input-10-1"
-            label="Contraseña"
-            hint="La contraseña es requerida"
-            counter
-            @click:append="show1 = !show1"
-          ></v-text-field>
-              <!-- <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
-              <validation-provider rules="required" v-slot="{ errors }" name="Contraseña">
-                <input :class="{ 'border-red-500': errors[0] }" type="password" id="contrasenia" name="contrasenia"
-                  v-model="contrasenia"
-                  class="mt-1 p-2 w-full bg-gray-100 border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300" />
-                <div v-if="errors[0]" class="text-red-500 text-sm">
-                  {{ errors[0] }}
-                </div>
-              </validation-provider> -->
+          </div>
 
-            </div>
-            <div>
-              <button type="submit"
-                class="w-full bg-fdoscuro text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300">
-                Iniciar Sesión
-              </button>
-            </div>
-          </form>
+          <div>
+            <v-text-field v-model="contrasenia" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+              :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'" name="input-10-1"
+              label="Contraseña" hint="La contraseña es requerida" counter
+              @click:append="show1 = !show1"></v-text-field>
+
+          </div>
+          <div>
+            <button type="submit"
+              class="w-full bg-fdoscuro text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300">
+              Iniciar Sesión
+            </button>
+          </div>
+        </form>
         <div class="mt-4 text-sm text-gray-600 text-center">
           <p>
             ¿Aun no eres parte de Foodster?
@@ -91,59 +67,37 @@
 </template>
 
 <script>
-import { extend, ValidationObserver, ValidationProvider, } from 'vee-validate';
 import { useAuthStore } from "@/stores";
 
-extend('email', {
-  validate: value => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-  },
-  message: 'Correo no válido',
-});
-
-extend('required', {
-  validate: value => {
-    return {
-      required: true,
-      valid: ['', null, undefined].indexOf(value) === -1,
-    };
-  },
-  computesRequired: true,
-  message: 'Campo requerido',
-});
-
 export default {
-  
+
   data() {
     return {
       correo: '',
       contrasenia: '',
-     
+
       email: '',
       emailRules: [
         v => !!v || 'E-mail is required',
         v => /.+@.+/.test(v) || 'El correo electronico es necesario',
       ],
       show1: false,
-        
-        password: 'Password',
-        rules: {
-          required: value => !!value || 'la contraseña es requerida',
-          emailMatch: () => (`The email and password you entered don't match`),
-        },
+
+      password: 'Password',
+      rules: {
+        required: value => !!value || 'la contraseña es requerida',
+        emailMatch: () => (`The email and password you entered don't match`),
+      },
     };
   },
   methods: {
     onSubmit() {
-      this.$refs.observer.validate().then(valid => {
-        if (!valid) {
-          return;
-        }
-        const authStore = useAuthStore();
-        return authStore.login(this.correo, this.contrasenia)
-      });
+      const authStore = useAuthStore();
+      return authStore.login(this.correo, this.contrasenia);
+
     },
   },
+
   mounted() {
   },
 };

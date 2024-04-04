@@ -9,8 +9,7 @@
 
     <!-- Main Content -->
     <div class="main-content">
-      <!-- Título y descripción -->
-      <div class="container mx-auto text-center mt-12">
+      <div class="container mx-auto text-center mt-3">
         <h2 class="text-3xl font-bold mb-4 text-white">Bienvenido a FOODSTER</h2>
         <p class="text-lg mb-6 text-white">Descubre los mejores buffets cerca de ti.</p>
         <v-divider class="mb-6"></v-divider>
@@ -18,7 +17,7 @@
       </div>
 
       <!-- CTA Section -->
-      <div class="bg-gray-900 py-12">
+      <div class="bg-gray-900 py-6">
         <div class="container mx-auto text-center">
           <h3 class="text-2xl font-semibold mb-4 text-white">¡Únete a Foodtser hoy mismo!</h3>
           <p class="text-lg mb-6 text-white">Regístrate ahora para acceder a los mejores buffets y ofertas especiales.</p>
@@ -106,7 +105,7 @@ export default {
 <style scoped>
 .carousel-container {
   width: 100%;
-  height: 100vh;
+  
 }
 .landing-page {
   /* Fondo con degradado */
