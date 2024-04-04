@@ -23,7 +23,9 @@ const getDireccion = async (id) =>{
 
 const getDireccionesByUser = async (id) =>{
     try {
+        console.log("ID: ",id);
         const response = await axiosClient.get(`${baseUrl}/usuario/${id}`);
+        console.log("Direcciones: ",response.data);
         return response.data;
     } catch (error) {
         console.log(error)
@@ -31,8 +33,10 @@ const getDireccionesByUser = async (id) =>{
 
 }
 const createDireccion = async (direccion) =>{
+    console.log(direccion);
     try {
         const response = await axiosClient.post(`${baseUrl}/`, direccion);
+        console.log("Se guardo: ",response.data);
         return response.data;
     } catch (error) {
         console.log(error)

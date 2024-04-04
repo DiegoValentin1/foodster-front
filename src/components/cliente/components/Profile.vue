@@ -4,120 +4,128 @@
       <v-sheet :elevation="2" border rounded class="half-sheet" color="#F1F1F1">
         <div class="title flex justify-end text-2xl font-bold py-4">
           <h1 class="flex-grow text-center">Mi perfil</h1>
-          <button @click="signOut" class="block px-4 py-2 text-sm text-white bg-red-500 hover:bg-red-700 rounded"
-                  role="menuitem" tabindex="-1" id="user-menu-item-1">
+          <button
+            @click="signOut"
+            class="block px-4 py-2 text-sm text-white bg-red-500 hover:bg-red-700 rounded"
+            role="menuitem"
+            tabindex="-1"
+            id="user-menu-item-1"
+          >
             <v-icon dark left color="white"> mdi-logout</v-icon>
             Cerrar sesion
           </button>
         </div>
-        <v-divider :thickness="2" class="border-black border-opacity-50 my-4"></v-divider>
+        <v-divider
+          :thickness="2"
+          class="border-black border-opacity-50 my-4"
+        ></v-divider>
         <div class="InfoCont">
           <v-avatar size="150">
             <v-img
-                alt="John"
-                src="https://cdn-icons-png.flaticon.com/512/1946/1946392.png"
+              alt="John"
+              src="https://cdn-icons-png.flaticon.com/512/1946/1946392.png"
             ></v-img>
           </v-avatar>
-          <br/>
+          <br />
           <div class="pair-container">
             <p class="label">Nombre:</p>
             <v-text-field
-                class="value"
-                v-model="usuario.nombres"
-                outlined
-                dense
-                required
-                :rules="[
+              class="value"
+              v-model="usuario.nombres"
+              outlined
+              dense
+              required
+              :rules="[
                 (v) => !!v || 'Nombre es requerido',
                 (v) => /^[a-zA-Z ]+$/.test(v) || 'Nombre no es válido',
               ]"
             ></v-text-field>
           </div>
           <v-divider
-              :thickness="7"
-              color="black"
-              class="border-opacity-75"
+            :thickness="7"
+            color="black"
+            class="border-opacity-75"
           ></v-divider>
           <div class="pair-container">
             <p class="label">Primer apellido:</p>
             <v-text-field
-                class="value"
-                v-model="usuario.primerApellido"
-                outlined
-                dense
-                required
-                :rules="[
+              class="value"
+              v-model="usuario.primerApellido"
+              outlined
+              dense
+              required
+              :rules="[
                 (v) => !!v || 'Primer apellido es requerido',
                 (v) => /^[a-zA-Z ]+$/.test(v) || 'Apellido no es válido',
               ]"
             ></v-text-field>
           </div>
           <v-divider
-              :thickness="7"
-              color="black"
-              class="border-opacity-75"
+            :thickness="7"
+            color="black"
+            class="border-opacity-75"
           ></v-divider>
           <div class="pair-container">
             <p class="label">Segundo apellido:</p>
             <v-text-field
-                class="value"
-                v-model="usuario.segundoApellido"
-                outlined
-                dense
-                required
-                :rules="[
+              class="value"
+              v-model="usuario.segundoApellido"
+              outlined
+              dense
+              required
+              :rules="[
                 (v) => !!v || 'Segundo apellido es requerido',
                 (v) => /^[a-zA-Z ]+$/.test(v) || 'Apellido no es válido',
               ]"
             ></v-text-field>
           </div>
           <v-divider
-              :thickness="7"
-              color="black"
-              class="border-opacity-75"
+            :thickness="7"
+            color="black"
+            class="border-opacity-75"
           ></v-divider>
           <div class="pair-container">
             <p class="label">Teléfono:</p>
             <v-text-field
-                class="value"
-                v-model="usuario.telefono"
-                outlined
-                dense
-                required
-                :rules="[
+              class="value"
+              v-model="usuario.telefono"
+              outlined
+              dense
+              required
+              :rules="[
                 (v) => !!v || 'Teléfono es requerido',
                 (v) => /^[0-9]{10}$/.test(v) || 'Teléfono no es válido',
               ]"
             ></v-text-field>
           </div>
           <v-divider
-              :thickness="7"
-              color="black"
-              class="border-opacity-75"
+            :thickness="7"
+            color="black"
+            class="border-opacity-75"
           ></v-divider>
           <div class="pair-container">
             <p class="label">Correo:</p>
             <v-text-field
-                class="value"
-                v-model="usuario.correo"
-                outlined
-                dense
-                required
-                :rules="[
+              class="value"
+              v-model="usuario.correo"
+              outlined
+              dense
+              required
+              :rules="[
                 (v) => !!v || 'Correo es requerido',
                 (v) => validateEmail(v) || 'Correo no es válido',
               ]"
             ></v-text-field>
           </div>
           <v-divider
-              :thickness="7"
-              color="black"
-              class="border-opacity-75"
+            :thickness="7"
+            color="black"
+            class="border-opacity-75"
           ></v-divider>
           <v-divider
-              :thickness="7"
-              color="black"
-              class="border-opacity-75"
+            :thickness="7"
+            color="black"
+            class="border-opacity-75"
           ></v-divider>
         </div>
         <div class="actions">
@@ -127,18 +135,18 @@
         </div>
       </v-sheet>
       <v-sheet
-          :elevation="10"
-          border
-          rounded
-          class="half-sheet"
-          color="#F1F1F1"
+        :elevation="10"
+        border
+        rounded
+        class="half-sheet"
+        color="#F1F1F1"
       >
         <div class="title">
           <h1>Mis direcciones</h1>
           <v-divider
-              :thickness="7"
-              color="black"
-              class="border-opacity-75"
+            :thickness="7"
+            color="black"
+            class="border-opacity-75"
           ></v-divider>
         </div>
         <v-dialog v-model="dialog" persistent max-width="600px">
@@ -157,97 +165,90 @@
                 <v-row>
                   <v-col cols="12" sm="6">
                     <v-text-field
-                        label="Nombre de la calle"
-                        outlined
-                        dense
-                        required
-                        :rules="[
-                      (v) => !!v || 'Nombre de la calle es requerido',
-                      (v) =>
-                        /^[a-zA-Z0-9 ]+$/.test(v) ||
-                        'Nombre de la calle no es válido',
-                    ]"
+                      label="Nombre de la calle"
+                      outlined
+                      dense
+                      required
+                      v-model="nuevaDireccion.calle"
+                      :rules="[
+                        (v) => !!v || 'Nombre de la calle es requerido',
+                        (v) => /^[a-zA-Z0-9 ]+$/.test(v) || 'Nombre de la calle no es válido',
+                      ]"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6">
                     <v-text-field
-                        label="Nombre de la colonia"
-                        outlined
-                        dense
-                        required
-                        :rules="[
-                      (v) => !!v || 'Nombre de la colonia es requerido',
-                      (v) =>
-                        /^[a-zA-Z0-9 ]+$/.test(v) ||
-                        'Nombre de la colonia no es válido',
-                    ]"
+                      label="Nombre de la colonia"
+                      outlined
+                      dense
+                      required
+                      v-model="nuevaDireccion.colonia"
+                      :rules="[
+                        (v) => !!v || 'Nombre de la colonia es requerido',
+                        (v) => /^[a-zA-Z0-9 ]+$/.test(v) || 'Nombre de la colonia no es válido',
+                      ]"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6">
                     <v-text-field
-                        label="Número de casa"
-                        outlined
-                        dense
-                        required
-                        :rules="[
-                      (v) => !!v || 'Número de casa es requerido'
-                    ]"
+                      label="Número de casa"
+                      outlined
+                      dense
+                      required
+                      v-model="nuevaDireccion.numero"
+                      :rules="[(v) => !!v || 'Número de casa es requerido']"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6">
                     <v-text-field
-                        label="Municipio"
-                        outlined
-                        dense
-                        required
-                        :rules="[
-                      (v) => !!v || 'Municipio es requerido',
-                      (v) =>
-                        /^[a-zA-Z ]+$/.test(v) ||
-                        'Municipio no es válido',
-                    ]"
+                      label="Municipio"
+                      outlined
+                      dense
+                      required
+                      v-model="nuevaDireccion.municipio"
+                      :rules="[
+                        (v) => !!v || 'Municipio es requerido',
+                        (v) => /^[a-zA-Z ]+$/.test(v) || 'Municipio no es válido',
+                      ]"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6">
                     <v-text-field
-                        label="Estado"
-                        outlined
-                        dense
-                        required
-                        :rules="[
-                      (v) => !!v || 'Estado es requerido',
-                      (v) =>
-                        /^[a-zA-Z ]+$/.test(v) ||
-                        'Estado no es válido',
-                    ]"
+                      label="Estado"
+                      outlined
+                      dense
+                      required
+                      v-model="nuevaDireccion.estado"
+                      :rules="[
+                        (v) => !!v || 'Estado es requerido',
+                        (v) => /^[a-zA-Z ]+$/.test(v) || 'Estado no es válido',
+                      ]"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6">
                     <v-text-field
-                        label="Código postal"
-                        outlined
-                        dense
-                        required
-                        :rules="[
-                      (v) => !!v || 'Código postal es requerido',
-                      (v) =>
-                        /^[0-9]{5}$/.test(v) ||
-                        'Código postal no es válido',
-                    ]"
+                      label="Código postal"
+                      outlined
+                      dense
+                      required
+                      v-model="nuevaDireccion.codigoPostal"
+                      :rules="[
+                        (v) => !!v || 'Código postal es requerido',
+                        (v) => /^[0-9]{5}$/.test(v) || 'Código postal no es válido',
+                      ]"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12">
                     <v-text-field
-                        label="Referencia"
-                        outlined
-                        dense
-                        required
-                        :rules="[
-                      (v) => !!v || 'Referencia es requerida',
-                      (v) =>
-                        /^[a-zA-Z0-9 ]+$/.test(v) ||
-                        'Referencia no es válida',
-                    ]"
+                      label="Referencia"
+                      outlined
+                      dense
+                      required
+                      v-model="nuevaDireccion.referencias"
+                      :rules="[
+                        (v) => !!v || 'Referencia es requerida',
+                        (v) => /^[a-zA-Z0-9 ]+$/.test(v) || 'Referencia no es válida',
+                      ]"
                     ></v-text-field>
                   </v-col>
                 </v-row>
@@ -255,10 +256,12 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="red" text @click="dialog = false">
-                Cancelar
-              </v-btn>
-              <v-btn color="green" text @click="dialog = false">
+              <v-btn color="red" text @click="dialog = false"> Cancelar </v-btn>
+              <v-btn
+                color="green"
+                text
+                @click="(dialog = false), addDireccion(nuevaDireccion)"
+              >
                 Guardar
               </v-btn>
             </v-card-actions>
@@ -267,24 +270,23 @@
         <div class="InfoCont">
           <v-expansion-panels :value="0">
             <v-expansion-panel
-                v-for="(address, index) in direcciones"
-                :key="index"
+              v-for="(address, index) in direcciones"
+              :key="index"
             >
-              <v-expansion-panel-header>{{
-                  address.calle
-                }}
+              <v-expansion-panel-header
+                >{{ address.calle }}
               </v-expansion-panel-header>
               <v-expansion-panel-content>
                 <h1>Dirección número {{ index + 1 }}:</h1>
                 <div class="pair-container">
                   <p class="label">Nombre de la calle:</p>
                   <v-text-field
-                      class="value"
-                      v-model="address.calle"
-                      outlined
-                      dense
-                      required
-                      :rules="[
+                    class="value"
+                    v-model="address.calle"
+                    outlined
+                    dense
+                    required
+                    :rules="[
                       (v) => !!v || 'Nombre de la calle es requerido',
                       (v) =>
                         /^[a-zA-Z0-9 ]+$/.test(v) ||
@@ -293,19 +295,19 @@
                   ></v-text-field>
                 </div>
                 <v-divider
-                    :thickness="7"
-                    color="black"
-                    class="border-opacity-75"
+                  :thickness="7"
+                  color="black"
+                  class="border-opacity-75"
                 ></v-divider>
                 <div class="pair-container">
                   <p class="label">Nombre de la colonia:</p>
                   <v-text-field
-                      class="value"
-                      v-model="address.colonia"
-                      outlined
-                      dense
-                      required
-                      :rules="[
+                    class="value"
+                    v-model="address.colonia"
+                    outlined
+                    dense
+                    required
+                    :rules="[
                       (v) => !!v || 'Nombre de la colonia es requerido',
                       (v) =>
                         /^[a-zA-Z0-9 ]+$/.test(v) ||
@@ -314,74 +316,73 @@
                   ></v-text-field>
                 </div>
                 <v-divider
-                    :thickness="7"
-                    color="black"
-                    class="border-opacity-75"
+                  :thickness="7"
+                  color="black"
+                  class="border-opacity-75"
                 ></v-divider>
                 <div class="pair-container">
                   <p class="label">Número de casa:</p>
                   <v-text-field
-                      class="value"
-                      v-model="address.numero"
-                      outlined
-                      dense
-                      required
-                      :rules="[
-                      (v) => !!v || 'Número de casa es requerido']"
+                    class="value"
+                    v-model="address.numero"
+                    outlined
+                    dense
+                    required
+                    :rules="[(v) => !!v || 'Número de casa es requerido']"
                   ></v-text-field>
                 </div>
                 <v-divider
-                    :thickness="7"
-                    color="black"
-                    class="border-opacity-75"
+                  :thickness="7"
+                  color="black"
+                  class="border-opacity-75"
                 ></v-divider>
                 <div class="pair-container">
                   <p class="label">Municipio:</p>
                   <v-text-field
-                      class="value"
-                      v-model="address.municipio"
-                      outlined
-                      dense
-                      required
-                      :rules="[
+                    class="value"
+                    v-model="address.municipio"
+                    outlined
+                    dense
+                    required
+                    :rules="[
                       (v) => !!v || 'Municipio es requerido',
                       (v) => /^[a-zA-Z ]+$/.test(v) || 'Municipio no es válido',
                     ]"
                   ></v-text-field>
                 </div>
                 <v-divider
-                    :thickness="7"
-                    color="black"
-                    class="border-opacity-75"
+                  :thickness="7"
+                  color="black"
+                  class="border-opacity-75"
                 ></v-divider>
                 <div class="pair-container">
                   <p class="label">Estado:</p>
                   <v-text-field
-                      class="value"
-                      v-model="address.estado"
-                      outlined
-                      dense
-                      required
-                      :rules="[
+                    class="value"
+                    v-model="address.estado"
+                    outlined
+                    dense
+                    required
+                    :rules="[
                       (v) => !!v || 'Estado es requerido',
                       (v) => /^[a-zA-Z ]+$/.test(v) || 'Estado no es válido',
                     ]"
                   ></v-text-field>
                 </div>
                 <v-divider
-                    :thickness="7"
-                    color="black"
-                    class="border-opacity-75"
+                  :thickness="7"
+                  color="black"
+                  class="border-opacity-75"
                 ></v-divider>
                 <div class="pair-container">
                   <p class="label">Código postal:</p>
                   <v-text-field
-                      class="value"
-                      v-model="address.codigoPostal"
-                      outlined
-                      dense
-                      required
-                      :rules="[
+                    class="value"
+                    v-model="address.codigoPostal"
+                    outlined
+                    dense
+                    required
+                    :rules="[
                       (v) => !!v || 'Código postal es requerido',
                       (v) =>
                         /^[0-9]{5}$/.test(v) || 'Código postal no es válido',
@@ -389,19 +390,19 @@
                   ></v-text-field>
                 </div>
                 <v-divider
-                    :thickness="7"
-                    color="black"
-                    class="border-opacity-75"
+                  :thickness="7"
+                  color="black"
+                  class="border-opacity-75"
                 ></v-divider>
                 <div class="pair-container">
                   <p class="label">Referencia:</p>
                   <v-text-field
-                      class="value"
-                      v-model="address.referencias"
-                      outlined
-                      dense
-                      required
-                      :rules="[
+                    class="value"
+                    v-model="address.referencias"
+                    outlined
+                    dense
+                    required
+                    :rules="[
                       (v) => !!v || 'Referencia es requerida',
                       (v) =>
                         /^[a-zA-Z0-9 ]+$/.test(v) || 'Referencia no es válida',
@@ -409,9 +410,9 @@
                   ></v-text-field>
                 </div>
                 <v-divider
-                    :thickness="7"
-                    color="black"
-                    class="border-opacity-75"
+                  :thickness="7"
+                  color="black"
+                  class="border-opacity-75"
                 ></v-divider>
                 <div class="actions">
                   <v-btn icon color="blue" @click="updateDireccion(address)">
@@ -438,7 +439,7 @@
 </template>
 
 <script>
-import {useAuthStore} from "@/stores";
+import { useAuthStore } from "@/stores";
 import UsersServices from "@/services/UsersServices";
 import DireccionesService from "@/services/DireccionesService";
 
@@ -449,6 +450,15 @@ export default {
       usuario: {},
       direcciones: [],
       loading: false,
+      nuevaDireccion: {
+        calle: "",//
+        colonia: "",//
+        numero: "",//
+        municipio: "",
+        estado: "",
+        codigoPostal: "",
+        referencias: "",///
+      },
     };
   },
   methods: {
@@ -458,46 +468,51 @@ export default {
       return emailRegex.test(email);
     },
     signOut() {
-      const authStore = useAuthStore()
-      authStore.logout()
+      const authStore = useAuthStore();
+      authStore.logout();
     },
     async getUserAndDirecciones() {
-      this.loading = true
-      const authStore = useAuthStore()
-      const idUsuario = authStore.user.usuarios.idUsuario
-      this.usuario = await UsersServices.getUser(idUsuario)
-      this.direcciones = await DireccionesService.getDirecciones(idUsuario)
-      this.loading = false
+      this.loading = true;
+      const authStore = useAuthStore();
+      const idUsuario = authStore.user.usuarios.idUsuario;
+      this.usuario = await UsersServices.getUser(idUsuario);
+      console.log(idUsuario);
+      this.direcciones = await DireccionesService.getDireccionesByUser(idUsuario);
+      this.loading = false;
     },
     async updateUser() {
-      this.loading = true
-      const usuario = await UsersServices.update(this.usuario)
-      const AuthStore = useAuthStore()
-      let user = AuthStore.user
-      user.usuarios = usuario
-      AuthStore.setUser(user)
-      this.loading = false
+      this.loading = true;
+      const usuario = await UsersServices.update(this.usuario);
+      const AuthStore = useAuthStore();
+      let user = AuthStore.user;
+      user.usuarios = usuario;
+      AuthStore.setUser(user);
+      this.loading = false;
     },
     async updateDireccion(direccion) {
-      this.loading = true
-      await DireccionesService.updateDireccion(direccion)
-      this.loading = false
+      this.loading = true;
+      await DireccionesService.updateDireccion(direccion);
+      this.loading = false;
     },
     async deleteDireccion(direccion) {
-      this.loading = true
-      await DireccionesService.deleteDireccion(direccion.idDireccion)
-      this.loading = false
+      this.loading = true;
+      await DireccionesService.deleteDireccion(direccion.idDireccion);
+      this.loading = false;
     },
 
-    async addDireccion() {
-      this.loading = true
-      await DireccionesService.addDireccion(this.usuario.idUsuario)
-      this.loading = false
+    async addDireccion(direccion) {
+      console.log(direccion);
+      this.loading = true;
+      const authStore = useAuthStore();
+      direccion.idUsuario = authStore.user.usuarios.idUsuario;
+      await DireccionesService.createDireccion(direccion);
+      this.getUserAndDirecciones();
+      this.loading = false;
     },
   },
 
   mounted() {
-    this.getUserAndDirecciones()
+    this.getUserAndDirecciones();
   },
 };
 </script>
@@ -531,7 +546,7 @@ export default {
   margin-top: 5vh;
   width: 70%;
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-  "Lucida Sans", Arial, sans-serif;
+    "Lucida Sans", Arial, sans-serif;
 }
 
 .label {
