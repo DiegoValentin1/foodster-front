@@ -29,40 +29,31 @@
           Foodster
         </h1>
         <h2 class="text-3xl font-semibold mb-6 text-black text-center sm:text-2xl lg:text-3xl">
-          Inicia sesión
+          Recuperar Contraseña
         </h2>
         <h1 class="text-sm font-semibold mb-6 text-gray-500 text-center">
-          Bienvenido a Foodster, inicia sesión para continuar
+          Escribe tu nueva contraseña
         </h1>
         <v-form class="space-y-4" @submit.prevent="onSubmit" ref="form" v-model="valid">
           <div>
-            <v-text-field for="email" id="correo" name="correo" v-model="correo" :rules="emailRules"
-                          label="Correo electonico" required></v-text-field>
-          </div>
-
-          <div>
-            <v-text-field v-model="contrasenia" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                          :rules="passwordRules" :type="show1 ? 'text' : 'password'" name="input-10-1"
-                          label="Contraseña" hint="La contraseña es requerida" counter
-                          @click:append="show1 = !show1"></v-text-field>
-          </div>
-          <div>
-            <div class="mt-4 text-sm text-gray-600 text-center">
-              <p>
-                ¿Olvidaste tu contraseña?
-                <a href="/restablecer/correo/" class="text-black hover:underline">Recuperala Aqui..!</a>
-              </p>
+            <div>
+              <v-text-field v-model="contrasenia" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                            :rules="passwordRules" :type="show1 ? 'text' : 'password'" name="input-10-1"
+                            label="Contraseña" hint="La contraseña es requerida" counter
+                            @click:append="show1 = !show1"></v-text-field>
             </div>
-            <button type="submit"
-                    class="w-full bg-fdoscuro text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300">
-              Iniciar Sesión
-            </button>
+            <div>
+              <button type="submit"
+                      class="w-full bg-fdoscuro text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300">
+                Restablecer Contraseña
+              </button>
+            </div>
           </div>
         </v-form>
         <div class="mt-4 text-sm text-gray-600 text-center">
           <p>
-            ¿Aun no eres parte de Foodster?
-            <a href="/home/registro/" class="text-black hover:underline">Registrate Aqui..!</a>
+            ¿Recuerdas tu contraseña?
+            <a href="/home/login/" class="text-black hover:underline">Inicia Sesión..!</a>
           </p>
         </div>
       </div>
@@ -71,31 +62,44 @@
 </template>
 
 <script>
-import {useAuthStore} from "@/stores";
+import {confirmarCambio} from "@/services/RecuperarContraService";
 
 export default {
   data() {
     return {
       valid: true,
-      correo: '',
+      token: '',
       contrasenia: '',
-      emailRules: [
-        v => !!v || 'E-mail is required',
-        v => /.+@.+/.test(v) || 'El correo electronico es necesario',
-      ],
       passwordRules: [
         v => !!v || 'la contraseña es requerida',
+        v => (v && v.length >= 8) || 'Minimo 8 caracteres',
+        v => (v && /[A-Z]/.test(v)) || 'Al menos una letra mayúscula',
+        v => (v && /[a-z]/.test(v)) || 'Al menos una letra minúscula',
+        v => (v && /[0-9]/.test(v)) || 'Al menos un número',
+        v => (v && !/\s/.test(v)) || 'No espacios en blanco',
+        v => (v && /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(v)) || 'Al menos un caracter especial',
       ],
       show1: false,
     };
   },
   methods: {
-    onSubmit() {
+    async onSubmit() {
       if (this.$refs.form.validate()) {
-        const authStore = useAuthStore();
-        authStore.login(this.correo, this.contrasenia);
+        let restablecerDto = {
+          token: this.token,
+          contrasenia: this.contrasenia,
+        };
+
+        await confirmarCambio(restablecerDto);
+
       }
     },
+  },
+
+  mounted() {
+    // el token se obtiene de la url
+    // "http://localhost:5173/restablecer?token=" + token;
+    this.token = this.$route.query.token;
   },
 };
 </script>

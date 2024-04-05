@@ -65,13 +65,22 @@ const router = new VueRouter({
             component: () => import("../components/public/Landing-pages/LandingPage.vue"),
         }, {
             path: "/home/perfil/", name: "perfil", component: () => {
-                return import("../components/cliente/components/Profile.vue");
+                import("../components/cliente/components/Profile.vue");
             },
 
         }, {
             path: "/home/login/", name: "login", component: () => import("../components/public/Login.vue"),
-        },{
+        }, {
             path: '/home/registro/', name: 'registrarse', component: () => import('../components/public/Register.vue')
+        }, {
+
+            path: "/restablecer/correo/",
+            name: "restablecerCorreo",
+            component: () => import("../components/public/Restablecer.vue"),
+        }, {
+            path: "/restablecer/",
+            name: "restablecerConfirmar",
+            component: () => import("../components/public/RestablecerConfirmar.vue"),
         }, {
             path: "/home/carrito/",
             name: "carrito",
