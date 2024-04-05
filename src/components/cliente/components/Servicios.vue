@@ -29,7 +29,7 @@
           v-if="loading"
       ></v-progress-linear>
       <div class="card-item col-lg-3 col-md-4 col-sm-6 col-12 mb-4" v-for="(item, index) in services" :key="index">
-        <CardService :servicio="item"  />
+        <CardService :servicio="item"/>
       </div>
     </div>
     <v-pagination
@@ -44,8 +44,7 @@
 
 <script>
 import CardService from "@/components/cliente/components/CardService.vue";
-import {getServicios} from "@/services/ServicesServices";
-import {getServiciosByCategoria} from "@/services/ServicesServices";
+import {getAllServiciosPaginado, getServiciosByCategoriaPaginado} from "@/services/ServicesServices";
 import {getCategoriasServicios} from "@/services/CategoryServices";
 
 export default {
@@ -64,11 +63,30 @@ export default {
     };
   },
   methods: {
-    async fetchServices(page = 1) {
+    async fetchServices() {
       this.loading = true;
-      const allServices = this.selectedCategory ? await getServiciosByCategoria(this.selectedCategory.idCategoria) : await getServicios();
-      this.totalPages = Math.ceil(allServices.length / this.itemsPerPage);
-      this.services = allServices.slice((page - 1) * this.itemsPerPage, page * this.itemsPerPage);
+      const response = await getAllServiciosPaginado(this.currentPage - 1, this.itemsPerPage);
+      if (response) {
+        this.totalPages = response.totalPages;
+        this.services = response.content;
+      } else {
+        this.totalPages = 0;
+        this.services = [];
+        this.currentPage = 1;
+      }
+      this.loading = false;
+    },
+    async fetchByCategory() {
+      this.loading = true;
+      const response = await getServiciosByCategoriaPaginado(this.selectedCategory.idCategoria, this.currentPage - 1, this.itemsPerPage);
+      if (response) {
+        this.totalPages = response.totalPages;
+        this.services = response.content;
+      } else {
+        this.totalPages = 0;
+        this.services = [];
+        this.currentPage = 1;
+      }
       this.loading = false;
     },
     async fetchCategories() {
@@ -84,8 +102,12 @@ export default {
   watch: {
     selectedCategory(newCategory) {
       this.currentPage = 1;
-      this.fetchServices(newCategory ? newCategory.idCategoria : null);
-    }
+      if (newCategory) {
+        this.fetchByCategory();
+      } else {
+        this.fetchServices();
+      }
+    },
   },
 }
 </script>

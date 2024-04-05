@@ -8,8 +8,6 @@ const router = new VueRouter({
     mode: "history", base: import.meta.env.BASE_URL, routes: [{
         path: "/", redirect: "/home/inicio",
     }, {
-        path: '/registrarse', name: 'registrarse', component: () => import('../components/public/Register.vue')
-    }, {
         path: "/admin", // meta: {roles: ['ADMIN']},
         name: "admin", component: () => import("../components/admin/components/SidebarNavbar.vue"), children: [{
             path: "/", name: "dashboard", component: () => import("../components/admin/Dashboard.vue"),
@@ -67,15 +65,13 @@ const router = new VueRouter({
             component: () => import("../components/public/Landing-pages/LandingPage.vue"),
         }, {
             path: "/home/perfil/", name: "perfil", component: () => {
-                const authStore = useAuthStore();
-                if (authStore.user) {
-                    // Si el usuario está logueado
-                    return import("../components/cliente/components/Profile.vue");
-                } else {
-                    // Si el usuario no está logueado
-                    return import("../components/public/Login.vue");
-                }
+                return import("../components/cliente/components/Profile.vue");
             },
+
+        }, {
+            path: "/home/login/", name: "login", component: () => import("../components/public/Login.vue"),
+        },{
+            path: '/home/registro/', name: 'registrarse', component: () => import('../components/public/Register.vue')
         }, {
             path: "/home/carrito/",
             name: "carrito",

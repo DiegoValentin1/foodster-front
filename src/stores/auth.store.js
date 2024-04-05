@@ -11,25 +11,30 @@ export const useAuthStore = defineStore({
 
     }), actions: {
         async login(correo, contrasenia) {
-            const userInfo = await axiosClient.post(`${baseUrl}/`, {correo, contrasenia});
-            this.user = userInfo.data;
-            localStorage.setItem('user', JSON.stringify(userInfo.data));
-            let route;
-            switch (this.user.usuarios.roles[0].nombre) {
-                case 'ADMIN':
-                    route = '/admin'
-                    break;
-                case 'CLIENTE':
-                    route = '/home/inicio'
-                    break;
-                case 'PERSONAL':
-                    route = '/personal'
-                    break;
-                default:
-                    route = '/'
-                    break;
+            try {
+                const userInfo = await axiosClient.post(`${baseUrl}/`, {correo, contrasenia});
+                userInfo.data ? showNotification('success', 'Bienvenido') : showNotification('error', 'Usuario o contraseña incorrectos');
+                this.user = userInfo.data;
+                localStorage.setItem('user', JSON.stringify(userInfo.data));
+                let route;
+                switch (this.user.usuarios.roles[0].nombre) {
+                    case 'ADMIN':
+                        route = '/admin'
+                        break;
+                    case 'CLIENTE':
+                        route = '/home/inicio'
+                        break;
+                    case 'PERSONAL':
+                        route = '/personal'
+                        break;
+                    default:
+                        route = '/'
+                        break;
+                }
+                router.push(route);
+            } catch (e) {
+                showNotification('error', 'Usuario o contraseña incorrectos');
             }
-            router.push(route);
         }, logout() {
             this.user = null;
             localStorage.removeItem('user');

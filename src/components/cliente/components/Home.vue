@@ -1,41 +1,43 @@
 <template>
   <div>
     <header class="w-full">
-      <v-tabs fixed-tabs  dark class="bg-gray-900">
-        <v-tab to="/home/inicio">
-          Inicio
-          <v-icon>mdi-home</v-icon>
-        </v-tab>
-        <v-tab to="/home/paquetes">
-          Paquetes
-          <v-icon>mdi-package-variant-closed</v-icon>
-        </v-tab>
-        <v-tab to="/home/servicios">
-          Servicios
-          <v-icon>mdi-food</v-icon>
-        </v-tab>
-        <v-tab icon to="/home/carrito/">
-          Carrito
-          <v-icon>mdi-cart</v-icon>
-        </v-tab>
-        <v-tab icon to="/home/perfil/">
-          Perfil
-          <v-icon>mdi-account</v-icon>
+      <v-tabs fixed-tabs dark class="bg-gray-900">
+        <v-tab v-for="item in items" :key="item.title" :to="item.to">
+          <v-icon>{{ item.icon }}</v-icon>
+          {{ item.title }}
         </v-tab>
       </v-tabs>
     </header>
-
-    <!-- Renderizar el componente correspondiente a la ruta activa -->
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-import Cards from './Cards.vue';
+import { watch } from 'vue';
+import { useAuthStore } from "@/stores";
 
 export default {
-  components: {
-    Cards
+  setup() {
+    const authStore = useAuthStore();
+    const items = [
+      {title: 'Inicio', icon: 'mdi-home', to: '/home/inicio'},
+      {title: 'Paquetes', icon: 'mdi-package-variant-closed', to: '/home/paquetes'},
+      {title: 'Servicios', icon: 'mdi-food', to: '/home/servicios'},
+      {title: 'Carrito', icon: 'mdi-cart', to: '/home/carrito'},
+    ];
+
+    watch(() => authStore.user, (newUser) => {
+      if (newUser) {
+        items.splice(3, 2)
+        items.push({title: 'Perfil', icon: 'mdi-account', to: '/home/perfil'});
+      } else {
+        items.pop();
+        items.push({title: 'Iniciar sesión', icon: 'mdi-login', to: '/home/login'});
+        items.push({title: 'Registrarse', icon: 'mdi-account-plus', to: '/home/registro'});
+      }
+    }, { immediate: true });
+
+    return { items };
   }
 }
 </script>

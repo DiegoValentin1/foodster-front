@@ -8,7 +8,17 @@ const getAllPaquetes = async () => {
         const response = await axiosClient.get(`${baseUrl}`);
         return response.data;
     } catch (error) {
-       showNotification("error", "Error al obtener paquetes")
+        showNotification("error", "Error al obtener paquetes")
+    }
+};
+
+const getAllPaquetesPaginado = async (page, size) => {
+    try {
+        // /paginado/{page}/{size}
+        const response = await axiosClient.get(`${baseUrl}paginado/${page}/${size}`);
+        return response.data;
+    } catch (error) {
+        showNotification("error", "Error al obtener paquetes")
     }
 };
 
@@ -63,6 +73,7 @@ const deletePaqueteByStatus = async (uid) => {
 
 export {
     getAllPaquetes,
+    getAllPaquetesPaginado,
     updatePaquete,
     createPaquete,
     getPaquetesByStatus,

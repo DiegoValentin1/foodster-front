@@ -11,6 +11,16 @@ const getServicios = async () => {
     }
 };
 
+const getAllServiciosPaginado = async (page, size) => {
+    try {
+
+        const response = await axiosClient.get(`/servicios/paginado/${page}/${size}`);
+        return response.data;
+    } catch (error) {
+        showNotification("error", "Error al obtener Servicios")
+    }
+};
+
 const getServiciosByCategoria = async (idCategoria) => {
     try {
         const response = await axiosClient.get("/servicios/categoria/" + idCategoria);
@@ -20,6 +30,17 @@ const getServiciosByCategoria = async (idCategoria) => {
 
     }
 };
+const getServiciosByCategoriaPaginado = async (idCategoria, page, size) => {
+    try {
+        const response = await axiosClient.get(`/servicios/categoria/${idCategoria}/paginado/${page}/${size}`);
+        return response.data;
+    } catch (error) {
+        showNotification("error", "Error al obtener servicios por categoría");
+
+    }
+};
+
+
 
 const updateServicio = async (servicio) => {
     console.log("Servicio desde service", servicio);
@@ -143,7 +164,9 @@ const deleteServicioPaqueteByStatus = async (id) => {
 // Exportamos todas las funciones
 export {
     getServicios,
+    getAllServiciosPaginado,
     getServiciosByCategoria,
+    getServiciosByCategoriaPaginado,
     updateServicio,
     createServicio,
     getServiciosByStatus,

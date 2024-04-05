@@ -8,7 +8,7 @@
           v-if="loading"
       ></v-progress-linear>
       <div class="card-item col-lg-3 col-md-4 col-sm-6 col-12 mb-4" v-for="(item, index) in paquetes" :key="index">
-        <CardPaquete :paquete="item" />
+        <CardPaquete :paquete="item"/>
       </div>
     </div>
     <v-pagination
@@ -23,8 +23,8 @@
 
 <script>
 import CardService from "@/components/cliente/components/CardService.vue";
-import {getAllPaquetes} from "@/services/PaquetesServices";
 import CardPaquete from "@/components/cliente/components/CardPaquete.vue";
+import {getAllPaquetesPaginado} from "@/services/PaquetesServices";
 
 export default {
   components: {
@@ -37,15 +37,21 @@ export default {
       loading: false,
       currentPage: 1,
       totalPages: 0,
-      itemsPerPage: 10,
+      itemsPerPage: 1,
     };
   },
   methods: {
-    async fetchPaquetes(page = 1) {
+    async fetchPaquetes() {
       this.loading = true;
-      const allServices = await getAllPaquetes();
-      this.totalPages = Math.ceil(allServices.length / this.itemsPerPage);
-      this.paquetes = allServices.slice((page - 1) * this.itemsPerPage, page * this.itemsPerPage);
+      const response = await getAllPaquetesPaginado(this.currentPage - 1, this.itemsPerPage);
+      if (response) {
+        this.totalPages = response.totalPages;
+        this.paquetes = response.content;
+      } else {
+        this.totalPages = 0;
+        this.paquetes = [];
+        this.currentPage = 1;
+      }
       this.loading = false;
     },
   },

@@ -123,7 +123,7 @@
         <div class="mt-4 text-sm text-gray-600 text-center">
           <p>
             ¿Ya eres parte de Foodster?
-            <a href="/home/perfil/" class="text-black hover:underline"
+            <a href="/home/login/" class="text-black hover:underline"
             >Incia sesion aqui...!</a
             >
           </p>
@@ -194,7 +194,7 @@ export default {
       const response = await UsersServices.insertPublic(usuario);
       if (response) {
         useAuthStore().login(this.correo, this.contrasena);
-        this.$router.push('/home/perfil/');
+        this.$router.push('/home/perfil');
       }
 
     },
