@@ -1,5 +1,4 @@
 import {axiosClient} from "@/utils/axios-client";
-import {API_URL} from "@/utils/constants";
 import {showNotification} from "@/utils/notification";
 
 let baseUrl = `/personal`;
@@ -12,46 +11,47 @@ const getPersonal = async () => {
         showNotification("error", "Error al obtener personal");
     }
 };
+
 const insert = async (personal) => {
     try {
-        const response = await fetch(`${API_URL}${baseUrl}/`, {
-            method: "POST", headers: {
-                "Content-Type": "application/json",
-            }, body: JSON.stringify({
-                categoria: {
-                    idCategoria: personal.categoria.idCategoria,
-                }, active: true, usuarios: {
-                    nombres: personal.nombres,
-                    primerApellido: personal.primerApellido,
-                    segundoApellido: personal.segundoApellido,
-                    telefono: personal.telefono,
-                    correo: personal.correo,
-                    contrasena: personal.contrasena,
-                    active: true,
-                    roles: [{
-                        idRol: personal.idRol,
-                    },],
-                },
-            }),
+        const response = await axiosClient.post(`${baseUrl}/`, {
+            categoria: {
+                idCategoria: personal.categoria.idCategoria,
+            },
+            active: true,
+            usuarios: {
+                nombres: personal.nombres,
+                primerApellido: personal.primerApellido,
+                segundoApellido: personal.segundoApellido,
+                telefono: personal.telefono,
+                correo: personal.correo,
+                contrasena: personal.contrasena,
+                active: true,
+                roles: [{
+                    idRol: personal.idRol,
+                }],
+            },
         });
 
-        if (response.ok) {
-            console.log("DATOS ENVIADOS CORRECTAMENTE");
+        if (response.data) {
+            showNotification("success", "Personal creado");
         } else {
-            console.log("Error al enviar datos:", response.statusText);
+            showNotification("error", "Error al crear personal");
         }
     } catch (error) {
-        console.log("Error:", error);
+        showNotification("error", "Error al crear personal")
     }
 };
+
 const delete_ = async (id_personal) => {
     try {
         const response = await axiosClient.delete(`${baseUrl}/${id_personal}`);
-        console.log(response.message);
+        response.data ? showNotification("success", "Personal eliminado") : showNotification("error", "Error al eliminar personal");
     } catch (error) {
-        console.log(error);
+        showNotification("error", "Error al eliminar personal");
     }
 };
+
 const changeStatus = async (id_personal) => {
     try {
         const response = await axiosClient.delete(`${baseUrl}/status/${id_personal}`);
@@ -61,22 +61,20 @@ const changeStatus = async (id_personal) => {
         console.log(error);
     }
 };
+
 const update = async (personal) => {
     try {
-        const response = await fetch(`${API_URL}${baseUrl}/`, {
-            method: "PUT", headers: {
-                "Content-Type": "application/json",
-            }, body: JSON.stringify(personal),
-        });
-        if (response.ok) {
-            console.log("DATOS ENVIADOS CORRECTAMENTE");
+        const response = await axiosClient.put(`${baseUrl}/`, personal);
+        if (response.data) {
+            showNotification("success", "Personal actualizado");
         } else {
-            console.log("Error al enviar datos:", response.statusText);
+            showNotification("error", "Error al actualizar personal")
         }
     } catch (error) {
-        console.log("Error:", error);
+        showNotification("error", "Error al actualizar personal")
     }
 };
+
 export default {
     getPersonal, insert, delete_, changeStatus, update,
 };

@@ -53,10 +53,15 @@
                 <a href="/restablecer/correo/" class="text-black hover:underline">Recuperala Aqui..!</a>
               </p>
             </div>
-            <button type="submit"
-                    class="w-full bg-fdoscuro text-white p-2 rounded-md hover:bg-gray-800 focus:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300">
+            <v-btn
+                :loading="loading"
+                type="submit"
+                color="secondary"
+                class="w-full bg-fdoscuro text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300"
+            >
               Iniciar Sesión
-            </button>
+            </v-btn>
+            
           </div>
         </v-form>
         <div class="mt-4 text-sm text-gray-600 text-center">
@@ -77,6 +82,7 @@ export default {
   data() {
     return {
       valid: true,
+      loading: false,
       correo: '',
       contrasenia: '',
       emailRules: [
@@ -92,8 +98,10 @@ export default {
   methods: {
     onSubmit() {
       if (this.$refs.form.validate()) {
+        this.loading = true;
         const authStore = useAuthStore();
         authStore.login(this.correo, this.contrasenia);
+        this.loading = false;
       }
     },
   },

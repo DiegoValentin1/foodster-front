@@ -43,7 +43,6 @@ const getServiciosByCategoriaPaginado = async (idCategoria, page, size) => {
 
 
 const updateServicio = async (servicio) => {
-    console.log("Servicio desde service", servicio);
     try {
         const response = await axiosClient.put("/servicios/", servicio);
         response.data ? showNotification("success", "Servicio actualizado") : showNotification("error", "Error al actualizar servicio");
@@ -101,7 +100,6 @@ const deleteServicioByStatus = async (uid) => {
 const getServiciosPaquete = async () => {
     try {
         const response = await axiosClient.get("/servicios-paquete/");
-        response.data ? showNotification("success", "Servicios de paquete obtenidos") : showNotification("error", "Error al obtener servicios de paquete");
         return response.data;
     } catch (error) {
         showNotification("error", "Error al obtener servicios de paquete");

@@ -71,12 +71,15 @@
             <Captcha @solucion="ponerSolucion"/>
           </div>
           <div>
-            <button
+            <v-btn
+                :loading="loading"
+                :disabled="solucion === ''"
                 type="submit"
+                color="secondary"
                 class="w-full bg-fdoscuro text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300"
             >
-              Recuperar Contraseña
-            </button>
+              Recuperar contraseña
+            </v-btn>
           </div>
         </v-form>
 
@@ -99,6 +102,7 @@ export default {
     return {
       correo: "",
       solucion: "",
+      loading: false,
       valid: true,
       rules: {
         required: (value) => !!value || "la contraseña es requerida",
@@ -112,12 +116,14 @@ export default {
   methods: {
     async onSubmit() {
       if (this.$refs.form.validate()) {
+        this.loading = true;
         let recuperarDto = {
           correo: this.correo,
           solucion: this.solucion,
         };
 
         await recuperarContra(recuperarDto);
+        this.loading = false;
       }
     },
     ponerSolucion(solucion) {

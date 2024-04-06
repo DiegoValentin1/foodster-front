@@ -56,8 +56,8 @@
         <h1 class="text-sm font-semibold mb-6 text-gray-500 text-center">
           Bienvenido a Foodster, inicia sesión para continuar
         </h1>
-        <form class="space-y-4" @submit.prevent="onSubmit">
-          <v-text-field
+        <v-form class="space-y-4" @submit.prevent="onSubmit" ref="form" v-model="valid">
+        <v-text-field
               v-model="nombres"
               :rules="nameRules"
               :counter="30"
@@ -112,14 +112,17 @@
             <Captcha @solucion="ponerSolucion" />
           </div>
           <div>
-            <button
+            <v-btn
+                :loading="loading"
+                :disabled="solucion === ''"
                 type="submit"
+                color="secondary"
                 class="w-full bg-fdoscuro text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300"
             >
               Registrarse
-            </button>
+            </v-btn>
           </div>
-        </form>
+        </v-form>
         <div class="mt-4 text-sm text-gray-600 text-center">
           <p>
             ¿Ya eres parte de Foodster?
@@ -147,6 +150,7 @@ export default {
 
   data() {
     return {
+      valid: true,
       correo: "",
       nombres: '',
       primerApellido: '',
@@ -155,6 +159,7 @@ export default {
       show1: false,
       contrasena: "",
       solucion: "",
+      loading: false,
       rules: {
         required: (value) => !!value || "la contraseña es requerida",
       },
@@ -182,19 +187,23 @@ export default {
   },
   methods: {
     async onSubmit() {
-      let usuario = {
-        nombres: this.nombres,
-        primerApellido: this.primerApellido,
-        segundoApellido: this.segundoApellido,
-        telefono: this.telefono,
-        correo: this.correo,
-        contrasena: this.contrasena,
-        solucion: this.solucion,
-      };
-      const response = await UsersServices.insertPublic(usuario);
-      if (response) {
-        await useAuthStore().login(this.correo, this.contrasena);
-        await this.$router.push('/home/perfil');
+      if (this.$refs.form.validate()) {
+        this.loading = true;
+        let usuario = {
+          nombres: this.nombres,
+          primerApellido: this.primerApellido,
+          segundoApellido: this.segundoApellido,
+          telefono: this.telefono,
+          correo: this.correo,
+          contrasena: this.contrasena,
+          solucion: this.solucion,
+        };
+        const response = await UsersServices.insertPublic(usuario);
+        if (response) {
+          await useAuthStore().login(this.correo, this.contrasena);
+          await this.$router.push('/home/perfil');
+        }
+        this.loading = false;
       }
 
     },

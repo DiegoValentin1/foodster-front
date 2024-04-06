@@ -43,10 +43,14 @@
                             @click:append="show1 = !show1"></v-text-field>
             </div>
             <div>
-              <button type="submit"
-                      class="w-full bg-fdoscuro text-white p-2 rounded-md hover:bg-gray-800 focus:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300">
-                Restablecer Contraseña
-              </button>
+              <v-btn
+                  :loading="loading"
+                  type="submit"
+                  color="secondary"
+                  class="w-full bg-fdoscuro text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300"
+              >
+                Cambiar Contraseña
+              </v-btn>
             </div>
           </div>
         </v-form>
@@ -68,6 +72,7 @@ export default {
   data() {
     return {
       valid: true,
+      loading: false,
       token: '',
       contrasenia: '',
       passwordRules: [
@@ -89,7 +94,6 @@ export default {
           token: this.token,
           contrasenia: this.contrasenia,
         };
-
         await confirmarCambio(restablecerDto);
 
       }

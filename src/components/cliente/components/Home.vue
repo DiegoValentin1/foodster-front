@@ -28,7 +28,7 @@ export default {
 
     watch(() => authStore.user, (newUser) => {
       if (newUser) {
-        items.splice(3, 2)
+        items.splice(4, 2)
         items.push({title: 'Perfil', icon: 'mdi-account', to: '/home/perfil'});
       } else {
         items.pop();
