@@ -64,9 +64,10 @@ const router = new VueRouter({
             name: "inicio",
             component: () => import("../components/public/Landing-pages/LandingPage.vue"),
         }, {
-            path: "/home/perfil/", name: "perfil", component: () => {
-                import("../components/cliente/components/Profile.vue");
-            },
+            path: "/home/perfil/",
+            name: "perfil",
+            component: () => import("../components/cliente/components/Profile.vue")
+
 
         }, {
             path: "/home/login/", name: "login", component: () => import("../components/public/Login.vue"),

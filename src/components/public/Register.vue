@@ -114,7 +114,7 @@
           <div>
             <button
                 type="submit"
-                class="w-full bg-fdoscuro text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300"
+                class="w-full bg-fdoscuro text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300"
             >
               Registrarse
             </button>
@@ -193,8 +193,8 @@ export default {
       };
       const response = await UsersServices.insertPublic(usuario);
       if (response) {
-        useAuthStore().login(this.correo, this.contrasena);
-        this.$router.push('/home/perfil');
+        await useAuthStore().login(this.correo, this.contrasena);
+        await this.$router.push('/home/perfil');
       }
 
     },

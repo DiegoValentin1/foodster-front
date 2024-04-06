@@ -44,7 +44,7 @@
             </div>
             <div>
               <button type="submit"
-                      class="w-full bg-fdoscuro text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300">
+                      class="w-full bg-fdoscuro text-white p-2 rounded-md hover:bg-gray-800 focus:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300">
                 Restablecer Contraseña
               </button>
             </div>
@@ -75,9 +75,9 @@ export default {
         v => (v && v.length >= 8) || 'Minimo 8 caracteres',
         v => (v && /[A-Z]/.test(v)) || 'Al menos una letra mayúscula',
         v => (v && /[a-z]/.test(v)) || 'Al menos una letra minúscula',
-        v => (v && /[0-9]/.test(v)) || 'Al menos un número',
+        v => /\d/.test(v) || 'Al menos un número',
         v => (v && !/\s/.test(v)) || 'No espacios en blanco',
-        v => (v && /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(v)) || 'Al menos un caracter especial',
+        v => (v && /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>?]+/.test(v)) || 'Al menos un caracter especial',
       ],
       show1: false,
     };
@@ -97,9 +97,11 @@ export default {
   },
 
   mounted() {
-    // el token se obtiene de la url
-    // "http://localhost:5173/restablecer?token=" + token;
-    this.token = this.$route.query.token;
+    if (this.$route.query.token) {
+      this.token = this.$route.query.token;
+    } else {
+      this.$router.push({name: 'login'});
+    }
   },
 };
 </script>

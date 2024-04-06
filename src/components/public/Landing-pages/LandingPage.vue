@@ -21,10 +21,10 @@
         <div class="container mx-auto text-center">
           <h3 class="text-2xl font-semibold mb-4 text-white">¡Únete a Foodtser hoy mismo!</h3>
           <p class="text-lg mb-6 text-white">Regístrate ahora para acceder a los mejores buffets y ofertas especiales.</p>
-          <v-btn href="/register" outlined class="mr-4 primary--text"> <!-- Agrega clase de margen para separar y color verde al borde -->
+          <v-btn href="/home/registro" class="mr-4">
             Registrarse
           </v-btn>
-          <v-btn href="/login" outlined class="primary--text"> <!-- Agrega clase de margen para separar y color verde al borde -->
+          <v-btn href="/home/login" outlined class="primary--text">
             Iniciar Sesión
           </v-btn>
         </div>
@@ -62,9 +62,9 @@
     <footer class="bg-gray-800 py-8">
       <div class="container mx-auto text-center text-white">
         <p class="text-lg font-semibold">Información de contacto:</p>
-        <p class="mt-2">Dirección: Calle Principal, Ciudad, País</p>
+        <p class="mt-2">Dirección: Av. Plan de Ayala 123, Cuernavaca, Morelos</p>
         <p>Teléfono: (123) 456-7890</p>
-        <p>Email: info@example.com</p>
+        <p>Email: contacto@foodster.com</p>
       </div>
     </footer>
     </div>
@@ -91,14 +91,6 @@ export default {
       ],
     };
   },
-  methods: {
-    login() {
-      // Implementar redirección a la página de inicio de sesión
-    },
-    register() {
-      // Implementar redirección a la página de registro
-    }
-  }
 };
 </script>
 

@@ -73,7 +73,7 @@
           <div>
             <button
                 type="submit"
-                class="w-full bg-fdoscuro text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300"
+                class="w-full bg-fdoscuro text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300"
             >
               Recuperar Contraseña
             </button>
@@ -87,10 +87,7 @@
 </template>
 
 <script>
-import {useAuthStore} from "@/stores";
-import UsersServices from "@/services/UsersServices";
 import {recuperarContra} from "@/services/RecuperarContraService";
-import {showNotification} from "@/utils/notification";
 
 export default {
 
@@ -121,11 +118,9 @@ export default {
         };
 
         await recuperarContra(recuperarDto);
-        showNotification("Correo enviado", "Se ha enviado un correo para recuperar tu contraseña", "success");
       }
     },
     ponerSolucion(solucion) {
-      console.log(solucion);
       this.solucion = solucion;
     }
   },
