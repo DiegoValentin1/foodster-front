@@ -135,6 +135,8 @@
 <script>
 import direccionesService from '../../../../services/DireccionesService'
 import categoriasPersonal from '../../../../services/CategoriasPersonal';
+import personalServices from "@/services/PersonalServices";
+import swalService from "@/services/SwalService";
 export default {
     data() {
         return {
@@ -261,45 +263,54 @@ export default {
                 active: ''
             };
         },
-        saveEdit() {
-            console.log("Persona editada:", this.editedItem);
-            try {
-                const response = personalServices.update(this.editedItem);
-            } catch (error) {
-                console.log(error)
-            } finally {
-                this.editDialog = false;
-                this.editedItem = {
-                    idPersonal: "",
-                    usuarios: {
-                        idUsuario: "",
-                        nombres: "",
-                        primerApellido: "",
-                        segundoApellido: "",
-                        telefono: "",
-                        correo: "",
-                        contrasena: "",
-                        active: '',
-                        roles: [
-                            {
-                                idRol: "",
-                            }
-                        ]
-                    },
-                    categoria: {
-                        idCategoria: "",
-                    },
-                    active: ''
-                };
-            }
+        saveEdit()
+        {
+          try {
+            personalServices.update(this.editedItem);
+          } catch (error) {
+            console.log(error)
+          } finally {
+            this.editDialog = false;
+            this.editedItem = {
+              idPersonal: "",
+              usuarios: {
+                idUsuario: "",
+                nombres: "",
+                primerApellido: "",
+                segundoApellido: "",
+                telefono: "",
+                correo: "",
+                contrasena: "",
+                active: '',
+                roles: [
+                  {
+                    idRol: "",
+                  }
+                ]
+              },
+              categoria: {
+                idCategoria: "",
+              },
+              active: ''
+            };
+          }
 
-        },
-        deleteItem(idPersonal) {
-            const res = personalServices.delete_(idPersonal);
-        },
-        changeStatus(idPersonal) {
-            const res = personalServices.changeStatus(idPersonal);
-        },
+        }
+,
+      deleteItem: async function (idPersonal) {
+        let proceder = await swalService.confirmationWarning(
+            "¿Estás seguro de eliminar el registro?",
+        );
+        if (proceder) {
+          await personalServices.delete_(idPersonal);
+          this.getPersonal();
+        }
+      }
+      ,
+      changeStatus: function (idPersonal) {
+        personalServices.changeStatus(idPersonal);
+      }
+      ,
         closeModalAddPersonal() {
             this.dialog = false;
         },
@@ -319,9 +330,8 @@ export default {
         },
         async addPersonal() {
             try {
-                const res = personalServices.insert(this.nuevoUsuario);
+                await personalServices.insert(this.nuevoUsuario);
             } catch (error) {
-                console.log(error)
             } finally {
                 this.resetNuevoPersona();
                 this.closeModalAddPersonal();

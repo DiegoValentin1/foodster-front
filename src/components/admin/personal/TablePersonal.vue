@@ -109,10 +109,6 @@
                 <v-text-field v-model="editedItem.usuarios.telefono" label="Telefono"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="editedItem.usuarios.correo" :rules="emailRules" label="Correo"
-                  required></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="4">
                 <v-select label="Cargo" v-model="editedItem.categoria.idCategoria" :items="categoriasPersonal"
                   item-text="nombre" item-value="idCategoria">
                 </v-select>
@@ -135,6 +131,7 @@
 <script>
 import personalServices from '../../../services/PersonalServices'
 import {getCategoriasPersonales} from "@/services/CategoryServices";
+import swalService from "@/services/SwalService";
 export default {
   data() {
     return {
@@ -263,11 +260,10 @@ export default {
         active: ''
       };
     },
-    saveEdit() {
+    async saveEdit() {
       try {
-        const response = personalServices.update(this.editedItem);
+        await personalServices.update(this.editedItem);
       } catch (error) {
-        console.log(error)
       } finally {
         this.editDialog = false;
         this.editedItem = {
@@ -292,15 +288,27 @@ export default {
           },
           active: ''
         };
+        await this.getPersonal();
       }
 
     },
-    deleteItem(idPersonal) {
-      const res = personalServices.delete_(idPersonal);
-    },
-    changeStatus(idPersonal) {
-      const res = personalServices.changeStatus(idPersonal);
-    },
+    async deleteItem(idPersonal)
+    {
+      let proceder = await swalService.confirmationWarning(
+          "¿Estás seguro de eliminar este personal?",
+      );
+      if (proceder) {
+        await personalServices.delete_(idPersonal);
+        await this.getPersonal();
+      }
+    }
+,
+    async changeStatus(idPersonal)
+    {
+      await personalServices.changeStatus(idPersonal);
+      await this.getPersonal();
+    }
+,
     closeModalAddPersonal() {
       this.dialog = false;
     },
@@ -320,13 +328,13 @@ export default {
     },
     async addPersonal() {
       try {
-        const res = personalServices.insert(this.nuevoUsuario);
+        await personalServices.insert(this.nuevoUsuario);
       } catch (error) {
         console.log(error)
       } finally {
         this.resetNuevoPersona();
         this.closeModalAddPersonal();
-        this.getPersonal()
+        await this.getPersonal()
       }
     }
 

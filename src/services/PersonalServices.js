@@ -46,7 +46,7 @@ const insert = async (personal) => {
 const delete_ = async (id_personal) => {
     try {
         const response = await axiosClient.delete(`${baseUrl}/${id_personal}`);
-        response.data ? showNotification("success", "Personal eliminado") : showNotification("error", "Error al eliminar personal");
+        !response.data ? showNotification("success", "Personal eliminado") : showNotification("error", "Error al eliminar personal");
     } catch (error) {
         showNotification("error", "Error al eliminar personal");
     }
@@ -55,7 +55,7 @@ const delete_ = async (id_personal) => {
 const changeStatus = async (id_personal) => {
     try {
         const response = await axiosClient.delete(`${baseUrl}/status/${id_personal}`);
-        response.data ? showNotification("success", "Personal eliminado") : showNotification("error", "Error al eliminar personal");
+        !response.data ? showNotification("success", "Personal eliminado") : showNotification("error", "Error al eliminar personal");
         return response.data;
     } catch (error) {
         console.log(error);

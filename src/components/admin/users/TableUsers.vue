@@ -28,19 +28,22 @@
                 <v-col cols="12" sm="6" md="4">
                   <v-text-field v-model="nuevoUsuario.segundoApellido" label="Segundo Apellido"></v-text-field>
                 </v-col>
+                <v-col cols="12" sm="6" md="4">
+                  <v-text-field v-model="nuevoUsuario.telefono" label="Teléfono"></v-text-field>
+                </v-col>
 
                 <v-col cols="12" sm="6" md="4">
                   <v-text-field v-model="nuevoUsuario.correo" label="Correo"></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
-                  <v-text-field v-model="nuevoUsuario.ultimaModificacion" label="Contraseña"></v-text-field>
+                  <v-text-field v-model="nuevoUsuario.contrasena" label="Contraseña"></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
                   <v-text-field v-model="nuevoUsuario.estado" label="Confirmar contraseña"></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
-                  <v-select label="Rol" v-model="nuevoUsuario.roles.idRol" :items="roles" item-text="nombre"
-                            item-value="idRole">
+                  <v-select label="Rol" v-model="nuevoUsuario.roles[0]" :items="roles" item-text="nombre"
+                            item-value="roles">
                   </v-select>
                 </v-col>
               </v-row>
@@ -63,14 +66,17 @@
           <td class="text-start">{{ item.segundoApellido }}</td>
           <td class="text-start">{{ item.telefono }}</td>
           <td class="text-start">{{ item.correo }}</td>
-          <td class="text-start">{{ new Date(item.ultimaModificacion).toLocaleString("es-ES", {
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit",
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-          }) }}</td>
+          <td class="text-start">{{
+              new Date(item.ultimaModificacion).toLocaleString("es-ES", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+              })
+            }}
+          </td>
           <td class="text-start">
             <v-chip @click="changeStatus(item.idUsuario)" :color="item.active ? 'green' : 'red'" outlined small>
               {{ item.active ? 'Activo' : 'Inactivo' }}
@@ -106,13 +112,7 @@
                 <v-text-field v-model="usuarioEditado.telefono" label="Teléfono"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="usuarioEditado.correo" label="Correo"></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="usuarioEditado.contrasena" label="Contraseña"></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="4">
-                <v-select label="Rol" v-model="nuevoUsuario.roles.idRol" :items="roles" item-text="nombre"
+                <v-select label="Rol" v-model="nuevoUsuario.roles[0].idRol" :items="roles" item-text="nombre"
                           item-value="idRole">
                 </v-select>
               </v-col>
@@ -149,11 +149,13 @@ export default {
         segundoApellido: '',
         telefono: '',
         correo: '',
-        ultimaModificacion: '',
-        estado: '',
-        roles: {
-          idRol: ''
-        }
+        contrasena: "",
+        active: true,
+        roles: [
+          {
+            idRol: "",
+          }
+        ]
       },
       usuarioEditado: {
         nombres: '',

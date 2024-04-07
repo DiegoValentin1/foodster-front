@@ -13,107 +13,115 @@
             <v-divider class="mx-4" inset vertical></v-divider>
             <v-spacer></v-spacer>
             <v-text-field
-              v-model="searchServicios"
-              append-icon="mdi-magnify"
-              label="Buscar"
-              single-line
-              hide-details
+                v-model="searchServicios"
+                append-icon="mdi-magnify"
+                label="Buscar"
+                single-line
+                hide-details
             ></v-text-field>
             <v-spacer></v-spacer>
             <v-dialog v-model="dialogServicios" max-width="500px">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
-                  color="primary"
-                  dark
-                  class="mb-2"
-                  v-bind="attrs"
-                  v-on="on"
-                  >Nuevo servicio</v-btn
+                    color="primary"
+                    dark
+                    class="mb-2"
+                    v-bind="attrs"
+                    v-on="on"
+                >Nuevo servicio
+                </v-btn
                 >
               </template>
-              <v-card>
-                <v-card-title>
-                  <span class="text-h5">Agregar nuevo servicio</span>
-                </v-card-title>
-                <v-card-text>
-                  <v-container>
-                    <v-row>
-                      <v-col cols="12" sm="6" md="6">
-                        <v-text-field
-                          v-model="nuevoServicio.nombre"
-                          label="Nombre"
-                        ></v-text-field>
-                        <v-text-field
-                          v-model="nuevoServicio.descripcion"
-                          label="Descripcion"
-                        ></v-text-field>
-                        <v-text-field
-                          v-model="nuevoServicio.precio"
-                          label="Precio"
-                          type="number"
-                          step="0.01"
-                        ></v-text-field>
-                        <v-text-field
-                          v-model="nuevoServicio.precioDescuento"
-                          label="Precio Descuento"
-                          type="number"
-                          step="0.01"
-                        ></v-text-field>
-                                          
-                        <input
-                            type="file"
-                            @change="onFileChange"
-                            accept="image/*"
-                          />
-                      </v-col>
+              <v-form @submit.prevent="agregarServicio" ref="formAgregarServicio" v-model="validAgregarServicio">
+                <v-card>
+                  <v-card-title>
+                    <span class="text-h5">Agregar nuevo servicio</span>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-container>
+                      <v-row>
+                        <v-col cols="12" sm="6" md="6">
+                          <v-text-field
+                              v-model="nuevoServicio.nombre"
+                              label="Nombre"
+                              :rules="[v => !!v || 'El nombre es requerido', v => (v && v.length >= 3 && v.length <= 50) || 'El nombre debe tener entre 3 y 50 caracteres']"
+                          ></v-text-field>
+                          <v-text-field
+                              v-model="nuevoServicio.descripcion"
+                              label="Descripcion"
+                              :rules="[v => !!v || 'La descripción es requerida', v => (v && v.length >= 3 && v.length <= 255) || 'La descripción debe tener entre 3 y 255 caracteres']"
+                          ></v-text-field>
+                          <v-text-field
+                              v-model="nuevoServicio.precio"
+                              label="Precio"
+                              type="number"
+                              step="0.01"
+                              :rules="[
+  v => !!v || 'El precio no puede ser nulo',
+  v => v > 0 || 'El precio debe ser positivo'
+]"
+                          ></v-text-field>
+                          <v-text-field
+                              v-model="nuevoServicio.precioDescuento"
+                              label="Precio Descuento"
+                              type="number"
+                              step="0.01"
+                          ></v-text-field>
 
-                      <!-- Segunda columna -->
-                      <v-col cols="12" sm="6" md="6">
-                        <v-text-field
-                          v-model="nuevoServicio.existencias"
-                          label="Existencias"
-                          type="number"
-                        ></v-text-field>
-                        <v-select
-                          v-model="nuevoServicio.categoria.idCategoria"
-                          :items="categoriasServicios"
-                          item-text="nombre"
-                          item-value="idCategoria"
-                          label="Categoria"
-                        ></v-select>
+                          <input
+                              type="file"
+                              @change="onFileChange"
+                              accept="image/*"
+                          />
+                        </v-col>
+
+                        <!-- Segunda columna -->
+                        <v-col cols="12" sm="6" md="6">
+                          <v-text-field
+                              v-model="nuevoServicio.existencias"
+                              label="Existencias"
+                              type="number"
+                          ></v-text-field>
                           <v-select
-                          v-model="nuevoServicio.active"
-                          :items="[
+                              v-model="nuevoServicio.categoria.idCategoria"
+                              :items="categoriasServicios"
+                              item-text="nombre"
+                              item-value="idCategoria"
+                              label="Categoria"
+                          ></v-select>
+                          <v-select
+                              v-model="nuevoServicio.active"
+                              :items="[
                             { text: 'Activo', value: true },
                             { text: 'Inactivo', value: false },
                           ]"
-                          label="Estado"
-                        ></v-select>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    color="blue darken-1"
-                    text
-                    @click="cerrarModalAgregarServicio"
-                    >Cancelar</v-btn
-                  >
-                  <v-btn color="blue darken-1" text @click="agregarServicio"
-                    >Guardar</v-btn
-                  >
-                </v-card-actions>
-              </v-card>
+                              label="Estado"
+                          ></v-select>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        color="blue darken-1"
+                        text
+                        @click="cerrarModalAgregarServicio"
+                    >Cancelar
+                    </v-btn
+                    >
+                    <v-btn color="blue darken-1" text type="submit">Guardar</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-form>
             </v-dialog>
           </v-card-title>
           <v-data-table
-            class="mx-auto"
-            style="height: auto; max-height: 500px; overflow-y: auto"
-            :headers="headersServicios"
-            :items="servicios"
-            :search="searchServicios"
+              class="mx-auto"
+              style="height: auto; max-height: 500px; overflow-y: auto"
+              :headers="headersServicios"
+              :items="servicios"
+              :search="searchServicios"
           >
             <template v-slot:item="{ item }">
               <tr>
@@ -123,19 +131,20 @@
                 <td class="text-start">{{ item.precioDescuento }}</td>
                 <td class="text-start">
                   <img
-                    :src="item.imagen"
-                    alt="Servicio"
-                    style="max-width: 100px; max-height: 100px"
+                      :src="item.imagen"
+                      alt="Servicio"
+                      style="max-width: 100px; max-height: 100px"
                   />
                 </td>
 
                 <td class="text-start">{{ item.existencias }}</td>
                 <td class="text-start">{{ item.categoria.nombre }}</td>
                 <td class="text-start">
-            <v-chip :color="item.active ? 'green' : 'red'" outlined small>{{
-              item.active ? "Activo" : "Inactivo"
-            }}</v-chip>
-          </td>
+                  <v-chip :color="item.active ? 'green' : 'red'" outlined small>{{
+                      item.active ? "Activo" : "Inactivo"
+                    }}
+                  </v-chip>
+                </td>
                 <td class="text-start">
                   {{
                     new Date(item.ultimaModificacion).toLocaleString("es-ES", {
@@ -150,67 +159,68 @@
                 </td>
                 <td class="text-center">
                   <v-dialog
-                    v-model="dialogosEditarServicio[item.idServicio]"
-                    max-width="500px"
+                      v-model="dialogosEditarServicio[item.idServicio]"
+                      max-width="500px"
                   >
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon
-                        color="blue"
-                        v-bind="attrs"
-                        v-on="on"
-                        @click="openEditServicioDialog(item.idServicio)"
-                        >mdi-pencil</v-icon
+                          color="blue"
+                          v-bind="attrs"
+                          v-on="on"
+                          @click="openEditServicioDialog(item.idServicio)"
+                      >mdi-pencil
+                      </v-icon
                       >
                     </template>
                     <v-card>
-                      <v-card-title> Editar servicio </v-card-title>
+                      <v-card-title> Editar servicio</v-card-title>
                       <v-card-text>
                         <v-container>
                           <v-row>
                             <v-col cols="12" sm="6" md="4">
                               <v-text-field v-model="item.nombre" label="Nombre"></v-text-field>
                               <v-text-field
-                                v-model="item.descripcion"
-                                label="Descripcion"
-                                :rules="[(v) => !!v || 'La descripción es requerida']"
-                                type="text"
+                                  v-model="item.descripcion"
+                                  label="Descripcion"
+                                  :rules="[(v) => !!v || 'La descripción es requerida']"
+                                  type="text"
                               ></v-text-field>
                               <v-text-field
-                                v-model="item.precio"
-                                label="Precio"
-                                :rules="[(v) => !!v || 'El precio es requerido']"
-                                type="number"
+                                  v-model="item.precio"
+                                  label="Precio"
+                                  :rules="[(v) => !!v || 'El precio es requerido']"
+                                  type="number"
                               ></v-text-field>
                               <v-text-field
-                                v-model="item.precioDescuento"
-                                label="Precio Descuento"
-                                :rules="[(v) => !!v || 'El precio de descuento es requerido']"
-                                type="number"
+                                  v-model="item.precioDescuento"
+                                  label="Precio Descuento"
+                                  :rules="[(v) => !!v || 'El precio de descuento es requerido']"
+                                  type="number"
                               ></v-text-field>
                               <v-text-field
-                                v-model="item.existencias"
-                                label="Existencias"
-                                :rules="[(v) => !!v || 'Las existencias son requeridas']"
-                                type="number"
+                                  v-model="item.existencias"
+                                  label="Existencias"
+                                  :rules="[(v) => !!v || 'Las existencias son requeridas']"
+                                  type="number"
                               ></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6" md="4">
                               <v-select
-                                v-model="item.categoria.idCategoria"
-                                :items="categoriasServicios"
-                                item-text="nombre"
-                                item-value="idCategoria"
-                                label="Categoria"
+                                  v-model="item.categoria.idCategoria"
+                                  :items="categoriasServicios"
+                                  item-text="nombre"
+                                  item-value="idCategoria"
+                                  label="Categoria"
                               ></v-select>
                               <v-select
-                                v-model="item.active"
-                                :items="[
+                                  v-model="item.active"
+                                  :items="[
                                   { text: 'Activo', value: true },
                                   { text: 'Inactivo', value: false },
                                 ]"
-                                label="Estado"
+                                  label="Estado"
                               ></v-select>
-                              <input type="file" @change="onFileChange" accept="image/*" />
+                              <input type="file" @change="onFileChange" accept="image/*"/>
                             </v-col>
                           </v-row>
                         </v-container>
@@ -218,25 +228,28 @@
                       <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn
-                          color="blue darken-1"
-                          text
-                          @click="cancelEditItemServicio(item)"
-                          >Cerrar</v-btn
+                            color="blue darken-1"
+                            text
+                            @click="cancelEditItemServicio(item)"
+                        >Cerrar
+                        </v-btn
                         >
 
                         <v-btn
-                          color="blue darken-1"
-                          text
-                          @click="editItemServicio(item)"
-                          >Guardar</v-btn
+                            color="blue darken-1"
+                            text
+                            @click="editItemServicio(item)"
+                        >Guardar
+                        </v-btn
                         >
                       </v-card-actions>
                     </v-card>
                   </v-dialog>
                   <v-icon
-                    color="red"
-                    @click="deleteItemServicio(item.idServicio)"
-                    >mdi-delete</v-icon
+                      color="red"
+                      @click="deleteItemServicio(item.idServicio)"
+                  >mdi-delete
+                  </v-icon
                   >
                 </td>
               </tr>
@@ -251,22 +264,23 @@
             <v-divider class="mx-4" inset vertical></v-divider>
             <v-spacer></v-spacer>
             <v-text-field
-              v-model="searchServicios"
-              append-icon="mdi-magnify"
-              label="Buscar"
-              single-line
-              hide-details
+                v-model="searchServicios"
+                append-icon="mdi-magnify"
+                label="Buscar"
+                single-line
+                hide-details
             ></v-text-field>
             <v-spacer></v-spacer>
             <v-dialog v-model="dialogPaquete" max-width="500px">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
-                  color="primary"
-                  dark
-                  class="mb-2"
-                  v-bind="attrs"
-                  v-on="on"
-                  >Nuevo paquete</v-btn
+                    color="primary"
+                    dark
+                    class="mb-2"
+                    v-bind="attrs"
+                    v-on="on"
+                >Nuevo paquete
+                </v-btn
                 >
               </template>
               <v-card>
@@ -278,28 +292,28 @@
                     <v-row>
                       <v-col cols="12" sm="6" md="4">
                         <v-select
-                          v-model="nuevoPaquete.paquete.idPaquete"
-                          :items="paquete"
-                          item-text="nombre"
-                          item-value="idPaquete"
-                          label="Paquete"
+                            v-model="nuevoPaquete.paquete.idPaquete"
+                            :items="paquete"
+                            item-text="nombre"
+                            item-value="idPaquete"
+                            label="Paquete"
                         ></v-select>
                         <v-select
-                          v-model="nuevoPaquete.servicio.idServicio"
-                          :items="servicios"
-                          item-text="nombre"
-                          item-value="idServicio"
-                          label="Servicio"
+                            v-model="nuevoPaquete.servicio.idServicio"
+                            :items="servicios"
+                            item-text="nombre"
+                            item-value="idServicio"
+                            label="Servicio"
                         ></v-select>
                       </v-col>
                       <v-col cols="12" sm="6" md="4">
                         <v-select
-                          v-model="nuevoPaquete.active"
-                          :items="[
+                            v-model="nuevoPaquete.active"
+                            :items="[
                             { text: 'Activo', value: true },
                             { text: 'Inactivo', value: false },
                           ]"
-                          label="Estado"
+                            label="Estado"
                         ></v-select>
                       </v-col>
                     </v-row>
@@ -308,24 +322,26 @@
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn
-                    color="blue darken-1"
-                    text
-                    @click="cerrarModalAgregarServicio"
-                    >Cancelar</v-btn
+                      color="blue darken-1"
+                      text
+                      @click="cerrarModalAgregarPaquete"
+                  >Cancelar
+                  </v-btn
                   >
                   <v-btn color="blue darken-1" text @click="agregarPaquete"
-                    >Guardar</v-btn
+                  >Guardar
+                  </v-btn
                   >
                 </v-card-actions>
               </v-card>
             </v-dialog>
           </v-card-title>
           <v-data-table
-            class="mx-auto"
-            style="height: auto; max-height: 500px; overflow-y: auto"
-            :headers="headersPaquete"
-            :items="servicioPaquete"
-            :search="searchServicios"
+              class="mx-auto"
+              style="height: auto; max-height: 500px; overflow-y: auto"
+              :headers="headersPaquete"
+              :items="servicioPaquete"
+              :search="searchServicios"
           >
             <template v-slot:item="{ item }">
               <tr>
@@ -337,60 +353,62 @@
                       year: "numeric",
                       month: "2-digit",
                       day: "2-digit",
-                      hour: "2-digit", 
+                      hour: "2-digit",
                       minute: "2-digit",
                       second: "2-digit",
                     })
                   }}
                 </td>
                 <td class="text-start">
-            <v-chip :color="item.active ? 'green' : 'red'" outlined small>{{
-              item.active ? "Activo" : "Inactivo"
-            }}</v-chip>
-          </td>
+                  <v-chip :color="item.active ? 'green' : 'red'" outlined small>{{
+                      item.active ? "Activo" : "Inactivo"
+                    }}
+                  </v-chip>
+                </td>
                 <td class="text-start">{{ item.ultima_modificacion }}
                   <v-dialog
-                    v-model="dialogosEditarPaquete[item.idServicioPaquete]"
-                    max-width="500px"
+                      v-model="dialogosEditarPaquete[item.idServicioPaquete]"
+                      max-width="500px"
                   >
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon
-                        color="blue"
-                        v-bind="attrs"
-                        v-on="on"
-                        @click="openEditServicioDialog(item.idServicioPaquete)"
-                        >mdi-pencil</v-icon
+                          color="blue"
+                          v-bind="attrs"
+                          v-on="on"
+                          @click="openEditPaqueteDialog(item.idServicioPaquete)"
+                      >mdi-pencil
+                      </v-icon
                       >
                     </template>
                     <v-card>
-                      <v-card-title> Editar servicio paquete </v-card-title>
+                      <v-card-title> Editar servicio paquete</v-card-title>
                       <v-card-text>
                         <v-container>
                           <v-row>
                             <v-col cols="12" sm="6" md="4">
                               <v-select
-                                v-model="item.paquete.idPaquete"
-                                :items="paquete"
-                                item-text="nombre"
-                                item-value="idPaquete"
-                                label="Paquete"
+                                  v-model="item.paquete.idPaquete"
+                                  :items="paquete"
+                                  item-text="nombre"
+                                  item-value="idPaquete"
+                                  label="Paquete"
                               ></v-select>
                               <v-select
-                                v-model="item.servicio.idServicio"
-                                :items="servicios"
-                                item-text="nombre"
-                                item-value="idServicio"
-                                label="Servicio"
+                                  v-model="item.servicio.idServicio"
+                                  :items="servicios"
+                                  item-text="nombre"
+                                  item-value="idServicio"
+                                  label="Servicio"
                               ></v-select>
                             </v-col>
                             <v-col cols="12" sm="6" md="4">
                               <v-select
-                                v-model="item.active"
-                                :items="[
+                                  v-model="item.active"
+                                  :items="[
                                   { text: 'Activo', value: true },
                                   { text: 'Inactivo', value: false },
                                 ]"
-                                label="Estado"
+                                  label="Estado"
                               ></v-select>
                             </v-col>
                           </v-row>
@@ -399,25 +417,28 @@
                       <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn
-                          color="blue darken-1"
-                          text
-                          @click="cancelEditItemServicio(item)"
-                          >Cerrar</v-btn
+                            color="blue darken-1"
+                            text
+                            @click="cancelEditItemPaquete(item)"
+                        >Cerrar
+                        </v-btn
                         >
 
                         <v-btn
-                          color="blue darken-1"
-                          text
-                          @click="editarServicioPaquete(item)"
-                          >Guardar</v-btn
+                            color="blue darken-1"
+                            text
+                            @click="editarServicioPaquete(item)"
+                        >Guardar
+                        </v-btn
                         >
                       </v-card-actions>
                     </v-card>
                   </v-dialog>
                   <v-icon
-                    color="red"
-                    @click="deleteItemServicioPaquete(item.idServicioPaquete)"
-                    >mdi-delete</v-icon
+                      color="red"
+                      @click="deleteItemServicioPaquete(item.idServicioPaquete)"
+                  >mdi-delete
+                  </v-icon
                   >
                 </td>
               </tr>
@@ -441,12 +462,15 @@ import {
   getServiciosPaquete,
 
 } from "@/services/ServicesServices";
-import { getCategoriasServicios } from "@/services/CategoryServices";
-import { getAllPaquetes } from "@/services/PaquetesServices";
+import {getCategoriasServicios} from "@/services/CategoryServices";
+import {getAllPaquetes} from "@/services/PaquetesServices";
+import swalService from "@/services/SwalService";
+
 export default {
   data() {
     return {
       tab: null,
+      validAgregarServicio: true,
       searchServicios: "",
       dialogServicios: false,
       dialogPaquete: false,
@@ -483,21 +507,21 @@ export default {
         active: true,
       },
       headersServicios: [
-        { text: "Nombre", align: "start", sortable: false, value: "nombre" },
+        {text: "Nombre", align: "start", sortable: false, value: "nombre"},
         {
           text: "Descripcion",
           align: "start",
           sortable: false,
           value: "descripcion",
         },
-        { text: "Precio", align: "start", sortable: false, value: "precio" },
+        {text: "Precio", align: "start", sortable: false, value: "precio"},
         {
           text: "Descuento",
           align: "start",
           sortable: false,
           value: "precioDescuento",
         },
-        { text: "Imagen", align: "start", sortable: false, value: "imagen" },
+        {text: "Imagen", align: "start", sortable: false, value: "imagen"},
         {
           text: "Existencia",
           align: "start",
@@ -510,7 +534,7 @@ export default {
           sortable: false,
           value: "categoria.nombre",
         }, // Corregido aquí
-        { text: "Estado", align: "start", sortable: false, value: "active" },
+        {text: "Estado", align: "start", sortable: false, value: "active"},
         {
           text: "Última Modificación",
           align: "start",
@@ -545,7 +569,7 @@ export default {
           sortable: false,
           value: "ultimaModificacion",
         },
-        { text: "Estado", align: "start", sortable: false, value: "active" },
+        {text: "Estado", align: "start", sortable: false, value: "active"},
         {
           text: "Acciones",
           align: "center",
@@ -601,8 +625,10 @@ export default {
     },
 
     cancelEditItemServicio(item) {
-      // Close the edit dialog without saving
       this.dialogosEditarServicio[item.idServicio] = false;
+    },
+    cancelEditItemPaquete(item) {
+      this.dialogosEditarPaquete[item.idServicioPaquete] = false;
     },
     cerrarModalAgregarServicio() {
       this.dialogServicios = false;
@@ -636,6 +662,22 @@ export default {
         console.error("Error al actualizar categoría de servicio:", error);
       }
     },
+
+    cerrarModalAgregarPaquete() {
+      this.dialogPaquete = false;
+      // Limpiar el formulario al cerrar el modal
+      this.nuevoPaquete = {
+        paquete: {
+          idPaquete: "",
+        },
+        servicio: {
+          idServicio: "",
+        },
+        ultimaModificacion: new Date().toISOString(),
+        active: true,
+      };
+    },
+
     async editarServicioPaquete(nuevoPaquete) {
       nuevoPaquete.ultimaModificacion = new Date().toISOString(); // Esto generará la fecha actual en el formato correcto
       try {
@@ -650,8 +692,13 @@ export default {
     },
     async deleteItemServicio(idServicio) {
       try {
-        await deleteServicio(idServicio);
-        this.fetchServicios(); // Recargar la lista de servicios
+        let proceder = await swalService.confirmationWarning(
+            "¿Estás seguro de eliminar el servicio?"
+        );
+        if (proceder) {
+          await deleteServicio(idServicio);
+          await this.fetchServicios(); // Llamada al método renombrado
+        }
       } catch (error) {
         console.error("Error al eliminar servicio:", error);
       }
@@ -661,7 +708,7 @@ export default {
         await deleteServicioPaquete(idServicioPaquete);
 
         const index = this.servicioPaquete.findIndex(
-          (service) => service.idServicioPaquete === idServicioPaquete
+            (service) => service.idServicioPaquete === idServicioPaquete
         );
         if (index !== -1) {
           this.servicioPaquete.splice(index, 1);
@@ -672,28 +719,30 @@ export default {
     },
     async agregarServicio() {
       try {
-        const nuevoServicio = await createServicio(this.nuevoServicio);
-        if (nuevoServicio) {
-          this.dialogServicios = false;
-          this.nuevoServicio = {
-            nombre: "",
-            descripcion: "",
-            precio: 0,
-            precioDescuento: 0,
-            imagen: "",
-            existencias: 0, // Corregido aquí
-            categoria: {
-              idCategoria: "", // Deberías decidir si este campo es generado automáticamente o si el usuario lo ingresa
+        if (this.$refs.formAgregarServicio.validate()) {
+          const nuevoServicio = await createServicio(this.nuevoServicio);
+          if (nuevoServicio) {
+            this.dialogServicios = false;
+            this.nuevoServicio = {
               nombre: "",
+              descripcion: "",
+              precio: 0,
+              precioDescuento: 0,
+              imagen: "",
+              existencias: 0, // Corregido aquí
+              categoria: {
+                idCategoria: "", // Deberías decidir si este campo es generado automáticamente o si el usuario lo ingresa
+                nombre: "",
+                ultimaModificacion: new Date().toISOString(), // Esto generará la fecha actual en el formato correcto
+                active: true,
+              },
               ultimaModificacion: new Date().toISOString(), // Esto generará la fecha actual en el formato correcto
-              active: true,
-            },
-            ultimaModificacion: new Date().toISOString(), // Esto generará la fecha actual en el formato correcto
 
-            active: true, // Por defecto, nuevo servicio activo
-          };
-          this.cerrarModalAgregarServicio();
-          this.fetchServicios(); // Llamada al método renombrado
+              active: true, // Por defecto, nuevo servicio activo
+            };
+            this.cerrarModalAgregarServicio();
+            await this.fetchServicios(); // Llamada al método renombrado
+          }
         }
       } catch (error) {
         console.error("Error al agregar categoría de servicio:", error);
@@ -711,9 +760,9 @@ export default {
             ultimaModificacion: new Date().toISOString(),
             active: true,
           };
-          this.cerrarModalAgregarServicio();
-          this.getAllPaquetes(); // Llamada al método renombrado
-          this.fetchServiciosPaquete();
+          this.cerrarModalAgregarPaquete();
+          await this.getAllPaquetes(); // Llamada al método renombrado
+          await this.fetchServiciosPaquete();
         }
       } catch (error) {
         console.error("Error al agregar categoría de servicio:", error);
@@ -722,6 +771,9 @@ export default {
 
     openEditServicioDialog(idServicio) {
       this.$set(this.dialogosEditarServicio, idServicio, true);
+    },
+    openEditPaqueteDialog(idServicioPaquete) {
+      this.$set(this.dialogosEditarPaquete, idServicioPaquete, true);
     },
     onFileChange(event) {
       const file = event.target.files[0];

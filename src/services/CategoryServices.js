@@ -13,6 +13,7 @@ const getCategoriasPersonales = async () => {
 const actualizarCategoriaPersonal = async (item) => {
     try {
         const response = await axiosClient.put(`/categorias-personal/`, item);
+        response.data ? showNotification("success", "Categoría personal actualizada") : showNotification("error", "Error al actualizar categoría personal")
         return response.data;
     } catch (error) {
         showNotification("error", "Error al actualizar categoría personal")

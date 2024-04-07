@@ -43,7 +43,7 @@ const getEventosByStatus = async (status) => {
 const deleteEvento = async (uid) => {
     try {
         const response = await axiosClient.delete(`${baseUrl}/${uid}`);
-        response.data ? showNotification("success", "Evento eliminado") : showNotification("error", "Error al eliminar evento")
+        !response.data ? showNotification("success", "Evento eliminado") : showNotification("error", "Error al eliminar evento")
         return response.data;
     } catch (error) {
        showNotification("error", "Error al eliminar evento")

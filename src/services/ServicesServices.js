@@ -78,7 +78,7 @@ const getServiciosByStatus = async (status) => {
 const deleteServicio = async (uid) => {
     try {
         const response = await axiosClient.delete(`/servicios/${uid}`);
-        response.data ? showNotification("success", "Servicio eliminado") : showNotification("error", "Error al eliminar servicio");
+        !response.data ? showNotification("success", "Servicio eliminado") : showNotification("error", "Error al eliminar servicio");
         return response.data;
     } catch (error) {
         showNotification("error", "Error al eliminar servicio");
@@ -142,6 +142,7 @@ const getServiciosPaqueteByStatus = async (status) => {
 const deleteServicioPaquete = async (id) => {
     try {
         const response = await axiosClient.delete(`/servicios-paquete/${id}`);
+        !response.data ? showNotification("success", "Servicio de paquete eliminado") : showNotification("error", "Error al eliminar servicio de paquete");
         return response.data;
     } catch (error) {
         showNotification("error", "Error al eliminar servicio de paquete");

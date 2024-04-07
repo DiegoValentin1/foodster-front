@@ -54,7 +54,7 @@ const getPaquetesByStatus = async (status) => {
 const deletePaquete = async (uid) => {
     try {
         const response = await axiosClient.delete(`${baseUrl}${uid}`);
-        response.data ? showNotification("success", "Paquete eliminado") : showNotification("error", "Error al eliminar paquete");
+        !response.data ? showNotification("success", "Paquete eliminado") : showNotification("error", "Error al eliminar paquete");
         return response.data;
     } catch (error) {
         showNotification("error", "Error al eliminar paquete")

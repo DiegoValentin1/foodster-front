@@ -54,7 +54,7 @@ const updateDireccion = async (direccion) => {
 const deleteDireccion = async (id) => {
     try {
         const response = await axiosClient.delete(`${baseUrl}/${id}`);
-        response.data ? showNotification("Success", "Dirección eliminada", "success") : showNotification("Error", "No se pudo eliminar la dirección", "danger");
+        !response.data ? showNotification("Success", "Dirección eliminada", "success") : showNotification("Error", "No se pudo eliminar la dirección", "danger");
         return response.data;
     } catch (error) {
         showNotification("Error", "No se pudo eliminar la dirección", "danger");
