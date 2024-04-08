@@ -39,6 +39,23 @@ const getEventosByStatus = async (status) => {
         showNotification("error", "Error al obtener eventos por estado")
     }
 }
+const getEventosByIdUsuario = async (uid) => {
+    try {
+        const response = await axiosClient.get(`${baseUrl}/usuario/${uid}`);
+        return response.data;
+    } catch (error) {
+        showNotification("error", "Error al obtener eventos por usuario")
+    }
+}
+
+const getEventosByPersonalIdUsuario = async (uid) => {
+    try {
+        const response = await axiosClient.get(`${baseUrl}/personal/${uid}`);
+        return response.data;
+    } catch (error) {
+        showNotification("error", "Error al obtener eventos por usuario")
+    }
+}
 
 const deleteEvento = async (uid) => {
     try {
@@ -52,6 +69,8 @@ const deleteEvento = async (uid) => {
 
 export {
     getEventos,
+    getEventosByIdUsuario,
+    getEventosByPersonalIdUsuario,
     updateEvento,
     createEvento,
     getEventosByStatus,

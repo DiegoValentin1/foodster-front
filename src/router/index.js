@@ -8,8 +8,11 @@ const router = new VueRouter({
     mode: "history", base: import.meta.env.BASE_URL, routes: [{
         path: "/", redirect: "/home/inicio",
     }, {
-        path: "/admin", // meta: {roles: ['ADMIN']},
-        name: "admin", component: () => import("../components/admin/components/SidebarNavbar.vue"), children: [{
+        path: "/admin",
+        meta: {roles: ['ADMIN']},
+        name: "admin",
+        component: () => import("../components/admin/components/SidebarNavbar.vue"),
+        children: [{
             path: "/", name: "dashboard", component: () => import("../components/admin/Dashboard.vue"),
         }, {
             path: "/admin/users", name: "users", component: () => import("../components/admin/users/TableUsers.vue"),
@@ -64,7 +67,9 @@ const router = new VueRouter({
             name: "inicio",
             component: () => import("../components/public/Landing-pages/LandingPage.vue"),
         }, {
+
             path: "/home/perfil/",
+            meta: {auth: true},
             name: "perfil",
             component: () => import("../components/cliente/components/Profile.vue")
 
@@ -72,14 +77,17 @@ const router = new VueRouter({
         }, {
             path: "/home/login/", name: "login", component: () => import("../components/public/Login.vue"),
         }, {
+            // que aqui solo se acceda si no esta logeado
             path: '/home/registro/', name: 'registrarse', component: () => import('../components/public/Register.vue')
         }, {
 
             path: "/restablecer/correo/",
+            meta: {auth: false},
             name: "restablecerCorreo",
             component: () => import("../components/public/Restablecer.vue"),
         }, {
             path: "/restablecer/",
+            meta: {auth: false},
             name: "restablecerConfirmar",
             component: () => import("../components/public/RestablecerConfirmar.vue"),
         }, {
@@ -90,7 +98,16 @@ const router = new VueRouter({
             path: "/home/pedido", name: "pedido", component: () => import("../components/cliente/Pedido.vue"),
         },
 
+
         ],
+    }, {
+        path: "/personal",
+        meta: {roles: ['PERSONAL']},
+        name: "personalScreen",
+        component: () => import("../components/personal/components/SidebarNavbar.vue"),
+        children: [{
+            path: "/", name: "eventos", component: () => import("../components/personal/components/Eventos.vue"),
+        }],
     }, {
         path: "/404", name: "404", component: () => import("../components/public/error/ErrorPage.vue"),
     }, {
@@ -111,7 +128,11 @@ router.beforeEach(async (to, from, next) => {
         }
     }
     if (to.matched.some((record) => record.meta?.roles)) {
-        if (!to.matched.some((record) => record.meta.roles.includes(userRoles))) {
+        try {
+            if (!to.matched.some((record) => userRoles.some(role => record.meta.roles.includes(role)))) {
+                return next({name: "404"});
+            }
+        } catch (e) {
             return next({name: "404"});
         }
     }

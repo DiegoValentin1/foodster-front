@@ -237,7 +237,7 @@ export default {
       nuevoPaquete.imagen = this.nuevoPaquete.imagen;
       try {
         await updatePaquete(nuevoPaquete);
-        this.getAllPaquetes;
+        await this.getAllPaquetes;
         this.dialogosEditarPaquete[nuevoPaquete.idPaquete] = false;
       } catch (error) {
         console.error("Error al actualizar paquete", error);

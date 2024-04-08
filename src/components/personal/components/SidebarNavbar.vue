@@ -5,39 +5,10 @@
         <div class="flex-shrink-0 flex items-center">
           <img class="h-12 w-auto" src="/src/assets/images/logorealista.png" alt="Workflow" />
         </div>
-
         <div class="flex-1 mt-6 w-full px-2 space-y-1">
-          <a href="/admin" class="text-indigo-100 hover:bg-gray-800 hover:text-white group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium">
-            <v-icon color="white"> mdi-home </v-icon>
-            <span class="mt-2">Home</span>
-          </a>
-
-          <a href="/admin/categorias" class="text-indigo-100 hover:bg-gray-800 hover:text-white group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium">
-            <v-icon color="white"> mdi-food-apple </v-icon>
-            <span class="mt-2">Categorias</span>
-          </a>
-
-          <a href="/admin/personal" class="text-indigo-100 hover:bg-gray-800 hover:text-white group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium">
-            <v-icon color="white"> mdi-account-circle </v-icon>
-            <span class="mt-2">Personal</span>
-          </a>
-          <a href="/admin/eventos" class="text-indigo-100 hover:bg-gray-800 hover:text-white group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium">
+          <a href="/personal/" class="text-indigo-100 hover:bg-gray-800 hover:text-white group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium">
             <v-icon color="white"> mdi-calendar </v-icon>
             <span class="mt-2">Eventos</span>
-          </a>
-
-          <a href="/admin/users" class="text-indigo-100 hover:bg-gray-800 hover:text-white group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium">
-            <v-icon color="white"> mdi-account </v-icon>
-            <span class="mt-2">Usuarios</span>
-          </a>
-
-          <a href="/admin/servicios" class="text-indigo-100 hover:bg-gray-800 hover:text-white group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium">
-            <v-icon color="white"> mdi-food </v-icon>
-            <span class="mt-2">Servicios</span>
-          </a>
-          <a href="/admin/paquete" class="text-indigo-100 hover:bg-gray-800 hover:text-white group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium">
-            <v-icon color="white"> mdi-package-variant-closed </v-icon>
-            <span class="mt-2">Paquetes</span>
           </a>
         </div>
       </div>
@@ -61,37 +32,10 @@
           <div class="mt-2 flex-1 h-0 px-2 overflow-y-auto">
             <nav class="h-full flex flex-col">
               <div class="space-y-1">
-                  <a href="/admin" class="text-indigo-100 hover:bg-gray-800 hover:text-white group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium">
-                    <v-icon color="white"> mdi-home </v-icon>
-                    <span class="mt-2">Home</span>
-                  </a>
 
-                  <a href="/admin/categorias" class="text-indigo-100 hover:bg-gray-800 hover:text-white group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium">
-                    <v-icon color="white"> mdi-food-apple </v-icon>
-                    <span class="mt-2">Categorias</span>
-                  </a>
-
-                  <a href="/admin/personal" class="text-indigo-100 hover:bg-gray-800 hover:text-white group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium">
-                    <v-icon color="white"> mdi-account-circle </v-icon>
-                    <span class="mt-2">Personal</span>
-                  </a>
-                  <a href="/admin/eventos" class="text-indigo-100 hover:bg-gray-800 hover:text-white group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium">
+                  <a href="/personal/" class="text-indigo-100 hover:bg-gray-800 hover:text-white group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium">
                     <v-icon color="white"> mdi-calendar </v-icon>
                     <span class="mt-2">Eventos</span>
-                  </a>
-
-                  <a href="/admin/users" class="text-indigo-100 hover:bg-gray-800 hover:text-white group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium">
-                    <v-icon color="white"> mdi-account </v-icon>
-                    <span class="mt-2">Usuarios</span>
-                  </a>
-
-                  <a href="/admin/servicios" class="text-indigo-100 hover:bg-gray-800 hover:text-white group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium">
-                    <v-icon color="white"> mdi-food </v-icon>
-                    <span class="mt-2">Servicios</span>
-                  </a>
-                  <a href="/admin/paquete" class="text-indigo-100 hover:bg-gray-800 hover:text-white group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium">
-                    <v-icon color="white"> mdi-package-variant-closed </v-icon>
-                    <span class="mt-2">Paquetes</span>
                   </a>
 
               </div>

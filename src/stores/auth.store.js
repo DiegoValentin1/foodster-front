@@ -7,7 +7,7 @@ const baseUrl = `/auth`;
 
 export const useAuthStore = defineStore({
     id: 'auth', state: () => ({
-        user: JSON.parse(localStorage.getItem('user')),
+        user: JSON.parse(localStorage.getItem('user')), returnUrl: null,
 
     }), actions: {
         async login(correo, contrasenia) {
@@ -25,13 +25,14 @@ export const useAuthStore = defineStore({
                         route = '/home/inicio'
                         break;
                     case 'PERSONAL':
-                        route = '/personal'
+                        route = '/personal/'
                         break;
                     default:
                         route = '/'
                         break;
                 }
-                router.push(route);
+                this.returnUrl = route;
+                await router.push(route);
             } catch (e) {
                 showNotification('error', 'Usuario o contraseña incorrectos');
             }

@@ -35,7 +35,7 @@ const insert = async (personal) => {
 
 const insertPublic = async (personal) => {
     try {
-        const response = await axiosClient.post(`${baseUrl}/public`, personal);
+        const response = await axiosClient.post(`${baseUrl}/public/`, personal);
         response.data ? showNotification("success", "Se ha registrado correctamente") : showNotification("error", "Error al crear usuario")
         return response.data;
     } catch (error) {
