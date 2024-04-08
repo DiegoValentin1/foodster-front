@@ -69,6 +69,7 @@ export default {
       if (response) {
         this.totalPages = response.totalPages;
         this.services = response.content;
+        console.log(this.services);
       } else {
         this.totalPages = 0;
         this.services = [];
