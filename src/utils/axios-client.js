@@ -49,10 +49,10 @@ function handleResponse(response) {
     const data = response.data;
     if (response.status >= 400) {
         const { user, logout } = useAuthStore();
-        if ([401, 403].includes(response.status) && user) {
+        if ([401].includes(response.status) && user) {
             logout();
         }
-        const error = (data && data.message) || response.statusText;
+        const error = data?.message || response.statusText;
         return Promise.reject(error);
     }
     return data;

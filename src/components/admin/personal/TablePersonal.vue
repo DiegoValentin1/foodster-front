@@ -1,7 +1,7 @@
 <template>
 
   <v-card>
-    <v-breadcrumbs :items="items" large> </v-breadcrumbs>
+    <v-breadcrumbs :items="items" large></v-breadcrumbs>
     <v-card-title>
       Personal
       <v-divider class="mx-4" inset vertical></v-divider>
@@ -33,7 +33,7 @@
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
                   <v-text-field v-model="nuevoUsuario.correo" :rules="emailRules" label="Correo"
-                    required></v-text-field>
+                                required></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
                   <v-text-field v-model="nuevoUsuario.contrasena" label="Contraseña" required></v-text-field>
@@ -43,7 +43,7 @@
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
                   <v-select label="Cargo" v-model="nuevoUsuario.categoria.idCategoria" :items="categoriasPersonal"
-                    item-text="nombre" item-value="idCategoria">
+                            item-text="nombre" item-value="idCategoria">
                   </v-select>
                 </v-col>
 
@@ -58,7 +58,8 @@
         </v-card>
       </v-dialog>
     </v-card-title>
-    <v-data-table class="mx-auto" style="height: auto; max-height: 500px; overflow-y: auto" :headers="headers" :items="personal" :search="search">
+    <v-data-table class="mx-auto" style="height: auto; max-height: 500px; overflow-y: auto" :headers="headers"
+                  :items="personal" :search="search">
       <template v-slot:item="{ item }">
         <tr>
           <td class="text-start">{{ item.usuarios.nombres }}</td>
@@ -68,18 +69,24 @@
           <td class="text-start">{{ item.usuarios.correo }}</td>
           <td class="text-start">{{ item.usuarios.roles[0].nombre }}</td>
           <td class="text-start">{{ item.categoria.nombre }}</td>
-          <td class="text-start">{{ new Date(item.ultimaModificacion).toLocaleString("es-ES", {
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit",
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-          }) }}</td>
+          <td class="text-start">{{
+              new Date(item.ultimaModificacion).toLocaleString("es-ES", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+              })
+            }}
+          </td>
           <td class="text-start">
             <v-chip @click="changeStatus(item.idPersonal)" :color="item.active === true ? 'green' : 'red'" outlined
-              small>{{ item.active === true ? 'Activo' :
-      "Inactivo" }}</v-chip>
+                    small>{{
+                item.active === true ? 'Activo' :
+                    "Inactivo"
+              }}
+            </v-chip>
           </td>
           <td class="text-center">
             <v-icon color="blue" @click="editItem(item)">mdi-pencil</v-icon>
@@ -110,7 +117,7 @@
               </v-col>
               <v-col cols="12" sm="6" md="4">
                 <v-select label="Cargo" v-model="editedItem.categoria.idCategoria" :items="categoriasPersonal"
-                  item-text="nombre" item-value="idCategoria">
+                          item-text="nombre" item-value="idCategoria">
                 </v-select>
               </v-col>
 
@@ -132,6 +139,7 @@
 import personalServices from '../../../services/PersonalServices'
 import {getCategoriasPersonales} from "@/services/CategoryServices";
 import swalService from "@/services/SwalService";
+
 export default {
   data() {
     return {
@@ -142,9 +150,9 @@ export default {
       editDialog: false,
       valid: false,
       items: [
-        { text: 'Personal', disabled: false, href: '/admin/personal' },
-        { text: 'Direcciones', disabled: false, href: '/admin/direcciones' },
-        
+        {text: 'Personal', disabled: false, href: '/admin/personal'},
+        {text: 'Direcciones', disabled: false, href: '/admin/direcciones'},
+
       ],
       nuevoUsuario: {
         nombres: '',
@@ -182,16 +190,16 @@ export default {
       },
       headers: [
 
-        { text: 'Nombre', align: 'start', sortable: false, value: 'nombres' },
-        { text: 'Primer Apellido', align: 'start', sortable: false, value: 'pApellido' },
-        { text: 'Segundo Apellido', align: 'start', sortable: false, value: 'sApellido' },
-        { text: 'Telefono', align: 'start', sortable: false, value: 'telefono' },
-        { text: 'Correo', align: 'start', sortable: false, value: 'correo' },
-        { text: 'Rol', align: 'start', sortable: false, value: 'role' },
-        { text: 'Cargo', align: 'start', sortable: false, value: 'cargo' },
-        { text: 'Ultima Modificación', align: 'start', sortable: false, value: 'ultimaModificacion' },
-        { text: 'Estado', align: 'start', sortable: false, value: 'estado' },
-        { text: 'Acciones', align: 'center', sortable: false, value: 'acciones' },
+        {text: 'Nombre', align: 'start', sortable: false, value: 'nombres'},
+        {text: 'Primer Apellido', align: 'start', sortable: false, value: 'pApellido'},
+        {text: 'Segundo Apellido', align: 'start', sortable: false, value: 'sApellido'},
+        {text: 'Telefono', align: 'start', sortable: false, value: 'telefono'},
+        {text: 'Correo', align: 'start', sortable: false, value: 'correo'},
+        {text: 'Rol', align: 'start', sortable: false, value: 'role'},
+        {text: 'Cargo', align: 'start', sortable: false, value: 'cargo'},
+        {text: 'Ultima Modificación', align: 'start', sortable: false, value: 'ultimaModificacion'},
+        {text: 'Estado', align: 'start', sortable: false, value: 'estado'},
+        {text: 'Acciones', align: 'center', sortable: false, value: 'acciones'},
       ],
 
       nameRules: [
@@ -229,8 +237,7 @@ export default {
       }
     },
     editItem(item) {
-      console.log(item)
-      this.editedItem = { ...item };
+      this.editedItem = {...item};
       this.editDialog = true;
     },
     cancelEdit() {
@@ -292,8 +299,7 @@ export default {
       }
 
     },
-    async deleteItem(idPersonal)
-    {
+    async deleteItem(idPersonal) {
       let proceder = await swalService.confirmationWarning(
           "¿Estás seguro de eliminar este personal?",
       );
@@ -302,13 +308,18 @@ export default {
         await this.getPersonal();
       }
     }
-,
-    async changeStatus(idPersonal)
-    {
-      await personalServices.changeStatus(idPersonal);
-      await this.getPersonal();
+    ,
+    async changeStatus(idPersonal) {
+      let proceder = await swalService.confirmationWarning(
+          "¿Estás seguro de cambiar el estado de este personal?",
+      );
+      if (proceder) {
+        await personalServices.changeStatus(idPersonal);
+        await this.getPersonal();
+      }
     }
-,
+
+    ,
     closeModalAddPersonal() {
       this.dialog = false;
     },

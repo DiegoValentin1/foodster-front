@@ -81,6 +81,10 @@
                               v-model="nuevoServicio.existencias"
                               label="Existencias"
                               type="number"
+                              :rules="[
+  v => !!v || 'Las existencias son requeridas',
+  v => v > 0 || 'Las existencias deben ser positivas'
+]"
                           ></v-text-field>
                           <v-select
                               v-model="nuevoServicio.categoria.idCategoria"
@@ -88,6 +92,7 @@
                               item-text="nombre"
                               item-value="idCategoria"
                               label="Categoria"
+                              :rules="[(v) => !!v || 'La categoría es requerida']"
                           ></v-select>
                           <v-select
                               v-model="nuevoServicio.active"
@@ -172,78 +177,81 @@
                       </v-icon
                       >
                     </template>
-                    <v-card>
-                      <v-card-title> Editar servicio</v-card-title>
-                      <v-card-text>
-                        <v-container>
-                          <v-row>
-                            <v-col cols="12" sm="6" md="4">
-                              <v-text-field v-model="item.nombre" label="Nombre"></v-text-field>
-                              <v-text-field
-                                  v-model="item.descripcion"
-                                  label="Descripcion"
-                                  :rules="[(v) => !!v || 'La descripción es requerida']"
-                                  type="text"
-                              ></v-text-field>
-                              <v-text-field
-                                  v-model="item.precio"
-                                  label="Precio"
-                                  :rules="[(v) => !!v || 'El precio es requerido']"
-                                  type="number"
-                              ></v-text-field>
-                              <v-text-field
-                                  v-model="item.precioDescuento"
-                                  label="Precio Descuento"
-                                  :rules="[(v) => !!v || 'El precio de descuento es requerido']"
-                                  type="number"
-                              ></v-text-field>
-                              <v-text-field
-                                  v-model="item.existencias"
-                                  label="Existencias"
-                                  :rules="[(v) => !!v || 'Las existencias son requeridas']"
-                                  type="number"
-                              ></v-text-field>
-                            </v-col>
-                            <v-col cols="12" sm="6" md="4">
-                              <v-select
-                                  v-model="item.categoria.idCategoria"
-                                  :items="categoriasServicios"
-                                  item-text="nombre"
-                                  item-value="idCategoria"
-                                  label="Categoria"
-                              ></v-select>
-                              <v-select
-                                  v-model="item.active"
-                                  :items="[
-                                  { text: 'Activo', value: true },
-                                  { text: 'Inactivo', value: false },
-                                ]"
-                                  label="Estado"
-                              ></v-select>
-                              <input type="file" @change="onFileChange" accept="image/*"/>
-                            </v-col>
-                          </v-row>
-                        </v-container>
-                      </v-card-text>
-                      <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn
-                            color="blue darken-1"
-                            text
-                            @click="cancelEditItemServicio(item)"
-                        >Cerrar
-                        </v-btn
-                        >
-
-                        <v-btn
-                            color="blue darken-1"
-                            text
-                            @click="editItemServicio(item)"
-                        >Guardar
-                        </v-btn
-                        >
-                      </v-card-actions>
-                    </v-card>
+                    <v-form @submit.prevent="editItemServicio(item) " ref="formEditarServicio">
+                      <v-card>
+                        <v-card-title> Editar servicio</v-card-title>
+                        <v-card-text>
+                          <v-container>
+                            <v-row>
+                              <v-col cols="12" sm="6" md="4">
+                                <v-text-field v-model="item.nombre" label="Nombre"
+                                              :rules="[(v) => !!v || 'El nombre es requerido']"></v-text-field>
+                                <v-text-field
+                                    v-model="item.descripcion"
+                                    label="Descripcion"
+                                    :rules="[(v) => !!v || 'La descripción es requerida']"
+                                    type="text"
+                                ></v-text-field>
+                                <v-text-field
+                                    v-model="item.precio"
+                                    label="Precio"
+                                    :rules="[(v) => !!v || 'El precio es requerido', v => v > 0 || 'El precio debe ser positivo']"
+                                    type="number"
+                                ></v-text-field>
+                                <v-text-field
+                                    v-model="item.precioDescuento"
+                                    label="Precio Descuento"
+                                    :rules="[(v) => v > 0 || 'El precio debe ser positivo']"
+                                    type="number"
+                                ></v-text-field>
+                                <v-text-field
+                                    v-model="item.existencias"
+                                    label="Existencias"
+                                    :rules="[(v) => !!v || 'Las existencias son requeridas', v => v > 0 || 'Las existencias deben ser positivas']"
+                                    type="number"
+                                ></v-text-field>
+                              </v-col>
+                              <v-col cols="12" sm="6" md="4">
+                                <v-select
+                                    v-model="item.categoria.idCategoria"
+                                    :items="categoriasServicios"
+                                    item-text="nombre"
+                                    item-value="idCategoria"
+                                    label="Categoria"
+                                    :rules="[(v) => !!v || 'La categoría es requerida']"
+                                ></v-select>
+                                <v-select
+                                    v-model="item.active"
+                                    :items="[
+                                    { text: 'Activo', value: true },
+                                    { text: 'Inactivo', value: false },
+                                  ]"
+                                    label="Estado"
+                                ></v-select>
+                                <input type="file" @change="onFileChange" accept="image/*"/>
+                              </v-col>
+                            </v-row>
+                          </v-container>
+                        </v-card-text>
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+                          <v-btn
+                              color="blue darken-1"
+                              text
+                              @click="cancelEditItemServicio(item)"
+                          >Cerrar
+                          </v-btn
+                          >
+                          <v-btn
+                              color="blue darken-1"
+                              text
+                              type="submit"
+                          >Guardar
+                          </v-btn
+                          >
+                        </v-card-actions>
+                      </v-card>
+                    </v-form>
                   </v-dialog>
                   <v-icon
                       color="red"
@@ -283,57 +291,61 @@
                 </v-btn
                 >
               </template>
-              <v-card>
-                <v-card-title>
-                  <span class="text-h5">Agregar nuevo paquete</span>
-                </v-card-title>
-                <v-card-text>
-                  <v-container>
-                    <v-row>
-                      <v-col cols="12" sm="6" md="4">
-                        <v-select
-                            v-model="nuevoPaquete.paquete.idPaquete"
-                            :items="paquete"
-                            item-text="nombre"
-                            item-value="idPaquete"
-                            label="Paquete"
-                        ></v-select>
-                        <v-select
-                            v-model="nuevoPaquete.servicio.idServicio"
-                            :items="servicios"
-                            item-text="nombre"
-                            item-value="idServicio"
-                            label="Servicio"
-                        ></v-select>
-                      </v-col>
-                      <v-col cols="12" sm="6" md="4">
-                        <v-select
-                            v-model="nuevoPaquete.active"
-                            :items="[
+              <v-form @submit.prevent="agregarPaquete" ref="formAgregarPaquete">
+                <v-card>
+                  <v-card-title>
+                    <span class="text-h5">Agregar nuevo paquete</span>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-container>
+                      <v-row>
+                        <v-col cols="12" sm="6" md="4">
+                          <v-select
+                              v-model="nuevoPaquete.paquete.idPaquete"
+                              :items="paquete"
+                              item-text="nombre"
+                              item-value="idPaquete"
+                              label="Paquete"
+                              :rules="[(v) => !!v || 'El paquete es requerido']"
+                          ></v-select>
+                          <v-select
+                              v-model="nuevoPaquete.servicio.idServicio"
+                              :items="servicios"
+                              item-text="nombre"
+                              item-value="idServicio"
+                              label="Servicio"
+                              :rules="[(v) => !!v || 'El servicio es requerido']"
+                          ></v-select>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="4">
+                          <v-select
+                              v-model="nuevoPaquete.active"
+                              :items="[
                             { text: 'Activo', value: true },
                             { text: 'Inactivo', value: false },
                           ]"
-                            label="Estado"
-                        ></v-select>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn
-                      color="blue darken-1"
-                      text
-                      @click="cerrarModalAgregarPaquete"
-                  >Cancelar
-                  </v-btn
-                  >
-                  <v-btn color="blue darken-1" text @click="agregarPaquete"
-                  >Guardar
-                  </v-btn
-                  >
-                </v-card-actions>
-              </v-card>
+                              label="Estado"
+                          ></v-select>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        color="blue darken-1"
+                        text
+                        @click="cerrarModalAgregarPaquete"
+                    >Cancelar
+                    </v-btn
+                    >
+                    <v-btn color="blue darken-1" text type="submit"
+                    >Guardar
+                    </v-btn
+                    >
+                  </v-card-actions>
+                </v-card>
+              </v-form>
             </v-dialog>
           </v-card-title>
           <v-data-table
@@ -380,59 +392,63 @@
                       </v-icon
                       >
                     </template>
-                    <v-card>
-                      <v-card-title> Editar servicio paquete</v-card-title>
-                      <v-card-text>
-                        <v-container>
-                          <v-row>
-                            <v-col cols="12" sm="6" md="4">
-                              <v-select
-                                  v-model="item.paquete.idPaquete"
-                                  :items="paquete"
-                                  item-text="nombre"
-                                  item-value="idPaquete"
-                                  label="Paquete"
-                              ></v-select>
-                              <v-select
-                                  v-model="item.servicio.idServicio"
-                                  :items="servicios"
-                                  item-text="nombre"
-                                  item-value="idServicio"
-                                  label="Servicio"
-                              ></v-select>
-                            </v-col>
-                            <v-col cols="12" sm="6" md="4">
-                              <v-select
-                                  v-model="item.active"
-                                  :items="[
+                    <v-form @submit.prevent="editarServicioPaquete(item)" ref="formEditarServicioPaquete">
+                      <v-card>
+                        <v-card-title> Editar servicio paquete</v-card-title>
+                        <v-card-text>
+                          <v-container>
+                            <v-row>
+                              <v-col cols="12" sm="6" md="4">
+                                <v-select
+                                    v-model="item.paquete.idPaquete"
+                                    :items="paquete"
+                                    item-text="nombre"
+                                    item-value="idPaquete"
+                                    label="Paquete"
+                                    :rules="[(v) => !!v || 'El paquete es requerido']"
+                                ></v-select>
+                                <v-select
+                                    v-model="item.servicio.idServicio"
+                                    :items="servicios"
+                                    item-text="nombre"
+                                    item-value="idServicio"
+                                    label="Servicio"
+                                    :rules="[(v) => !!v || 'El servicio es requerido']"
+                                ></v-select>
+                              </v-col>
+                              <v-col cols="12" sm="6" md="4">
+                                <v-select
+                                    v-model="item.active"
+                                    :items="[
                                   { text: 'Activo', value: true },
                                   { text: 'Inactivo', value: false },
                                 ]"
-                                  label="Estado"
-                              ></v-select>
-                            </v-col>
-                          </v-row>
-                        </v-container>
-                      </v-card-text>
-                      <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn
-                            color="blue darken-1"
-                            text
-                            @click="cancelEditItemPaquete(item)"
-                        >Cerrar
-                        </v-btn
-                        >
+                                    label="Estado"
+                                ></v-select>
+                              </v-col>
+                            </v-row>
+                          </v-container>
+                        </v-card-text>
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+                          <v-btn
+                              color="blue darken-1"
+                              text
+                              @click="cancelEditItemPaquete(item)"
+                          >Cerrar
+                          </v-btn
+                          >
 
-                        <v-btn
-                            color="blue darken-1"
-                            text
-                            @click="editarServicioPaquete(item)"
-                        >Guardar
-                        </v-btn
-                        >
-                      </v-card-actions>
-                    </v-card>
+                          <v-btn
+                              color="blue darken-1"
+                              text
+                              type="submit"
+                          >Guardar
+                          </v-btn
+                          >
+                        </v-card-actions>
+                      </v-card>
+                    </v-form>
                   </v-dialog>
                   <v-icon
                       color="red"
@@ -652,12 +668,13 @@ export default {
     },
     async editItemServicio(nuevoServicio) {
       nuevoServicio.ultimaModificacion = new Date().toISOString(); // Esto generará la fecha actual en el formato correcto
-      nuevoServicio.categoria.ultimaModificacion = new Date().toISOString(); // Esto generará la fecha actual en el formato correcto
       nuevoServicio.imagen = this.nuevoServicio.imagen;
       try {
-        await updateServicio(nuevoServicio);
-        this.fetchServicios(); // Llamada al método renombrado
-        this.dialogosEditarServicio[nuevoServicio.idServicio] = false;
+        if (this.$refs.formEditarServicio.validate()) {
+          await updateServicio(nuevoServicio);
+          await this.fetchServicios(); // Llamada al método renombrado
+          this.dialogosEditarServicio[nuevoServicio.idServicio] = false;
+        }
       } catch (error) {
         console.error("Error al actualizar categoría de servicio:", error);
       }
@@ -681,11 +698,11 @@ export default {
     async editarServicioPaquete(nuevoPaquete) {
       nuevoPaquete.ultimaModificacion = new Date().toISOString(); // Esto generará la fecha actual en el formato correcto
       try {
-        // Call the service to update the service
-        await updateServicioPaquete(nuevoPaquete);
-        this.fetchServiciosPaquete(); // Llamada al método renombrado
-        // Close the edit dialog
-        this.dialogosEditarPaquete[nuevoPaquete.idServicioPaquete] = false;
+        if (this.$refs.formEditarServicioPaquete.validate()) {
+          await updateServicioPaquete(nuevoPaquete);
+          await this.fetchServiciosPaquete();
+          this.dialogosEditarPaquete[nuevoPaquete.idServicioPaquete] = false;
+        }
       } catch (error) {
         console.error("Error al actualizar categoría de servicio:", error);
       }
@@ -750,19 +767,21 @@ export default {
     },
     async agregarPaquete() {
       try {
-        const nuevoPaquete = await createServicioPaquete(this.nuevoPaquete);
-        if (nuevoPaquete) {
-          this.dialogPaquete = false;
-          this.nuevoPaquete = {
-            paquete: {
-              idPaquete: "",
-            },
-            ultimaModificacion: new Date().toISOString(),
-            active: true,
-          };
-          this.cerrarModalAgregarPaquete();
-          await this.getAllPaquetes(); // Llamada al método renombrado
-          await this.fetchServiciosPaquete();
+        if (this.$refs.formAgregarPaquete.validate()) {
+          const nuevoPaquete = await createServicioPaquete(this.nuevoPaquete);
+          if (nuevoPaquete) {
+            this.dialogPaquete = false;
+            this.nuevoPaquete = {
+              paquete: {
+                idPaquete: "",
+              },
+              ultimaModificacion: new Date().toISOString(),
+              active: true,
+            };
+            this.cerrarModalAgregarPaquete();
+            await this.getAllPaquetes(); // Llamada al método renombrado
+            await this.fetchServiciosPaquete();
+          }
         }
       } catch (error) {
         console.error("Error al agregar categoría de servicio:", error);

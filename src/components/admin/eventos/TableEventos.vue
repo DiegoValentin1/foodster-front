@@ -5,21 +5,21 @@
       <v-divider class="mx-4" inset vertical></v-divider>
       <v-spacer></v-spacer>
       <v-text-field
-        v-model="searchEventos"
-        append-icon="mdi-magnify"
-        label="Buscar"
-        single-line
-        hide-details
+          v-model="searchEventos"
+          append-icon="mdi-magnify"
+          label="Buscar"
+          single-line
+          hide-details
       ></v-text-field>
       <v-spacer></v-spacer>
     </v-card-title>
 
     <v-data-table
-      class="mx-auto"
-      style="height: auto; max-height: 500px; overflow-y: auto"
-      :headers="headers"
-      :items="eventos"
-      :search="searchEventos"
+        class="mx-auto"
+        style="height: auto; max-height: 500px; overflow-y: auto"
+        :headers="headers"
+        :items="eventos"
+        :search="searchEventos"
     >
       <template v-slot:item="{ item }">
         <tr>
@@ -64,76 +64,78 @@
           </td>
           <td class="text-start">
             <v-chip :color="item.active ? 'green' : 'red'" outlined small>{{
-              item.active ? "Activo" : "Inactivo"
-            }}</v-chip>
+                item.active ? "Activo" : "Inactivo"
+              }}
+            </v-chip>
           </td>
           <td class="text-center">
             <v-dialog
-              v-model="dialogosEditarEvento[item.idEvento]"
-              max-width="500px"
+                v-model="dialogosEditarEvento[item.idEvento]"
+                max-width="500px"
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-icon
-                  color="blue"
-                  v-bind="attrs"
-                  v-on="on"
-                  @click="openEditServicioDialog(item.idEvento)"
-                  >mdi-pencil</v-icon
+                    color="blue"
+                    v-bind="attrs"
+                    v-on="on"
+                    @click="openEditServicioDialog(item.idEvento)"
+                >mdi-pencil
+                </v-icon
                 >
               </template>
               <v-card>
-                <v-card-title> Editar evento </v-card-title>
+                <v-card-title> Editar evento</v-card-title>
                 <v-card-text>
                   <v-container>
                     <v-row>
                       <v-col cols="12" sm="6" md="6">
                         <v-text-field
-                          v-model="item.numeroPersonas"
-                          label="Número de Personas"
-                          :rules="[
+                            v-model="item.numeroPersonas"
+                            label="Número de Personas"
+                            :rules="[
                             (v) => !!v || 'El número de personas es requerido',
                             (v) => (v && v > 0) || 'El número de personas debe ser mayor a 0',
                             (v) => (v && v < 1000) || 'El número de personas debe ser menor a 1000',
                           ]"
                         ></v-text-field>
                         <v-text-field
-                          v-model="item.costoTotal"
-                          label="Costo Total"
-                          :rules="[(v) => !!v || 'El costo total es requerido']"
-                          type="number"
+                            v-model="item.costoTotal"
+                            label="Costo Total"
+                            :rules="[(v) => !!v || 'El costo total es requerido']"
+                            type="number"
                         ></v-text-field>
                         <v-text-field
-                          v-model="item.fechaHoraInicio"
-                          label="Fecha y Hora de Inicio"
-                          :rules="[
+                            v-model="item.fechaHoraInicio"
+                            label="Fecha y Hora de Inicio"
+                            :rules="[
                             (v) =>
                               !!v || 'La fecha y hora de inicio es requerida',
                           ]"
-                          type="datetime-local"
+                            type="datetime-local"
                         ></v-text-field>
                         <v-text-field
-                          v-model="item.fechaHoraFin"
-                          label="Fecha y Hora de Fin"
-                          :rules="[
+                            v-model="item.fechaHoraFin"
+                            label="Fecha y Hora de Fin"
+                            :rules="[
                             (v) => !!v || 'La fecha y hora de fin es requerida',
                           ]"
-                          type="datetime-local"
+                            type="datetime-local"
                         ></v-text-field>
                         <v-select
-                          v-model="item.personalizado"
-                          :items="[
+                            v-model="item.personalizado"
+                            :items="[
                             { text: 'Personalizado', value: true },
                             { text: 'No personalizado', value: false },
                           ]"
-                          label="Personalizado"
+                            label="Personalizado"
                         ></v-select>
                         <v-select
-                          v-model="item.active"
-                          :items="[
+                            v-model="item.active"
+                            :items="[
                             { text: 'Activo', value: true },
                             { text: 'Inactivo', value: false },
                           ]"
-                          label="Estado"
+                            label="Estado"
                         ></v-select>
                       </v-col>
                     </v-row>
@@ -142,22 +144,25 @@
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn
-                    color="blue darken-1"
-                    text
-                    @click="cancelEditItemEvento(item)"
-                    >Cerrar</v-btn
+                      color="blue darken-1"
+                      text
+                      @click="cancelEditItemEvento(item)"
+                  >Cerrar
+                  </v-btn
                   >
                   <v-btn
-                    color="blue darken-1"
-                    text
-                    @click="editItemEvento(item)"
-                    >Guardar</v-btn
+                      color="blue darken-1"
+                      text
+                      @click="editItemEvento(item)"
+                  >Guardar
+                  </v-btn
                   >
                 </v-card-actions>
               </v-card>
             </v-dialog>
             <v-icon color="red" @click="deleteItemEvento(item.idEvento)"
-              >mdi-delete</v-icon
+            >mdi-delete
+            </v-icon
             >
           </td>
         </tr>
@@ -171,9 +176,10 @@ import {
   getEventos,
   updateEvento,
   createEvento,
-  getEventosByStatus,
   deleteEvento,
 } from "../../../services/EventosServices";
+import swalService from "@/services/SwalService";
+
 export default {
   data() {
     return {
@@ -226,7 +232,7 @@ export default {
           sortable: false,
           value: "ultimaModificacion",
         },
-        { text: "Estado", align: "start", sortable: false, value: "active" },
+        {text: "Estado", align: "start", sortable: false, value: "active"},
         {
           text: "Acciones",
           align: "center",
@@ -268,7 +274,6 @@ export default {
       };
     },
     async editItemEvento(item) {
-      console.log("Item a editar:", item); // Agregar esta línea para verificar el objeto item
       item.ultimaModificacion = new Date().toISOString();
       try {
         await updateEvento(item);
@@ -281,8 +286,13 @@ export default {
 
     async deleteItemEvento(idEvento) {
       try {
-        await deleteEvento(idEvento);
-        this.getAllEventos();
+        let proceder = swalService.confirmationWarning(
+            "¿Estás seguro de eliminar el evento?"
+        );
+        if (proceder) {
+          await deleteEvento(idEvento);
+          await this.getAllEventos();
+        }
       } catch (error) {
         console.error("Error al eliminar servicio:", error);
       }

@@ -13,150 +13,172 @@
             <v-divider class="mx-4" inset vertical></v-divider>
             <v-spacer></v-spacer>
             <v-text-field
-              v-model="searchPersonal"
-              append-icon="mdi-magnify"
-              label="Buscar"
-              single-line
-              hide-details
+                v-model="searchPersonal"
+                append-icon="mdi-magnify"
+                label="Buscar"
+                single-line
+                hide-details
             ></v-text-field>
             <v-spacer></v-spacer>
             <v-dialog v-model="dialogPersonal" max-width="500px">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
-                  color="primary"
-                  dark
-                  class="mb-2"
-                  v-bind="attrs"
-                  v-on="on"
-                  >Nuevo personal</v-btn
+                    color="primary"
+                    dark
+                    class="mb-2"
+                    v-bind="attrs"
+                    v-on="on"
+                >Nuevo personal
+                </v-btn
                 >
               </template>
-              <v-card>
-                <v-card-title>
-                  <span class="text-h5"
+              <v-form ref="formAgregarCategoriaPersonal" @submit.prevent="agregarCategoriaPersonal">
+                <v-card>
+                  <v-card-title>
+                    <span class="text-h5"
                     >Agregar nueva categoría de personal</span
-                  >
-                </v-card-title>
-                <v-card-text>
-                  <v-container>
-                    <v-row>
-                      <v-col cols="12" sm="6" md="4">
-                        <v-text-field
-                          v-model="nuevaCategoriaPersonal.nombre"
-                          label="Nombre"
-                          :rules="[v => !!v || 'El nombre es requerido', v => /^[a-zA-Z0-9\s]+$/.test(v) || 'El nombre solo puede contener letras y números']"
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="6" md="4">
-                        <v-select
-                          v-model="nuevaCategoriaPersonal.active"
-                          :items="[
+                    >
+                  </v-card-title>
+                  <v-card-text>
+                    <v-container>
+                      <v-row>
+                        <v-col cols="12" sm="6" md="4">
+                          <v-text-field
+                              v-model="nuevaCategoriaPersonal.nombre"
+                              label="Nombre"
+                              :rules="[v => !!v || 'El nombre es requerido', v => /^[a-zA-Z0-9\s]+$/.test(v) || 'El nombre solo puede contener letras y números']"
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="4">
+                          <v-select
+                              v-model="nuevaCategoriaPersonal.active"
+                              :items="[
                             { text: 'Activo', value: true },
                             { text: 'Inactivo', value: false },
                           ]"
-                          label="Estado"
-                        ></v-select>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    color="blue darken-1"
-                    text
-                    @click="cerrarModalAgregarCategoriaPersonal"
-                    >Cancelar</v-btn
-                  >
-                  <v-btn
-                    color="blue darken-1"
-                    text
-                    @click="agregarCategoriaPersonal"
-                    >Guardar</v-btn
-                  >
-                </v-card-actions>
-              </v-card>
+                              label="Estado"
+                          ></v-select>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        color="blue darken-1"
+                        text
+                        @click="cerrarModalAgregarCategoriaPersonal"
+                    >Cancelar
+                    </v-btn
+                    >
+                    <v-btn
+                        color="blue darken-1"
+                        text
+                        type="submit"
+                    >Guardar
+                    </v-btn
+                    >
+                  </v-card-actions>
+                </v-card>
+              </v-form>
             </v-dialog>
           </v-card-title>
           <v-data-table
-            class="mx-auto"
-            style="height: auto; max-height: 500px; overflow-y: auto;"
-            :headers="headersPersonal"
-            :items="categoriasPersonal"
-            :search="searchPersonal"
+              class="mx-auto"
+              style="height: auto; max-height: 500px; overflow-y: auto;"
+              :headers="headersPersonal"
+              :items="categoriasPersonal"
+              :search="searchPersonal"
           >
             <template v-slot:item="{ item }">
               <tr>
                 <td class="text-start">{{ item.nombre }}</td>
                 <td class="text-start">
-            <v-chip :color="item.active ? 'green' : 'red'" outlined small>{{
-              item.active ? "Activo" : "Inactivo"
-            }}</v-chip>
-          </td>
-                <td class="text-start">{{ new Date(item.ultimaModificacion).toLocaleString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }) }}</td>
+                  <v-chip :color="item.active ? 'green' : 'red'" outlined small>{{
+                      item.active ? "Activo" : "Inactivo"
+                    }}
+                  </v-chip>
+                </td>
+                <td class="text-start">{{
+                    new Date(item.ultimaModificacion).toLocaleString('es-ES', {
+                      year: 'numeric',
+                      month: '2-digit',
+                      day: '2-digit',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      second: '2-digit'
+                    })
+                  }}
+                </td>
                 <td class="text-center">
                   <v-dialog
-                    v-model="dialogosEditar[item.idCategoria]"
-                    max-width="500px"
+                      v-model="dialogosEditar[item.idCategoria]"
+                      max-width="500px"
                   >
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon
-                        color="blue"
-                        v-bind="attrs"
-                        v-on="on"
-                        @click="openEditDialog(item.idCategoria)"
-                        >mdi-pencil</v-icon
+                          color="blue"
+                          v-bind="attrs"
+                          v-on="on"
+                          @click="openEditDialog(item.idCategoria)"
+                      >mdi-pencil
+                      </v-icon
                       >
                     </template>
-                    <v-card>
-                      <v-card-title>
-                        Editar categoría de personal
-                      </v-card-title>
-                      <v-card-text>
-                        <v-container>
-                          <v-row>
-                            <v-col cols="12" sm="6" md="4">
-                              <v-text-field
-                                v-model="item.nombre"
-                                label="Nombre"
-                                :rules="[v => !!v || 'El nombre es requerido', v => /^[a-zA-Z0-9\s]+$/.test(v) || 'El nombre solo puede contener letras y números']"
-                              ></v-text-field>
-                            </v-col>
-                            <v-col cols="12" sm="6" md="4">
-                              <v-select
-                                v-model="item.active"
-                                :items="[
+                    <v-form ref="formEditarCategoriaPersonal" @submit.prevent="editItemPersonal(item)">
+                      <v-card>
+                        <v-card-title>
+                          Editar categoría de personal
+                        </v-card-title>
+                        <v-card-text>
+                          <v-container>
+                            <v-row>
+                              <v-col cols="12" sm="6" md="4">
+                                <v-text-field
+                                    v-model="item.nombre"
+                                    label="Nombre"
+                                    :rules="[v => !!v || 'El nombre es requerido', v => /^[a-zA-Z0-9\s]+$/.test(v) || 'El nombre solo puede contener letras y números']"
+                                ></v-text-field>
+                              </v-col>
+                              <v-col cols="12" sm="6" md="4">
+                                <v-select
+                                    v-model="item.active"
+                                    :items="[
                                   { text: 'Activo', value: true },
                                   { text: 'Inactivo', value: false },
                                 ]"
-                                label="Estado"
-                              ></v-select>
-                            </v-col>
-                          </v-row>
-                        </v-container>
-                      </v-card-text>
-                      <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn
-                          color="blue darken-1"
-                          text
-                          @click="cancelEditItemPersonal(item)"
-                          >Cerrar</v-btn
-                        >
+                                    label="Estado"
+                                ></v-select>
+                              </v-col>
+                            </v-row>
+                          </v-container>
+                        </v-card-text>
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+                          <v-btn
+                              color="blue darken-1"
+                              text
+                              @click="cancelEditItemPersonal(item)"
+                          >Cerrar
+                          </v-btn
+                          >
 
-                        <v-btn
-                          color="blue darken-1"
-                          text
-                          @click="editItemPersonal(item)"
-                          >Guardar</v-btn
-                        >
-                      </v-card-actions>
-                    </v-card>
+                          <v-btn
+                              color="blue darken-1"
+                              text
+                              type="submit"
+                          >Guardar
+                          </v-btn
+                          >
+                        </v-card-actions>
+                      </v-card>
+                    </v-form>
                   </v-dialog>
                   <v-icon
-                    color="red"
-                    @click="deleteItemPersonal(item.idCategoria)"
-                    >mdi-delete</v-icon
+                      color="red"
+                      @click="deleteItemPersonal(item.idCategoria)"
+                  >mdi-delete
+                  </v-icon
                   >
                 </td>
               </tr>
@@ -171,148 +193,172 @@
             <v-divider class="mx-4" inset vertical></v-divider>
             <v-spacer></v-spacer>
             <v-text-field
-              v-model="searchServicios"
-              append-icon="mdi-magnify"
-              label="Buscar"
-              single-line
-              hide-details
+                v-model="searchServicios"
+                append-icon="mdi-magnify"
+                label="Buscar"
+                single-line
+                hide-details
             ></v-text-field>
             <v-spacer></v-spacer>
             <v-dialog v-model="dialogServicios" max-width="500px">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
-                  color="primary"
-                  dark
-                  class="mb-2"
-                  v-bind="attrs"
-                  v-on="on"
-                  >Nuevo servicio</v-btn
+                    color="primary"
+                    dark
+                    class="mb-2"
+                    v-bind="attrs"
+                    v-on="on"
+                >Nuevo servicio
+                </v-btn
                 >
               </template>
-              <v-card>
-                <v-card-title>
+              <v-form ref="formAgregarCategoriaServicio" @submit.prevent="agregarCategoriaServicio">
+                <v-card>
+                  <v-card-title>
                   <span class="text-h5"
-                    >Agregar nueva categoría de servicio</span
+                  >Agregar nueva categoría de servicio</span
                   >
-                </v-card-title>
-                <v-card-text>
-                  <v-container>
-                    <v-row>
-                      <v-col cols="12" sm="6" md="4">
-                        <v-text-field
-                          v-model="nuevoServicio.nombre"
-                          label="Nombre"
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="12" sm="6" md="4">
-                        <v-select
-                          v-model="nuevoServicio.active"
-                          :items="[
+                  </v-card-title>
+                  <v-card-text>
+                    <v-container>
+                      <v-row>
+                        <v-col cols="12" sm="6" md="4">
+                          <v-text-field
+                              v-model="nuevoServicio.nombre"
+                              label="Nombre"
+                              :rules="[v => !!v || 'El nombre es requerido', v => v.length <= 50 && v.length > 3 || 'El nombre debe tener entre 3 y 50 caracteres']"
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="4">
+                          <v-select
+                              v-model="nuevoServicio.active"
+                              :items="[
                             { text: 'Activo', value: true },
                             { text: 'Inactivo', value: false },
                           ]"
-                          label="Estado"
-                        ></v-select>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    color="blue darken-1"
-                    text
-                    @click="cerrarModalAgregarCategoriaServicio"
-                    >Cancelar</v-btn
-                  >
-                  <v-btn
-                    color="blue darken-1"
-                    text
-                    @click="agregarCategoriaServicio"
-                    >Guardar</v-btn
-                  >
-                </v-card-actions>
-              </v-card>
+                              label="Estado"
+                          ></v-select>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        color="blue darken-1"
+                        text
+                        @click="cerrarModalAgregarCategoriaServicio"
+                    >Cancelar
+                    </v-btn
+                    >
+                    <v-btn
+                        color="blue darken-1"
+                        text
+                        type="submit"
+                    >Guardar
+                    </v-btn
+                    >
+                  </v-card-actions>
+                </v-card>
+              </v-form>
             </v-dialog>
           </v-card-title>
           <v-data-table
-            class="mx-auto"
-            style="height: auto; max-height: 500px; overflow-y: auto;"
-            :headers="headersServicios"
-            :items="categoriasServicios"
-            :search="searchServicios"
+              class="mx-auto"
+              style="height: auto; max-height: 500px; overflow-y: auto;"
+              :headers="headersServicios"
+              :items="categoriasServicios"
+              :search="searchServicios"
           >
             <template v-slot:item="{ item }">
               <tr>
                 <td class="text-start">{{ item.nombre }}</td>
                 <td class="text-start">
-            <v-chip :color="item.active ? 'green' : 'red'" outlined small>{{
-              item.active ? "Activo" : "Inactivo"
-            }}</v-chip>
-          </td>
-                <td class="text-start">{{ new Date(item.ultimaModificacion).toLocaleString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }) }}</td>
+                  <v-chip :color="item.active ? 'green' : 'red'" outlined small>{{
+                      item.active ? "Activo" : "Inactivo"
+                    }}
+                  </v-chip>
+                </td>
+                <td class="text-start">{{
+                    new Date(item.ultimaModificacion).toLocaleString('es-ES', {
+                      year: 'numeric',
+                      month: '2-digit',
+                      day: '2-digit',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      second: '2-digit'
+                    })
+                  }}
+                </td>
                 <td class="text-center">
                   <v-dialog
-                    v-model="dialogosEditarServicio[item.idCategoria]"
-                    max-width="500px"
+                      v-model="dialogosEditarServicio[item.idCategoria]"
+                      max-width="500px"
                   >
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon
-                        color="blue"
-                        v-bind="attrs"
-                        v-on="on"
-                        @click="openEditServicioDialog(item.idCategoria)"
-                        >mdi-pencil</v-icon
+                          color="blue"
+                          v-bind="attrs"
+                          v-on="on"
+                          @click="openEditServicioDialog(item.idCategoria)"
+                      >mdi-pencil
+                      </v-icon
                       >
                     </template>
-                    <v-card>
-                      <v-card-title>
-                        Editar categoría de servicio
-                      </v-card-title>
-                      <v-card-text>
-                        <v-container>
-                          <v-row>
-                            <v-col cols="12" sm="6" md="4">
-                              <v-text-field
-                                v-model="item.nombre"
-                                label="Nombre"
-                              ></v-text-field>
-                            </v-col>
-                            <v-col cols="12" sm="6" md="4">
-                              <v-select
-                                v-model="item.active"
-                                :items="[
-                                  { text: 'Activo', value: true },
-                                  { text: 'Inactivo', value: false },
-                                ]"
-                                label="Estado"
-                              ></v-select>
-                            </v-col>
-                          </v-row>
-                        </v-container>
-                      </v-card-text>
-                      <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn
-                          color="blue darken-1"
-                          text
-                          @click="cancelEditItemServicio(item)"
-                          >Cerrar</v-btn
-                        >
+                    <v-form ref="formEditarCategoriaServicio" @submit.prevent="editItemServicio(item)">
+                      <v-card>
+                        <v-card-title>
+                          Editar categoría de servicio
+                        </v-card-title>
+                        <v-card-text>
+                          <v-container>
+                            <v-row>
+                              <v-col cols="12" sm="6" md="4">
+                                <v-text-field
+                                    v-model="item.nombre"
+                                    label="Nombre"
+                                    :rules="[v => !!v || 'El nombre es requerido', v => v.length <= 50 && v.length > 3  || 'El nombre debe tener entre 3 y 50 caracteres']"
+                                ></v-text-field>
+                              </v-col>
+                              <v-col cols="12" sm="6" md="4">
+                                <v-select
+                                    v-model="item.active"
+                                    :items="[
+                                    { text: 'Activo', value: true },
+                                    { text: 'Inactivo', value: false },
+                                  ]"
+                                    label="Estado"
+                                ></v-select>
+                              </v-col>
+                            </v-row>
+                          </v-container>
+                        </v-card-text>
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+                          <v-btn
+                              color="blue darken-1"
+                              text
+                              @click="cancelEditItemServicio(item)"
+                          >Cerrar
+                          </v-btn
+                          >
 
-                        <v-btn
-                          color="blue darken-1"
-                          text
-                          @click="editItemServicio(item)"
-                          >Guardar</v-btn
-                        >
-                      </v-card-actions>
-                    </v-card>
+                          <v-btn
+                              color="blue darken-1"
+                              text
+                              type="submit"
+                          >Guardar
+                          </v-btn
+                          >
+                        </v-card-actions>
+                      </v-card>
+                    </v-form>
                   </v-dialog>
                   <v-icon
-                    color="red"
-                    @click="deleteItemServicio(item.idCategoria)"
-                    >mdi-delete</v-icon
+                      color="red"
+                      @click="deleteItemServicio(item.idCategoria)"
+                  >mdi-delete
+                  </v-icon
                   >
                 </td>
               </tr>
@@ -333,10 +379,9 @@ import {
   getCategoriasServicios,
   actualizarCategoriaServicio,
   crearCategoriaServicio,
-  getCategoriasServiciosPorEstado,
   eliminarCategoriaServicio,
-  eliminarCategoriaServicioPorEstado,
 } from "../../../services/CategoryServices.js";
+import swalService from "@/services/SwalService";
 
 export default {
   data() {
@@ -352,8 +397,8 @@ export default {
         active: true, // Por defecto, nueva categoría activa
       },
       headersPersonal: [
-        { text: "Nombre", align: "start", sortable: false, value: "nombre" },
-        { text: "Estado", align: "start", sortable: false, value: "active" },
+        {text: "Nombre", align: "start", sortable: false, value: "nombre"},
+        {text: "Estado", align: "start", sortable: false, value: "active"},
         {
           text: "Última Modificación",
           align: "start",
@@ -369,14 +414,13 @@ export default {
       ],
       categoriasPersonal: [],
       searchServicios: "",
-      dialogServicios: false,
       nuevoServicio: {
         nombre: "",
         active: true, // Por defecto, nuevo servicio activo
       },
       headersServicios: [
-        { text: "Nombre", align: "start", sortable: false, value: "nombre" },
-        { text: "Estado", align: "start", sortable: false, value: "active" },
+        {text: "Nombre", align: "start", sortable: false, value: "nombre"},
+        {text: "Estado", align: "start", sortable: false, value: "active"},
         {
           text: "Última Modificación",
           align: "start",
@@ -425,13 +469,13 @@ export default {
     },
     async editItemPersonal(item) {
       console.log("Editando categoría personal:", item);
-      try{
+      try {
         // Set the edit dialog state for this row to true
         this.$set(this.dialogosEditar, item.idCategoria, true);
 
         // Find the index of the object in categoriasPersonal and update it
         const index = this.categoriasPersonal.findIndex(
-          (category) => category.idCategoria === item.idCategoria
+            (category) => category.idCategoria === item.idCategoria
         );
         if (index !== -1) {
           // Update the object in the categoriasPersonal list
@@ -449,24 +493,26 @@ export default {
     },
     async editItemServicio(item) {
       try {
-        // Set the edit dialog state for this row to true
-        this.$set(this.dialogosEditar, item.idCategoria, true);
-        console.log("Editando categoría de servicio:", item);
+        if (this.$refs.formEditarCategoriaServicio.validate()) {
+          // Set the edit dialog state for this row to true
+          this.$set(this.dialogosEditarServicio, item.idCategoria, true);
 
-        // Find the index of the object in categoriasServicios and update it
-        const index = this.categoriasServicios.findIndex(
-          (category) => category.idCategoria === item.idCategoria
-        );
-        if (index !== -1) {
-          // Update the object in the categoriasServicios list
-          this.categoriasServicios[index].nombre = item.nombre;
-          this.categoriasServicios[index].active = item.active;
+          // Find the index of the object in categoriasServicios and update it
+          const index = this.categoriasServicios.findIndex(
+              (category) => category.idCategoria === item.idCategoria
+          );
+          if (index !== -1) {
+            // Update the object in the categoriasServicios list
+            this.categoriasServicios[index].nombre = item.nombre;
+            this.categoriasServicios[index].active = item.active;
 
-          // Call the service to update the category
-          await actualizarCategoriaServicio(item);
+            // Call the service to update the category
+            await actualizarCategoriaServicio(item);
+            this.dialogosEditarServicio[item.idCategoria] = false;
+          }
         }
         // Close the edit dialog after saving
-        this.dialogosEditarServicio[item.idCategoria] = false;
+
       } catch (error) {
         console.error("Error al editar categoría de servicio:", error);
       }
@@ -474,15 +520,13 @@ export default {
 
     async deleteItemPersonal(item) {
       try {
-        // Call the service to delete the category
-        console.log("Eliminando categoría personal:", item);
-        await eliminarCategoriaPersonal(item);
-        // Remove the deleted category from the list
-        const index = this.categoriasPersonal.findIndex(
-          (category) => category.uid === item.uid
+        let proceder = await swalService.confirmationWarning(
+            "¿Estás seguro de que deseas eliminar esta categoría de personal?"
         );
-        if (index !== -1) {
-          this.categoriasPersonal.splice(index, 1);
+        if (proceder) {
+          // Call the service to delete the category
+          await eliminarCategoriaPersonal(item);
+          await this.getCategoriasPersonales();
         }
       } catch (error) {
         console.error("Error al eliminar categoría personal:", error);
@@ -490,15 +534,13 @@ export default {
     },
     async deleteItemServicio(item) {
       try {
-        // Call the service to delete the category
-        console.log("Eliminando categoría de servicio:", item);
-        await eliminarCategoriaServicio(item);
-        // Remove the deleted category from the list
-        const index = this.categoriasServicios.findIndex(
-          (category) => category.uid === item.uid
+        let proceder = await swalService.confirmationWarning(
+            "¿Estás seguro de que deseas eliminar esta categoría de servicio?"
         );
-        if (index !== -1) {
-          this.categoriasServicios.splice(index, 1);
+        if (proceder) {
+          // Call the service to delete the category
+          await eliminarCategoriaServicio(item);
+          await this.getCategoriasServicios();
         }
       } catch (error) {
         console.error("Error al eliminar categoría de servicio:", error);
@@ -522,21 +564,23 @@ export default {
     },
     async agregarCategoriaPersonal() {
       try {
-        const nuevaCategoria = await crearCategoriaPersonal(
-          this.nuevaCategoriaPersonal
-        );
-        if (nuevaCategoria) {
-          this.getCategoriasPersonales();
-          this.getCategoriasServicios();
+        if (this.$refs.formAgregarCategoriaPersonal.validate()) {
+          const nuevaCategoria = await crearCategoriaPersonal(
+              this.nuevaCategoriaPersonal
+          );
+          if (nuevaCategoria) {
+            await this.getCategoriasPersonales();
+            await this.getCategoriasServicios();
 
-          // Cerrar el modal
-          this.dialogPersonal = false;
+            // Cerrar el modal
+            this.dialogPersonal = false;
 
-          // Limpiar el formulario al cerrar el modal
-          this.nuevaCategoriaPersonal = {
-            nombre: "",
-            active: true, // Por defecto, nueva categoría activa
-          };
+            // Limpiar el formulario al cerrar el modal
+            this.nuevaCategoriaPersonal = {
+              nombre: "",
+              active: true, // Por defecto, nueva categoría activa
+            };
+          }
         }
       } catch (error) {
         console.error("Error al agregar categoría personal:", error);
@@ -544,15 +588,17 @@ export default {
     },
     async agregarCategoriaServicio() {
       try {
-        const nuevoServicio = await crearCategoriaServicio(this.nuevoServicio);
-        if (nuevoServicio) {
-          this.getCategoriasPersonales();
-          this.getCategoriasServicios();
-          this.dialogServicios = false;
-          this.nuevoServicio = {
-            nombre: "",
-            active: true, // Por defecto, nuevo servicio activo
-          };
+        if (this.$refs.formAgregarCategoriaServicio.validate()) {
+          const nuevoServicio = await crearCategoriaServicio(this.nuevoServicio);
+          if (nuevoServicio) {
+            await this.getCategoriasPersonales();
+            await this.getCategoriasServicios();
+            this.dialogServicios = false;
+            this.nuevoServicio = {
+              nombre: "",
+              active: true, // Por defecto, nuevo servicio activo
+            };
+          }
         }
       } catch (error) {
         console.error("Error al agregar categoría de servicio:", error);
