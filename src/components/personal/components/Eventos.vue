@@ -7,15 +7,17 @@
         >
           <v-btn
               class="me-4"
-              color="grey-darken-2"
+              color="secondary"
+
               variant="outlined"
               @click="setToday"
           >
             Hoy
           </v-btn>
           <v-btn
-              color="grey-darken-2"
+              color="secondary"
               size="small"
+              class="mr-2"
               variant="text"
               fab
               @click="prev"
@@ -25,8 +27,9 @@
             </v-icon>
           </v-btn>
           <v-btn
-              color="grey-darken-2"
+              color="secondary"
               size="small"
+              class="mr-2"
               variant="text"
               fab
               @click="next"
@@ -42,7 +45,7 @@
           <v-menu location="bottom end">
             <template v-slot:activator="{ on, attrs }">
               <v-btn
-                  color="grey-darken-2"
+                  color="secondary"
                   variant="outlined"
                   v-bind="attrs"
                   v-on="on"
@@ -88,25 +91,85 @@
               color="grey-lighten-4"
               min-width="350px"
               flat
+              v-if="selectedEvent.details"
           >
             <v-toolbar
                 :color="selectedEvent.color"
                 dark
             >
-              <v-btn icon>
-                <v-icon>mdi-pencil</v-icon>
-              </v-btn>
               <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
               <v-spacer></v-spacer>
-              <v-btn icon>
-                <v-icon>mdi-heart</v-icon>
-              </v-btn>
-              <v-btn icon>
-                <v-icon>mdi-dots-vertical</v-icon>
-              </v-btn>
             </v-toolbar>
             <v-card-text>
-              <span v-html="selectedEvent.details"></span>
+              <div>
+                <v-icon left>mdi-calendar</v-icon>
+                <span>Fecha y Hora de Inicio: </span>
+                <span>{{ selectedEvent.start }}</span>
+              </div>
+              <div>
+                <v-icon left>mdi-calendar</v-icon>
+                <span>Fecha y Hora de Fin: </span>
+                <span>{{ selectedEvent.end }}</span>
+              </div>
+              <div>
+                <v-icon left>mdi-account</v-icon>
+                <span>Nombres: </span>
+                <span>{{ selectedEvent.details.usuario.nombres }}</span>
+              </div>
+              <div>
+                <v-icon left>mdi-account</v-icon>
+                <span>Apellidos: </span>
+                <span>{{
+                    selectedEvent.details.usuario.primerApellido
+                  }} {{ selectedEvent.details.usuario.segundoApellido }}</span>
+              </div>
+              <div>
+                <v-icon left>mdi-phone</v-icon>
+                <span>Telefono: </span>
+                <span>{{ selectedEvent.details.usuario.telefono }}</span>
+              </div>
+              <div>
+                <v-icon left>mdi-email</v-icon>
+                <span>Correo: </span>
+                <span>{{ selectedEvent.details.usuario.correo }}</span>
+                <div>
+                  <v-icon left>mdi-map-marker</v-icon>
+                  <span>Calle: </span>
+                  <span>{{ selectedEvent.details.direccion.calle }}</span>
+                </div>
+                <div>
+                  <v-icon left>mdi-map-marker</v-icon>
+                  <span>Numero: </span>
+                  <span>{{ selectedEvent.details.direccion.numero }}</span>
+                </div>
+                <div>
+                  <v-icon left>mdi-map-marker</v-icon>
+                  <span>Colonia: </span>
+                  <span>{{ selectedEvent.details.direccion.colonia }}</span>
+                </div>
+                <div>
+                  <v-icon left>mdi-map-marker</v-icon>
+                  <span>Codigo Postal: </span>
+                  <span>{{ selectedEvent.details.direccion.codigoPostal }}</span>
+                </div>
+                <div>
+                  <v-icon left>mdi-map-marker</v-icon>
+                  <span>Estado: </span>
+                  <span>{{ selectedEvent.details.direccion.estado }}</span>
+                </div>
+                <div>
+                  <v-icon left>mdi-map-marker</v-icon>
+                  <span>Municipio: </span>
+                  <span>{{ selectedEvent.details.direccion.municipio }}</span>
+                </div>
+                <div>
+                  <v-icon left>mdi-map-marker</v-icon>
+                  <span>Referencias: </span>
+                  <span>{{ selectedEvent.details.direccion.referencias }}</span>
+                </div>
+              </div>
+
+
             </v-card-text>
             <v-card-actions>
               <v-btn
@@ -136,7 +199,6 @@ const typeToLabel = {
 
 }
 const colors = ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1']
-const names = ['Meeting', 'Holiday', 'PTO', 'Travel', 'Event', 'Birthday', 'Conference', 'Party']
 
 const focus = ref('')
 const type = ref('month')
@@ -206,7 +268,6 @@ export default {
     selectedOpen: false,
     eventos: [],
     colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
-    names: ['Meeting', 'Holiday', 'PTO', 'Travel', 'Event', 'Birthday', 'Conference', 'Party'],
   }),
   mounted() {
     this.$refs.calendar.checkChange()
@@ -250,8 +311,9 @@ export default {
         name: evento.usuario.nombres,
         start: new Date(evento.fechaHoraInicio),
         end: new Date(evento.fechaHoraFin),
-        color: 'black',
+        color: 'secondary',
         timed: true,
+        details: evento,
       }));
     },
     loadPersonal() {

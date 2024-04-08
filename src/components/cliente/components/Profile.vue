@@ -30,25 +30,6 @@
           <br/>
           <v-form class="space-y-4" v-model="validUpdateUser" ref="formUpdateUser" @submit.prevent="updateUser">
             <div class="pair-container">
-              <p class="label">Correo:</p>
-              <v-text-field
-                  class="value"
-                  v-model="usuario.correo"
-                  outlined
-                  dense
-                  required
-                  :rules="[
-                  (v) => !!v || 'Correo es requerido',
-                  (v) => validateEmail(v) || 'Correo no es válido',
-                ]"
-              ></v-text-field>
-            </div>
-            <v-divider
-                :thickness="7"
-                color="black"
-                class="border-opacity-75"
-            ></v-divider>
-            <div class="pair-container">
               <p class="label">Nombre:</p>
               <v-text-field
                   class="value"

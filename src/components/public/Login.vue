@@ -96,11 +96,11 @@ export default {
     };
   },
   methods: {
-    onSubmit() {
+    async onSubmit() {
       if (this.$refs.form.validate()) {
         this.loading = true;
         const authStore = useAuthStore();
-        authStore.login(this.correo, this.contrasenia);
+        await authStore.login(this.correo, this.contrasenia);
         this.loading = false;
       }
     },

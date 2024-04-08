@@ -48,9 +48,11 @@ const router = new VueRouter({
             component: () => import("../components/admin/paquete/TablePackages.vue"),
         }, {
             path: "/admin/direcciones", name: "direcciones", component: TableDirecciones,
-        },],
+        }, {
+            path: "/admin/perfil", name: "perfilAdmin", component: () => import("../components/public/Profile.vue"),
+        }],
     }, {
-        path: "/home", // meta: {roles: ['CLIENTE']},
+        path: "/home",
         name: "home",
         component: () => import("../components/cliente/components/Home.vue"),
         redirect: "/home/inicio",
@@ -107,6 +109,10 @@ const router = new VueRouter({
         component: () => import("../components/personal/components/SidebarNavbar.vue"),
         children: [{
             path: "/", name: "eventos", component: () => import("../components/personal/components/Eventos.vue"),
+        }, {
+            path: "/personal/perfil",
+            name: "perfilPersonal",
+            component: () => import("../components/public/Profile.vue"),
         }],
     }, {
         path: "/404", name: "404", component: () => import("../components/public/error/ErrorPage.vue"),
