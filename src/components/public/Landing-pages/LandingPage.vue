@@ -1,6 +1,6 @@
 <template>
   <div class="landing-page">
-    <div class="carousel-container">
+    <div class="carousel-container animate__animated animate__fadeInLeft">
       <v-carousel cycle>
         <v-carousel-item v-for="(item, i) in items" :key="i" :src="item.src" reverse-transition="fade-transition"
           transition="fade-transition"></v-carousel-item>

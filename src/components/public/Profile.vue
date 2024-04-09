@@ -226,8 +226,6 @@ export default {
   align-items: center;
   margin-top: 5vh;
   width: 70%;
-  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-  "Lucida Sans", Arial, sans-serif;
 }
 
 .label {

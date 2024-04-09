@@ -1,7 +1,7 @@
 <template>
   <div>
     <header class="w-full">
-      <v-tabs fixed-tabs dark class="bg-gray-900">
+      <v-tabs fixed-tabs dark class="bg-gray-900 animate__animated animate__fadeInLeft">
         <v-tab v-for="item in items" :key="item.title" :to="item.to">
           <v-icon>{{ item.icon }}</v-icon>
           {{ item.title }}

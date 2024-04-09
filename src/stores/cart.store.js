@@ -1,7 +1,5 @@
 import {defineStore} from 'pinia';
 import {showNotification} from "@/utils/notification";
-import {axiosClient} from "@/utils/axios-client";
-import router from "@/router";
 
 const baseUrl = `/eventos`;
 
@@ -26,6 +24,10 @@ export const useCartStore = defineStore({
                 return this.cart.reduce((suma, item)=>{
                     return suma + (item.precio*item.cantidad)
                 }, 0)
-            }
+            },
+
+            deleteAll(){
+                this.cart = [];
+            },
     }
 });

@@ -22,19 +22,19 @@
             </v-row>
             <v-row v-else-if="carrito.length > 0">
               <v-col
-                cols="12"
-                sm="6"
-                md="3"
-                v-for="(item, index) in carrito"
-                :key="index"
+                  cols="12"
+                  sm="6"
+                  md="3"
+                  v-for="(item, index) in carrito"
+                  :key="index"
               >
                 <v-card
-                  draggable="true"
-                  @dragstart="dragStart(index)"
-                  @dragover.prevent
-                  @drop="drop(index)"
+                    draggable="true"
+                    @dragstart="dragStart(index)"
+                    @dragover.prevent
+                    @drop="drop(index)"
                 >
-                  <!-- <v-img :src="item.imagen"></v-img> -->
+                  <v-img :src="item.imagen"></v-img>
                   <v-card-text>
                     <div class="font-bold text-lg">
                       {{ `$ ${item.precio && item.precio.toFixed(2)} MXN` }}
@@ -44,29 +44,33 @@
                   </v-card-text>
                   <v-card-actions>
                     <v-btn
-                      color="success"
-                      @click="incrementQuantity(item.idServicio)"
-                      >+</v-btn
+                        color="success"
+                        @click="incrementQuantity(item.idServicio)"
+                    >+
+                    </v-btn
                     >
                     <v-btn
-                      color="error"
-                      @click="decrementQuantity(item.idServicio)"
-                      >-</v-btn
+                        color="error"
+                        @click="decrementQuantity(item.idServicio)"
+                    >-
+                    </v-btn
                     >
                     <v-btn
-                      color="error"
-                      @click="removeFromCart(item.idServicio)"
-                      >Remove</v-btn
+                        color="error"
+                        @click="removeFromCart(item.idServicio)"
+                    >Remove
+                    </v-btn
                     >
                   </v-card-actions>
                 </v-card>
               </v-col>
               <v-col cols="12">
                 <v-icon
-                  color="red"
-                  @drop="removeFromCartDrag()"
-                  @dragover.prevent
-                  >mdi-delete</v-icon
+                    color="red"
+                    @drop="removeFromCartDrag()"
+                    @dragover.prevent
+                >mdi-delete
+                </v-icon
                 >
               </v-col>
             </v-row>
@@ -107,14 +111,14 @@
                   </v-col>
                   <v-col cols="3" sm="6" md="3">
                     <v-date-picker
-                      v-model="date2"
-                      color="green lighten-1"
+                        v-model="date2"
+                        color="green lighten-1"
                     ></v-date-picker>
                   </v-col>
                   <v-col cols="3" sm="6" md="3">
                     <v-time-picker
-                      v-model="time2"
-                      color="green lighten-1"
+                        v-model="time2"
+                        color="green lighten-1"
                     ></v-time-picker>
                   </v-col>
                 </v-row>
@@ -139,13 +143,13 @@
                 <v-row>
                   <v-col cols="12" sm="12" md="12">
                     <div
-                      style="font-weight: 500; font-size: larger"
-                      class="flex flex-row items-center gap-[20px]"
+                        style="font-weight: 500; font-size: larger"
+                        class="flex flex-row items-center gap-[20px]"
                     >
                       Cantidad de personas que asistirán
                       <div
-                        style="font-size: xx-large"
-                        class="text-[#333] underline"
+                          style="font-size: xx-large"
+                          class="text-[#333] underline"
                       >
                         {{ people }}
                       </div>
@@ -156,10 +160,10 @@
                   <v-col cols="6" sm="12" md="6">
                     <v-col cols="9" sm="12" md="9">
                       <v-slider
-                        v-model="people"
-                        hint="Im a hint"
-                        max="1000"
-                        min="1"
+                          v-model="people"
+                          hint="Im a hint"
+                          max="1000"
+                          min="1"
                       ></v-slider>
                     </v-col>
                   </v-col>
@@ -167,8 +171,8 @@
                 <v-row>
                   <v-col cols="12" sm="12" md="12">
                     <div
-                      style="font-weight: 500; font-size: larger"
-                      class="flex flex-row items-center gap-[20px]"
+                        style="font-weight: 500; font-size: larger"
+                        class="flex flex-row items-center gap-[20px]"
                     >
                       Dirección del evento
                     </div>
@@ -177,14 +181,14 @@
                 <v-row>
                   <v-col cols="6" sm="12" md="6">
                     <v-radio-group
-                      v-if="direcciones.length > 0"
-                      v-model="direccion"
+                        v-if="direcciones.length > 0"
+                        v-model="direccion"
                     >
                       <v-radio
-                        v-for="n in direcciones"
-                        :key="n.idDireccion"
-                        :label="`${n.calle} #${n.numero}`"
-                        :value="n.idDireccion"
+                          v-for="n in direcciones"
+                          :key="n.idDireccion"
+                          :label="`${n.calle} #${n.numero}`"
+                          :value="n.idDireccion"
                       ></v-radio>
                     </v-radio-group>
                     <div v-else>
@@ -197,12 +201,12 @@
                 <v-row>
                   <v-col cols="12" sm="12" md="12">
                     <section
-                      aria-labelledby="summary-heading"
-                      class="bg-gray-50 rounded-lg px-4 lg:col-span-5"
+                        aria-labelledby="summary-heading"
+                        class="bg-gray-50 rounded-lg px-4 lg:col-span-5"
                     >
                       <h2
-                        id="summary-heading"
-                        class="text-lg font-medium text-gray-900"
+                          id="summary-heading"
+                          class="text-lg font-medium text-gray-900"
                       >
                         Total
                       </h2>
@@ -223,7 +227,7 @@
                           </dd>
                         </div>
                         <div
-                          class="border-t border-gray-200 pt-4 flex items-center justify-between"
+                            class="border-t border-gray-200 pt-4 flex items-center justify-between"
                         >
                           <dt class="flex items-center text-sm text-gray-600">
                             <span>Pago por persona * Cantidad de personas</span>
@@ -239,30 +243,30 @@
                           </dd>
                         </div>
                         <div
-                          class="border-t border-gray-200 pt-4 flex items-center justify-between"
+                            class="border-t border-gray-200 pt-4 flex items-center justify-between"
                         >
                           <dt class="flex items-center text-sm text-gray-600">
                             <span>Envío</span>
                             <a
-                              href="#"
-                              class="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-500"
+                                href="#"
+                                class="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-500"
                             >
                               <span class="sr-only"
-                                >Learn more about how shipping is
+                              >Learn more about how shipping is
                                 calculated</span
                               >
                               <!-- Heroicon name: solid/question-mark-circle -->
                               <svg
-                                class="h-5 w-5"
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                                aria-hidden="true"
+                                  class="h-5 w-5"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  viewBox="0 0 20 20"
+                                  fill="currentColor"
+                                  aria-hidden="true"
                               >
                                 <path
-                                  fill-rule="evenodd"
-                                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z"
-                                  clip-rule="evenodd"
+                                    fill-rule="evenodd"
+                                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z"
+                                    clip-rule="evenodd"
                                 />
                               </svg>
                             </a>
@@ -272,7 +276,7 @@
                           </dd>
                         </div>
                         <div
-                          class="border-t border-gray-200 pt-4 flex items-center justify-between"
+                            class="border-t border-gray-200 pt-4 flex items-center justify-between"
                         >
                           <dt class="flex text-sm text-gray-600">
                             <span>Impuestos</span>
@@ -280,18 +284,18 @@
                           <dd class="text-sm font-medium text-gray-900">
                             {{
                               (totalCarrito * people * 0.16).toLocaleString(
-                                "es-MX",
-                                {
-                                  style: "currency",
-                                  currency: "MXN",
-                                  maximumFractionDigits: 2,
-                                }
+                                  "es-MX",
+                                  {
+                                    style: "currency",
+                                    currency: "MXN",
+                                    maximumFractionDigits: 2,
+                                  }
                               )
                             }}
                           </dd>
                         </div>
                         <div
-                          class="border-t border-gray-200 pt-4 flex items-center justify-between"
+                            class="border-t border-gray-200 pt-4 flex items-center justify-between"
                         >
                           <dt class="text-base font-medium text-gray-900">
                             Total del pedido
@@ -299,8 +303,8 @@
                           <dd class="text-base font-medium text-gray-900">
                             {{
                               (
-                                totalCarrito * people +
-                                totalCarrito * people * 0.16
+                                  totalCarrito * people +
+                                  totalCarrito * people * 0.16
                               ).toLocaleString("es-MX", {
                                 style: "currency",
                                 currency: "MXN",
@@ -313,8 +317,9 @@
 
                       <div class="mt-6">
                         <button
-                          type="submit"
-                          class="w-full bg-indigo-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
+                            @click="buyCart"
+                            type="submit"
+                            class="w-full bg-indigo-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
                         >
                           Checkout
                         </button>
@@ -340,8 +345,9 @@
 
 <script>
 import DireccionesService from "../../../services/DireccionesService";
-import { useCartStore } from "../../../stores/cart.store";
-import { useAuthStore } from "../../../stores/auth.store";
+import {useCartStore} from "@/stores/cart.store";
+import {useAuthStore} from "@/stores";
+import * as EventosService from "@/services/EventosServices";
 
 export default {
   data() {
@@ -424,20 +430,91 @@ export default {
       const authStore = useAuthStore();
       const idUsuario = authStore.user.usuarios.idUsuario;
       this.direcciones = await DireccionesService.getDireccionesByUser(
-        idUsuario
+          idUsuario
       );
       console.log(this.direcciones);
       this.carrito = cart.cart;
       this.setTotal();
       console.log(this.carrito);
     },
-    buyCart() {
-      if (this.carrito.length === 0) return alert("No hay cosas puto");
+     async buyCart() {
+      /*{
+      "evento": {
+        "idEvento": "string",
+            "fechaHoraInicio": "2024-04-09T19:04:05.826Z",
+            "fechaHoraFin": "2024-04-09T19:04:05.826Z",
+            "numeroPersonas": 1000,
+            "direccion": {
+          "idDireccion": "string",
+              "calle": "string",
+              "colonia": "string",
+              "numero": "string",
+              "codigoPostal": "string",
+              "municipio": "string",
+              "estado": "string",
+              "referencias": "string",
+              "ultimaModificacion": "2024-04-09T19:04:05.826Z",
+              "active": true
+        },
+        "usuario": {
+          "idUsuario": "string",
+              "nombres": "string",
+              "primerApellido": "string",
+              "segundoApellido": "string",
+              "telefono": "string",
+              "correo": "string",
+              "contrasena": "string",
+              "ultimaModificacion": "2024-04-09T19:04:05.826Z",
+              "active": true,
+              "roles": [
+            {
+              "idRol": "string",
+              "nombre": "string",
+              "ultimaModificacion": "2024-04-09T19:04:05.826Z",
+              "active": true
+            }
+          ]
+        },
+        "costoTotal": 0,
+            "personalizado": true,
+            "estado": "string",
+            "ultimaModificacion": "2024-04-09T19:04:05.826Z",
+            "active": true
+      },
+      "servicios": [
+        {
+          "cantidad": 0,
+          "idServicio": "string"
+        }
+      ],
+          "idPaquete": "string"
+    }*/
+      if (this.carrito.length === 0) return alert("I remember you was conflicted, misusing your influence");
       const envio = this.carrito.map((item) => {
-        return { cantidad: item.cantidad, idServicio: item.idServicio };
+        return {cantidad: item.cantidad, idServicio: item.idServicio};
       });
+      let eventoDto = {
+        evento: {
+          fechaHoraInicio: `${this.date}T${this.time}`,
+          fechaHoraFin: `${this.date2}T${this.time2}`,
+          numeroPersonas: this.people,
+          direccion: {
+            idDireccion: this.direccion,
+          },
+          usuario: {
+            idUsuario: useAuthStore().user.usuarios.idUsuario,
+          },
+          costoTotal: this.totalCarrito * this.people,
+          personalizado: true,
+          activo: true,
+        },
+        servicios: envio,
+        idPaquete: null,
+      };
 
-      console.log(envio);
+      await EventosService.createEvento(eventoDto);
+      useCartStore().deleteAll();
+      this.$router.push("/home/inicio");
     },
   },
   mounted() {

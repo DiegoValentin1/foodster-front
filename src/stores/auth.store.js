@@ -34,6 +34,7 @@ export const useAuthStore = defineStore({
                 this.returnUrl = route;
                 await router.push(route);
             } catch (e) {
+                console.error(e);
                 showNotification('error', 'Usuario o contraseña incorrectos');
             }
         }, logout() {

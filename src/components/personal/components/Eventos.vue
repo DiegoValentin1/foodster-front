@@ -102,6 +102,12 @@
             </v-toolbar>
             <v-card-text>
               <div>
+                <v-icon left>mdi-check</v-icon>
+                <span>Estado: </span>
+                <span>{{ selectedEvent.details.estado }}</span>
+              </div>
+
+              <div>
                 <v-icon left>mdi-calendar</v-icon>
                 <span>Fecha y Hora de Inicio: </span>
                 <span>{{ selectedEvent.start }}</span>
@@ -177,7 +183,15 @@
                   variant="text"
                   @click="selectedOpen = false"
               >
-                Cancel
+                Cerrar
+              </v-btn>
+              <v-btn
+                  v-if="personal.categoria.nombre === 'Chef'"
+                  color="secondary"
+                  variant="text"
+                  @click="setFinalizado(selectedEvent.details)"
+              >
+                Finalizar
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -249,7 +263,7 @@ function showEvent({nativeEvent, event}) {
 </script>
 
 <script>
-import {getEventosByPersonalIdUsuario} from "@/services/EventosServices";
+import {getEventosByPersonalIdUsuario,setFinalizarEvento} from "@/services/EventosServices";
 import {useAuthStore} from "@/stores";
 
 export default {
@@ -324,6 +338,15 @@ export default {
       } else {
         console.log(this.personal)
         this.fetchEvents(this.personal.usuarios.idUsuario)
+      }
+    },
+
+    async setFinalizado(evento) {
+      try {
+        await setFinalizarEvento(evento.idEvento)
+        await this.fetchEvents(this.personal.usuarios.idUsuario)
+      } catch (e) {
+        console.log(e)
       }
     },
 
