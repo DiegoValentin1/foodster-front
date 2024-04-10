@@ -57,8 +57,21 @@
         </v-card>
       </v-dialog>
     </v-card-title>
-    <v-data-table class="mx-auto" style="height: auto; max-height: 500px; overflow-y: auto" :headers="headers"
-                  :items="users" :search="search">
+    <v-data-table
+        class="mx-auto"
+        style="height: auto; max-height: 500px; overflow-y: auto"
+        :items-per-page-options="[5, 10, 15]"
+        :headers="headers"
+        :items="users"
+        :server-items-length="totalItems"
+        :items-per-page.sync="itemsPerPage"
+        :loading="loading"
+        :search="search"
+        :page.sync="currentPage"
+        @update:page="getUsers"
+        @update:items-per-page="getUsers"
+
+    >
       <template v-slot:item="{ item }">
         <tr>
           <td class="text-start">{{ item.nombres }}</td>
@@ -138,7 +151,12 @@ import rolesService from '../../../services/RolesService'
 export default {
   data() {
     return {
+      loading: false,
       users: [],
+      currentPage: 1,
+      totalItems: 0,
+      totalPages: 0,
+      itemsPerPage: 10,
       roles: [],
       search: '',
       dialog: false,
@@ -191,11 +209,23 @@ export default {
   methods: {
     async getUsers() {
       try {
-        const response = await usersServices.getUsers();
-        console.log(response)
-        this.users = response;
+        this.loading = true;
+        const response = await usersServices.getAllPaginado(this.currentPage - 1, this.itemsPerPage);
+        if (response) {
+          this.totalPages = response.totalPages;
+          this.totalItems = response.totalElements;
+          this.users = response.content;
+          this.loading = false;
+        } else {
+          this.totalPages = 0;
+          this.users = [];
+          this.currentPage = 1;
+          this.totalItems = 0;
+          this.loading = false;
+        }
       } catch (error) {
         console.log(error)
+        this.loading = false;
       }
     },
     async getRoles() {

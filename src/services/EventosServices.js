@@ -12,6 +12,16 @@ const getEventos = async () => {
     }
 }
 
+const getAllPaginado = async (page, size) => {
+    try {
+        // /paginado/{page}/{size}
+        const response = await axiosClient.get(`${baseUrl}/paginado/${page}/${size}`);
+        return response.data;
+    } catch (error) {
+        showNotification("error", "Error al obtener elementos del paginado")
+    }
+};
+
 const updateEvento = async (evento) => {
     try {
         const response = await axiosClient.put(`${baseUrl}/`, evento);
@@ -108,5 +118,8 @@ export {
     setCancelarEvento,
     createEvento,
     getEventosByStatus,
-    deleteEvento
+    deleteEvento,
+    getEventosByUsuario,
+    getAllPaginado
+
 }

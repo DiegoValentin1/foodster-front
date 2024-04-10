@@ -58,8 +58,21 @@
         </v-card>
       </v-dialog>
     </v-card-title>
-    <v-data-table class="mx-auto" style="height: auto; max-height: 500px; overflow-y: auto" :headers="headers"
-                  :items="personal" :search="search">
+    <v-data-table
+        class="mx-auto"
+        style="height: auto; max-height: 500px; overflow-y: auto"
+        :items-per-page-options="[5, 10, 15]"
+        :headers="headers"
+        :items="personal"
+        :server-items-length="totalItems"
+        :items-per-page.sync="itemsPerPage"
+        :loading="loading"
+        :search="search"
+        :page.sync="currentPage"
+        @update:page="getPersonal"
+        @update:items-per-page="getPersonal"
+
+    >
       <template v-slot:item="{ item }">
         <tr>
           <td class="text-start">{{ item.usuarios.nombres }}</td>
@@ -139,11 +152,17 @@
 import personalServices from '../../../services/PersonalServices'
 import {getCategoriasPersonales} from "@/services/CategoryServices";
 import swalService from "@/services/SwalService";
+import PersonalServices from "../../../services/PersonalServices";
 
 export default {
   data() {
     return {
+      loading: false,
       personal: [],
+      currentPage: 1,
+      totalItems: 0,
+      totalPages: 0,
+      itemsPerPage: 10,
       categoriasPersonal: [],
       search: '',
       dialog: false,
@@ -229,11 +248,23 @@ export default {
     },
     async getPersonal() {
       try {
-        const response = await personalServices.getPersonal();
-        console.log(response)
-        this.personal = response;
+        this.loading = true;
+        const response = await PersonalServices.getAllPaginado(this.currentPage - 1, this.itemsPerPage);
+        if (response) {
+          this.totalPages = response.totalPages;
+          this.totalItems = response.totalElements;
+          this.personal = response.content;
+          this.loading = false;
+        } else {
+          this.totalPages = 0;
+          this.personal = [];
+          this.currentPage = 1;
+          this.totalItems = 0;
+          this.loading = false;
+        }
       } catch (error) {
         console.error(error);
+        this.loading = false;
       }
     },
     editItem(item) {

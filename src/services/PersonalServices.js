@@ -12,6 +12,16 @@ const getPersonal = async () => {
     }
 };
 
+const getAllPaginado = async (page, size) => {
+    try {
+        // /paginado/{page}/{size}
+        const response = await axiosClient.get(`${baseUrl}/paginado/${page}/${size}`);
+        return response.data;
+    } catch (error) {
+        showNotification("error", "Error al obtener elementos del paginado")
+    }
+};
+
 const insert = async (personal) => {
     try {
         const response = await axiosClient.post(`${baseUrl}/`, {
@@ -76,5 +86,5 @@ const update = async (personal) => {
 };
 
 export default {
-    getPersonal, insert, delete_, changeStatus, update,
+    getPersonal, insert, delete_, changeStatus, update, getAllPaginado
 };

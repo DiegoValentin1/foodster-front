@@ -49,8 +49,21 @@
         </v-card>
       </v-dialog>
     </v-card-title>
-    <v-data-table class="mx-auto" style="height: auto; max-height: 500px; overflow-y: auto" :headers="headersPaquetes"
-                  :items="paquetes" :search="searchPaquetes">
+    <v-data-table
+        class="mx-auto"
+        style="height: auto; max-height: 500px; overflow-y: auto"
+        :items-per-page-options="[5, 10, 15]"
+        :headers="headersPaquetes"
+        :items="paquetes"
+        :server-items-length="totalItems"
+        :items-per-page.sync="itemsPerPage"
+        :loading="loading"
+        :search="searchPaquetes"
+        :page.sync="currentPage"
+        @update:page="getAllPaquetes"
+        @update:items-per-page="getAllPaquetes"
+
+    >
       <template v-slot:item="{ item }">
         <tr>
           <td class="text-start">{{ item.nombre }}</td>
@@ -134,15 +147,15 @@
 
 <script>
 import {
-  getAllPaquetes,
   updatePaquete,
   createPaquete,
-  deletePaquete,
+  deletePaquete, getAllPaquetesPaginado,
 } from "@/services/PaquetesServices";
 
 export default {
   data() {
     return {
+      loading: false,
       tab: null,
       validUpdate: true,
       searchPaquetes: "",
@@ -194,17 +207,32 @@ export default {
         },
       ],
       paquetes: [],
+      currentPage: 1,
+      totalItems: 0,
+      totalPages: 0,
+      itemsPerPage: 10,
     };
   },
   methods: {
     async getAllPaquetes() {
       try {
-        const response = await getAllPaquetes();
+        this.loading = true;
+        const response = await getAllPaquetesPaginado(this.currentPage - 1, this.itemsPerPage);
         if (response) {
-          this.paquetes = response;
+          this.totalPages = response.totalPages;
+          this.totalItems = response.totalElements;
+          this.paquetes = response.content;
+          this.loading = false;
+        } else {
+          this.totalPages = 0;
+          this.paquetes = [];
+          this.currentPage = 1;
+          this.totalItems = 0;
+          this.loading = false;
         }
       } catch (error) {
         console.error(error);
+        this.loading = false;
       }
     },
 
@@ -233,20 +261,23 @@ export default {
       };
     },
     async editItemPaquete(nuevoPaquete) {
+      this.loading = true;
       nuevoPaquete.ultimaModificacion = new Date().toISOString(); // Esto generará la fecha actual en el formato correcto
       nuevoPaquete.imagen = this.nuevoPaquete.imagen;
       try {
         await updatePaquete(nuevoPaquete);
         await this.getAllPaquetes;
         this.dialogosEditarPaquete[nuevoPaquete.idPaquete] = false;
+        this.loading = false;
       } catch (error) {
         console.error("Error al actualizar paquete", error);
+        this.loading = false;
       }
     },
     async deleteItemPaquete(idPaquete) {
       try {
         await deletePaquete(idPaquete);
-        this.getAllPaquetes(); // Recargar la lista de servicios
+        await this.getAllPaquetes(); // Recargar la lista de servicios
       } catch (error) {
         console.error("Error al eliminar servicio:", error);
       }
@@ -271,7 +302,7 @@ export default {
             active: true,
           };
           this.cerrarModalAgregarPaquete();
-          this.getAllPaquetes();
+          await this.getAllPaquetes();
         }
       } catch (error) {
         console.error("Error al agregar categoría de servicio:", error);

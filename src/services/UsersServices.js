@@ -8,16 +8,25 @@ const getUsers = async () => {
         const response = await axiosClient.get(`${baseUrl}/`);
         return response.data;
     } catch (error) {
-        console.log(error);
+        showNotification("error", "Error al obtener usuarios")
     }
 }
+const getAllPaginado = async (page, size) => {
+    try {
+        // /paginado/{page}/{size}
+        const response = await axiosClient.get(`${baseUrl}/paginado/${page}/${size}`);
+        return response.data;
+    } catch (error) {
+        showNotification("error", "Error al obtener elementos del paginado")
+    }
+};
 
 const getUser = async (id) => {
     try {
         const response = await axiosClient.get(`${baseUrl}/${id}`);
         return response.data;
     } catch (error) {
-        console.log(error);
+        showNotification("error", "Error al obtener usuario")
     }
 
 }
@@ -27,7 +36,7 @@ const getMyUser = async () => {
         const response = await axiosClient.get(`${baseUrl}/usuario/`);
         return response.data;
     } catch (error) {
-        console.log(error);
+        showNotification("error", "Error al obtener usuario");
     }
 
 }
@@ -81,5 +90,5 @@ const update = async (users) => {
 
 
 export default {
-    getUsers, getUser, getMyUser, insert, insertPublic, deleteUser: deleteUser, changeStatus, update
+    getUsers, getUser, getMyUser, insert, insertPublic, deleteUser: deleteUser, changeStatus, update, getAllPaginado
 }

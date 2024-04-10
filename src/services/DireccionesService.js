@@ -12,6 +12,16 @@ const getDirecciones = async () => {
         showNotification("Error", "No se pudieron obtener las direcciones", "danger")
     }
 }
+
+const getAllPaginado = async (page, size) => {
+    try {
+        // /paginado/{page}/{size}
+        const response = await axiosClient.get(`${baseUrl}/paginado/${page}/${size}`);
+        return response.data;
+    } catch (error) {
+        showNotification("error", "Error al obtener elementos del paginado")
+    }
+};
 const getDireccion = async (id) => {
     try {
         const response = await axiosClient.get(`${baseUrl}/${id}`);
@@ -68,5 +78,5 @@ const deleteDireccion = async (id) => {
     }
 }
 export default {
-    getDirecciones, getDireccionesByUser, getMyDirecciones, getDireccion, createDireccion, updateDireccion, deleteDireccion
+    getDirecciones, getDireccionesByUser, getMyDirecciones, getDireccion, createDireccion, updateDireccion, deleteDireccion, getAllPaginado
 }

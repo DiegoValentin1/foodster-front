@@ -17,9 +17,17 @@
     <v-data-table
         class="mx-auto"
         style="height: auto; max-height: 500px; overflow-y: auto"
+        :items-per-page-options="[5, 10, 15]"
         :headers="headers"
         :items="eventos"
+        :server-items-length="totalItems"
+        :items-per-page.sync="itemsPerPage"
+        :loading="loading"
         :search="searchEventos"
+        :page.sync="currentPage"
+        @update:page="getAllEventos"
+        @update:items-per-page="getAllEventos"
+
     >
       <template v-slot:item="{ item }">
         <tr>
@@ -176,13 +184,15 @@ import {
   getEventos,
   updateEvento,
   createEvento,
-  deleteEvento,
+  deleteEvento, getAllPaginado,
 } from "../../../services/EventosServices";
 import swalService from "@/services/SwalService";
+import {getAllPaquetesPaginado} from "@/services/PaquetesServices";
 
 export default {
   data() {
     return {
+      loading: false,
       searchEventos: "",
       dialogEvento: false,
       dialogosEditarEvento: {},
@@ -241,19 +251,33 @@ export default {
         },
       ],
       eventos: [],
+      currentPage: 1,
+      totalItems: 0,
+      totalPages: 0,
+      itemsPerPage: 10,
     };
   },
 
   methods: {
     async getAllEventos() {
       try {
-        const response = await getEventos();
+        this.loading = true;
+        const response = await getAllPaginado(this.currentPage - 1, this.itemsPerPage);
         if (response) {
-          this.eventos = response;
-          console.log(this.eventos);
+          this.totalPages = response.totalPages;
+          this.totalItems = response.totalElements;
+          this.eventos = response.content;
+          this.loading = false;
+        } else {
+          this.totalPages = 0;
+          this.eventos = [];
+          this.currentPage = 1;
+          this.totalItems = 0;
+          this.loading = false;
         }
       } catch (error) {
         console.error(error);
+        this.loading = false;
       }
     },
 
