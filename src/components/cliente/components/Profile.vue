@@ -457,10 +457,8 @@ export default {
     },
     async getUserAndDirecciones() {
       this.loading = true;
-      const authStore = useAuthStore();
-      const idUsuario = authStore.user.usuarios.idUsuario;
-      this.usuario = await UsersServices.getUser(idUsuario);
-      this.direcciones = await DireccionesService.getDireccionesByUser(idUsuario);
+      this.usuario = await UsersServices.getMyUser();
+      this.direcciones = await DireccionesService.getMyDirecciones();
       this.loading = false;
     },
     async updateUser() {

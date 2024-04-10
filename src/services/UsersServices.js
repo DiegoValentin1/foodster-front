@@ -22,6 +22,15 @@ const getUser = async (id) => {
 
 }
 
+const getMyUser = async () => {
+    try {
+        const response = await axiosClient.get(`${baseUrl}/usuario/`);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+
+}
 
 const insert = async (personal) => {
     try {
@@ -72,5 +81,5 @@ const update = async (users) => {
 
 
 export default {
-    getUsers, getUser, insert, insertPublic, deleteUser: deleteUser, changeStatus, update
+    getUsers, getUser, getMyUser, insert, insertPublic, deleteUser: deleteUser, changeStatus, update
 }

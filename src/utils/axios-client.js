@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useAuthStore } from '@/stores/auth.store';
 import {API_URL} from "@/utils/constants";
+import {showNotification} from "@/utils/notification";
 
 export const axiosClient = {
     get: request('get'),
@@ -47,10 +48,10 @@ function authHeader(url) {
 
 function handleResponse(response) {
     const data = response.data;
-    if (response.status >= 400) {
+    if (response.status > 400) {
         const { user, logout } = useAuthStore();
         if ([401].includes(response.status) && user) {
-            logout();
+            showNotification('error', 'Intentaste acceder a una página sin permisos');
         }
         const error = data?.message || response.statusText;
         return Promise.reject(error);

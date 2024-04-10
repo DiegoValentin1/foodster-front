@@ -70,6 +70,16 @@ const getEventosByIdUsuario = async (uid) => {
     }
 }
 
+// este se puede acceder sin mandar id de usuario
+const getEventosByUsuario = async () => {
+    try {
+        const response = await axiosClient.get(`${baseUrl}/usuario/`);
+        return response.data;
+    } catch (error) {
+        showNotification("error", "Error al obtener eventos por usuario")
+    }
+}
+
 const getEventosByPersonalIdUsuario = async (uid) => {
     try {
         const response = await axiosClient.get(`${baseUrl}/personal/${uid}`);
