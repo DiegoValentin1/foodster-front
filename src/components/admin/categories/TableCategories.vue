@@ -89,6 +89,13 @@
               :headers="headersPersonal"
               :items="categoriasPersonal"
               :search="searchPersonal"
+              :items-per-page-options="[5, 10, 15]"
+              :server-items-length="totalItems"
+              :items-per-page.sync="itemsPerPage"
+              :loading="loading"
+              :page.sync="currentPage"
+              @update:page="getCategoriasPersonales"
+              @update:items-per-page="getCategoriasPersonales"
           >
             <template v-slot:item="{ item }">
               <tr>
@@ -265,10 +272,18 @@
           </v-card-title>
           <v-data-table
               class="mx-auto"
-              style="height: auto; max-height: 500px; overflow-y: auto;"
+              style="height: auto; max-height: 500px; overflow-y: auto"
+              :items-per-page-options="[5, 10, 15]"
               :headers="headersServicios"
               :items="categoriasServicios"
+              :server-items-length="totalItemsCategoriasServicios"
+              :items-per-page.sync="itemsPerPageCategoriasServicios"
+              :loading="loadingCategoriasServicios"
               :search="searchServicios"
+              :page.sync="currentPageCategoriasServicios"
+              @update:page="getCategoriasServicios"
+              @update:items-per-page="getCategoriasServicios"
+
           >
             <template v-slot:item="{ item }">
               <tr>
@@ -379,7 +394,7 @@ import {
   getCategoriasServicios,
   actualizarCategoriaServicio,
   crearCategoriaServicio,
-  eliminarCategoriaServicio,
+  eliminarCategoriaServicio, getAllCategoriasServiciosPaginado, getAllCategoriasPersonalesPaginado,
 } from "../../../services/CategoryServices.js";
 import swalService from "@/services/SwalService";
 
@@ -413,6 +428,13 @@ export default {
         },
       ],
       categoriasPersonal: [],
+      loading: false,
+      currentPage: 1,
+      totalItems: 0,
+      totalPages: 0,
+      itemsPerPage: 10,
+
+
       searchServicios: "",
       nuevoServicio: {
         nombre: "",
@@ -435,27 +457,55 @@ export default {
         },
       ],
       categoriasServicios: [],
+      loadingCategoriasServicios: false,
+      currentPageCategoriasServicios: 1,
+      totalItemsCategoriasServicios: 0,
+      totalPagesCategoriasServicios: 0,
+      itemsPerPageCategoriasServicios: 10,
     };
   },
   methods: {
     async getCategoriasPersonales() {
       try {
-        const response = await getCategoriasPersonales();
+        this.loading = true;
+        const response = await getAllCategoriasPersonalesPaginado(this.currentPage - 1, this.itemsPerPage);
         if (response) {
-          this.categoriasPersonal = response;
+          this.totalPages = response.totalPages;
+          this.totalItems = response.totalElements;
+          this.categoriasPersonal = response.content;
+          this.loading = false;
+        } else {
+          this.totalPages = 0;
+          this.categoriasPersonal = [];
+          this.currentPage = 1;
+          this.totalItems = 0;
+          this.loading = false;
         }
+
       } catch (error) {
         console.error(error);
+        this.loading = false;
       }
     },
     async getCategoriasServicios() {
       try {
-        const response = await getCategoriasServicios();
+        this.loadingCategoriasServicios = true;
+        const response = await getAllCategoriasServiciosPaginado(this.currentPageCategoriasServicios - 1, this.itemsPerPageCategoriasServicios);
         if (response) {
-          this.categoriasServicios = response;
+          this.totalPagesCategoriasServicios = response.totalPages;
+          this.totalItemsCategoriasServicios = response.totalElements;
+          this.categoriasServicios = response.content;
+          this.loadingCategoriasServicios = false;
+        } else {
+          this.totalPagesCategoriasServicios = 0;
+          this.categoriasServicios = [];
+          this.currentPageCategoriasServicios = 1;
+          this.totalItemsCategoriasServicios = 0;
+          this.loadingCategoriasServicios = false;
         }
       } catch (error) {
         console.error(error);
+        this.loading = false;
       }
     },
 

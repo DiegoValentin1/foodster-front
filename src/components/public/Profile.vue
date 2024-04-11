@@ -142,11 +142,6 @@ export default {
     };
   },
   methods: {
-    validateEmail(email) {
-      // Expresión regular para validar el correo electrónico
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return emailRegex.test(email);
-    },
     signOut() {
       this.loading = true;
       const authStore = useAuthStore();
@@ -155,9 +150,7 @@ export default {
     },
     async getUser() {
       this.loading = true;
-      const authStore = useAuthStore();
-      const idUsuario = authStore.user.usuarios.idUsuario;
-      this.usuario = await UsersServices.getUser(idUsuario);
+      this.usuario = await UsersServices.getMyUser();
       this.loading = false;
     },
     async updateUser() {
@@ -167,27 +160,6 @@ export default {
         await this.getUser();
         this.loading = false;
       }
-    },
-    async updateDireccion(direccion) {
-      this.loading = true;
-      await DireccionesService.updateDireccion(direccion);
-      await this.getUser();
-      this.loading = false;
-    },
-    async deleteDireccion(id) {
-      this.loading = true;
-      await DireccionesService.deleteDireccion(id);
-      await this.getUser();
-      this.loading = false;
-    },
-
-    async addDireccion(direccion) {
-      this.loading = true;
-      const authStore = useAuthStore();
-      direccion.idUsuario = authStore.user.usuarios.idUsuario;
-      await DireccionesService.createDireccion(direccion);
-      this.getUser();
-      this.loading = false;
     },
   },
 

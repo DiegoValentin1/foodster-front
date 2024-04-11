@@ -12,6 +12,16 @@ const getEventos = async () => {
     }
 }
 
+const getAllPaginado = async (page, size) => {
+    try {
+        // /paginado/{page}/{size}
+        const response = await axiosClient.get(`${baseUrl}/paginado/${page}/${size}`);
+        return response.data;
+    } catch (error) {
+        showNotification("error", "Error al obtener elementos del paginado")
+    }
+};
+
 const updateEvento = async (evento) => {
     try {
         const response = await axiosClient.put(`${baseUrl}/`, evento);
@@ -70,6 +80,16 @@ const getEventosByIdUsuario = async (uid) => {
     }
 }
 
+// este se puede acceder sin mandar id de usuario
+const getEventosByUsuario = async () => {
+    try {
+        const response = await axiosClient.get(`${baseUrl}/usuario/`);
+        return response.data;
+    } catch (error) {
+        showNotification("error", "Error al obtener eventos por usuario")
+    }
+}
+
 const getEventosByPersonalIdUsuario = async (uid) => {
     try {
         const response = await axiosClient.get(`${baseUrl}/personal/${uid}`);
@@ -98,5 +118,8 @@ export {
     setCancelarEvento,
     createEvento,
     getEventosByStatus,
-    deleteEvento
+    deleteEvento,
+    getEventosByUsuario,
+    getAllPaginado
+
 }

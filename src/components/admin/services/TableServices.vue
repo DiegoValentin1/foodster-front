@@ -124,9 +124,16 @@
           <v-data-table
               class="mx-auto"
               style="height: auto; max-height: 500px; overflow-y: auto"
+              :items-per-page-options="[5, 10, 15]"
               :headers="headersServicios"
               :items="servicios"
+              :server-items-length="totalItemsServicios"
+              :items-per-page.sync="itemsPerPageServicios"
+              :loading="loadingServicios"
               :search="searchServicios"
+              :page.sync="currentPageServicios"
+              @update:page="fetchServicios"
+              @update:items-per-page="fetchServicios"
           >
             <template v-slot:item="{ item }">
               <tr>
@@ -475,7 +482,7 @@ import {
   deleteServicioPaquete,
   createServicioPaquete,
   updateServicioPaquete,
-  getServiciosPaquete,
+  getServiciosPaquete, getAllServiciosPaginado,
 
 } from "@/services/ServicesServices";
 import {getCategoriasServicios} from "@/services/CategoryServices";
@@ -485,6 +492,7 @@ import swalService from "@/services/SwalService";
 export default {
   data() {
     return {
+      loadingServicios: false,
       tab: null,
       validAgregarServicio: true,
       searchServicios: "",
@@ -566,6 +574,11 @@ export default {
       ],
 
       servicios: [],
+      currentPageServicios: 1,
+      totalItemsServicios: 0,
+      totalPagesServicios: 0,
+      itemsPerPageServicios: 10,
+
       headersPaquete: [
         {
           text: "Nombre paquete",
@@ -601,12 +614,23 @@ export default {
     async fetchServicios() {
       // Renombrado el método
       try {
-        const response = await getServicios();
+        this.loadingServicios = true;
+        const response = await getAllServiciosPaginado(this.currentPageServicios - 1, this.itemsPerPageServicios);
         if (response) {
-          this.servicios = response;
+          this.totalPagesServicios = response.totalPages;
+          this.totalItemsServicios = response.totalElements;
+          this.servicios = response.content;
+          this.loadingServicios = false;
+        } else {
+          this.totalPagesServicios = 0;
+          this.servicios = [];
+          this.currentPageServicios = 1;
+          this.totalItemsServicios = 0;
+          this.loadingServicios = false;
         }
       } catch (error) {
         console.error(error);
+        this.loadingServicios = false;
       }
     },
     async fetchServiciosPaquete() {
@@ -667,6 +691,7 @@ export default {
       };
     },
     async editItemServicio(nuevoServicio) {
+      this.loadingServicios = true;
       nuevoServicio.ultimaModificacion = new Date().toISOString(); // Esto generará la fecha actual en el formato correcto
       nuevoServicio.imagen = this.nuevoServicio.imagen;
       try {
@@ -674,9 +699,11 @@ export default {
           await updateServicio(nuevoServicio);
           await this.fetchServicios(); // Llamada al método renombrado
           this.dialogosEditarServicio[nuevoServicio.idServicio] = false;
+          this.loadingServicios = false;
         }
       } catch (error) {
         console.error("Error al actualizar categoría de servicio:", error);
+        this.loadingServicios = false;
       }
     },
 

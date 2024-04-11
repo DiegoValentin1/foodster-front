@@ -427,15 +427,9 @@ export default {
     },
     async loadCart() {
       const cart = useCartStore();
-      const authStore = useAuthStore();
-      const idUsuario = authStore.user.usuarios.idUsuario;
-      this.direcciones = await DireccionesService.getDireccionesByUser(
-          idUsuario
-      );
-      console.log(this.direcciones);
+      this.direcciones = await DireccionesService.getMyDirecciones();
       this.carrito = cart.cart;
       this.setTotal();
-      console.log(this.carrito);
     },
      async buyCart() {
       /*{

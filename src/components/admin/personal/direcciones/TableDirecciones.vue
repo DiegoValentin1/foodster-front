@@ -134,9 +134,9 @@
 
 <script>
 import direccionesService from '../../../../services/DireccionesService'
-import categoriasPersonal from '../../../../services/CategoriasPersonal';
 import personalServices from "@/services/PersonalServices";
 import swalService from "@/services/SwalService";
+import categoriasPersonal from "@/services/CategoriasPersonal";
 export default {
     data() {
         return {
