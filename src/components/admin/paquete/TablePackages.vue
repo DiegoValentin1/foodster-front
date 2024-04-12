@@ -73,18 +73,7 @@
             <img :src="item.imagen" style="max-width: 100px; max-height: 100px" alt="Paquete de servicios"/>
           </td>
           <td class="text-start">{{ item.numeroPedidos }}</td>
-          <td class="text-start">
-            {{
-              new Date(item.ultimaModificacion).toLocaleString("es-ES", {
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit",
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit",
-              })
-            }}
-          </td>
+          <td class="text-start">{{ formatDateTime(item.ultimaModificacion) }}</td>
           <td class="text-start">
             <v-chip :color="item.active ? 'green' : 'red'" outlined small>{{
                 item.active ? "Activo" : "Inactivo"
@@ -151,6 +140,7 @@ import {
   createPaquete,
   deletePaquete, getAllPaquetesPaginado,
 } from "@/services/PaquetesServices";
+import moment from "moment";
 
 export default {
   data() {
@@ -214,6 +204,9 @@ export default {
     };
   },
   methods: {
+    formatDateTime(dateTimeString) {
+  return moment.utc(dateTimeString, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss");
+},  
     async getAllPaquetes() {
       try {
         this.loading = true;

@@ -157,17 +157,7 @@
                     }}
                   </v-chip>
                 </td>
-                <td class="text-start">
-                  {{
-                    new Date(item.ultimaModificacion).toLocaleString("es-ES", {
-                      year: "numeric",
-                      month: "2-digit",
-                      day: "2-digit",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      second: "2-digit",
-                    })
-                  }}
+                <td class="text-start">{{ formatDateTime(item.ultimaModificacion) }}
                 </td>
                 <td class="text-center">
                   <v-dialog
@@ -366,18 +356,7 @@
               <tr>
                 <td class="text-start">{{ item.paquete.nombre }}</td>
                 <td class="text-start">{{ item.servicio.nombre }}</td>
-                <td class="text-start">
-                  {{
-                    new Date(item.ultimaModificacion).toLocaleString("es-ES", {
-                      year: "numeric",
-                      month: "2-digit",
-                      day: "2-digit",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      second: "2-digit",
-                    })
-                  }}
-                </td>
+                <td class="text-start">{{ formatDateTime(item.ultimaModificacion)}}</td>
                 <td class="text-start">
                   <v-chip :color="item.active ? 'green' : 'red'" outlined small>{{
                       item.active ? "Activo" : "Inactivo"
@@ -488,6 +467,7 @@ import {
 import {getCategoriasServicios} from "@/services/CategoryServices";
 import {getAllPaquetes} from "@/services/PaquetesServices";
 import swalService from "@/services/SwalService";
+import moment from "moment";
 
 export default {
   data() {
@@ -611,6 +591,10 @@ export default {
     };
   },
   methods: {
+
+    formatDateTime(dateTimeString) {
+  return moment.utc(dateTimeString, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss");
+},  
     async fetchServicios() {
       // Renombrado el método
       try {

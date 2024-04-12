@@ -405,7 +405,7 @@
           <v-expansion-panels :value="0">
             <v-expansion-panel v-for="(evento, index) in eventos" :key="index">
               <v-expansion-panel-header
-                @click="loadServiciosEvento(evento.idEvento)" 
+                @click="loadServiciosEvento(evento.idEvento)"
               >
                 {{ formatDateTime(evento.fechaHoraFin) }}
               </v-expansion-panel-header>
@@ -523,7 +523,10 @@
 import { useAuthStore } from "@/stores";
 import UsersServices from "@/services/UsersServices";
 import DireccionesService from "@/services/DireccionesService";
-import {getEventosByIdUsuario, getEventosByUsuario} from "@/services/EventosServices";
+import {
+  getEventosByIdUsuario,
+  getEventosByUsuario,
+} from "@/services/EventosServices";
 import ServicioEventoService from "@/services/ServicioEventoService";
 import moment from "moment";
 
@@ -551,7 +554,9 @@ export default {
   },
   methods: {
     formatDateTime(dateTimeString) {
-      return moment(dateTimeString).format("YYYY-MM-DD HH:mm:ss");
+      return moment
+        .utc(dateTimeString, "YYYY-MM-DD HH:mm:ss")
+        .format("YYYY-MM-DD HH:mm:ss");
     },
 
     validateEmail(email) {
@@ -603,26 +608,25 @@ export default {
     },
 
     async getMisEventos() {
-  this.loading = true;
-  try {
-    // Obtener todos los eventos del usuario
-    const eventos = await getEventosByUsuario();
-    // Iterar sobre cada evento y obtener los servicios asociados
-    for (const evento of eventos) {
-      // Obtener los servicios asociados al evento
-      evento.servicios = await ServicioEventoService.getServiciosEventoByEvento(evento.id);
-    }
-    // Asignar los eventos actualizados con los servicios al data binding
-    this.eventos = eventos;
-  } catch (error) {
-    console.error("Error al obtener eventos:", error);
-  } finally {
-    this.loading = false;
-  }
-},
-
-
-},
+      this.loading = true;
+      try {
+        // Obtener todos los eventos del usuario
+        const eventos = await getEventosByUsuario();
+        // Iterar sobre cada evento y obtener los servicios asociados
+        for (const evento of eventos) {
+          // Obtener los servicios asociados al evento
+          evento.servicios =
+            await ServicioEventoService.getServiciosEventoByEvento(evento.id);
+        }
+        // Asignar los eventos actualizados con los servicios al data binding
+        this.eventos = eventos;
+      } catch (error) {
+        console.error("Error al obtener eventos:", error);
+      } finally {
+        this.loading = false;
+      }
+    },
+  },
 
   watch: {
     dialog(val) {

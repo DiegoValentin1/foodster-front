@@ -82,17 +82,7 @@
           <td class="text-start">{{ item.usuarios.correo }}</td>
           <td class="text-start">{{ item.usuarios.roles[0].nombre }}</td>
           <td class="text-start">{{ item.categoria.nombre }}</td>
-          <td class="text-start">{{
-              new Date(item.ultimaModificacion).toLocaleString("es-ES", {
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit",
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit",
-              })
-            }}
-          </td>
+          <td class="text-start">{{ formatDateTime(item.usuarios.ultimaModificacion) }}</td>
           <td class="text-start">
             <v-chip @click="changeStatus(item.idPersonal)" :color="item.active === true ? 'green' : 'red'" outlined
                     small>{{
@@ -153,6 +143,7 @@ import personalServices from '../../../services/PersonalServices'
 import {getCategoriasPersonales} from "@/services/CategoryServices";
 import swalService from "@/services/SwalService";
 import PersonalServices from "../../../services/PersonalServices";
+import moment from "moment";
 
 export default {
   data() {
@@ -237,6 +228,10 @@ export default {
     this.getCategoriasPersonal();
   },
   methods: {
+
+    formatDateTime(dateTimeString) {
+  return moment.utc(dateTimeString, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss");
+},  
     async getCategoriasPersonal() {
       try {
         const response = await getCategoriasPersonales();
