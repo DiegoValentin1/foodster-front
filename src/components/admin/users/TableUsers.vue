@@ -79,15 +79,7 @@
           <td class="text-start">{{ item.segundoApellido }}</td>
           <td class="text-start">{{ item.telefono }}</td>
           <td class="text-start">{{ item.correo }}</td>
-          <td class="text-start">{{
-              new Date(item.ultimaModificacion).toLocaleString("es-ES", {
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit",
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit",
-              })
+          <td class="text-start">{{ formatDateTime(item.ultimaModificacion)
             }}
           </td>
           <td class="text-start">
@@ -147,6 +139,7 @@
 <script>
 import usersServices from '../../../services/UsersServices'
 import rolesService from '../../../services/RolesService'
+import moment from 'moment'
 
 export default {
   data() {
@@ -207,6 +200,9 @@ export default {
     this.getRoles();
   },
   methods: {
+    formatDateTime(dateTimeString) {
+  return moment.utc(dateTimeString, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss");
+},  
     async getUsers() {
       try {
         this.loading = true;

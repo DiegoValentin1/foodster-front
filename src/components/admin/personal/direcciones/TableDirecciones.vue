@@ -77,7 +77,7 @@
                             outlined small>{{ item.active === true ? 'Activo' :
             "Inactivo" }}</v-chip>
                     </td>
-                    <td class="text-start">{{ item.ultimaModificacion }}</td>
+                    <td class="text-start">{{ formatDateTime(item.ultimaModificacion) }}</td>
                     
                     <td class="text-center">
                         <v-icon color="blue" @click="editItem(item)">mdi-pencil</v-icon>
@@ -137,6 +137,7 @@ import direccionesService from '../../../../services/DireccionesService'
 import personalServices from "@/services/PersonalServices";
 import swalService from "@/services/SwalService";
 import categoriasPersonal from "@/services/CategoriasPersonal";
+import moment from 'moment';
 export default {
     data() {
         return {
@@ -213,6 +214,9 @@ export default {
         this.getCategoriasPersonal();
     },
     methods: {
+        formatDateTime(dateTimeString) {
+  return moment.utc(dateTimeString, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss");
+},  
         async getCategoriasPersonal() {
             try {
                 const response = await categoriasPersonal.getCategoriasPersonalByStatus(true);

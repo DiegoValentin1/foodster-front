@@ -35,41 +35,16 @@
           <td class="text-start">{{ item.costoTotal }}</td>
           <td class="text-start">
             {{
-              new Date(item.fechaHoraInicio).toLocaleString("es-ES", {
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit",
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit",
-              })
+              formatDateTime(item.fechaHoraInicio)
             }}
           </td>
           <td class="text-start">
             {{
-              new Date(item.fechaHoraFin).toLocaleString("es-ES", {
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit",
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit",
-              })
+              formatDateTime(item.fechaHoraFin)
             }}
           </td>
           <td class="text-start">{{ item.personalizado }}</td>
-          <td class="text-start">
-            {{
-              new Date(item.ultimaModificacion).toLocaleString("es-ES", {
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit",
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit",
-              })
-            }}
-          </td>
+          <td class="text-start">{{ formatDateTime(item.ultimaModificacion) }}</td>
           <td class="text-start">
             <v-chip :color="item.active ? 'green' : 'red'" outlined small>{{
                 item.active ? "Activo" : "Inactivo"
@@ -188,6 +163,8 @@ import {
 } from "../../../services/EventosServices";
 import swalService from "@/services/SwalService";
 import {getAllPaquetesPaginado} from "@/services/PaquetesServices";
+import moment from "moment";
+
 
 export default {
   data() {
@@ -259,6 +236,9 @@ export default {
   },
 
   methods: {
+    formatDateTime(dateTimeString) {
+  return moment.utc(dateTimeString, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss");
+},    
     async getAllEventos() {
       try {
         this.loading = true;
