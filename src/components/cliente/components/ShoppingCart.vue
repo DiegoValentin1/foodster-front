@@ -348,6 +348,7 @@ import DireccionesService from "../../../services/DireccionesService";
 import {useCartStore} from "@/stores/cart.store";
 import {useAuthStore} from "@/stores";
 import * as EventosService from "@/services/EventosServices";
+import {showNotification} from "@/utils/notification";
 
 export default {
   data() {
@@ -432,58 +433,20 @@ export default {
       this.setTotal();
     },
      async buyCart() {
-      /*{
-      "evento": {
-        "idEvento": "string",
-            "fechaHoraInicio": "2024-04-09T19:04:05.826Z",
-            "fechaHoraFin": "2024-04-09T19:04:05.826Z",
-            "numeroPersonas": 1000,
-            "direccion": {
-          "idDireccion": "string",
-              "calle": "string",
-              "colonia": "string",
-              "numero": "string",
-              "codigoPostal": "string",
-              "municipio": "string",
-              "estado": "string",
-              "referencias": "string",
-              "ultimaModificacion": "2024-04-09T19:04:05.826Z",
-              "active": true
-        },
-        "usuario": {
-          "idUsuario": "string",
-              "nombres": "string",
-              "primerApellido": "string",
-              "segundoApellido": "string",
-              "telefono": "string",
-              "correo": "string",
-              "contrasena": "string",
-              "ultimaModificacion": "2024-04-09T19:04:05.826Z",
-              "active": true,
-              "roles": [
-            {
-              "idRol": "string",
-              "nombre": "string",
-              "ultimaModificacion": "2024-04-09T19:04:05.826Z",
-              "active": true
-            }
-          ]
-        },
-        "costoTotal": 0,
-            "personalizado": true,
-            "estado": "string",
-            "ultimaModificacion": "2024-04-09T19:04:05.826Z",
-            "active": true
-      },
-      "servicios": [
-        {
-          "cantidad": 0,
-          "idServicio": "string"
-        }
-      ],
-          "idPaquete": "string"
-    }*/
+      const errors = [];
       if (this.carrito.length === 0) return alert("I remember you was conflicted, misusing your influence");
+      if (new Date(`${this.date2}T${this.time2}`) < new Date(`${this.date}T${this.time}`)) errors.push('La fecha de fin no puede ser menor que la fecha de inicio');
+      if (new Date(`${this.date}T${this.time}`) < new Date()) errors.push('La fecha de inicio no puede ser menor a la fecha actual');
+      if (!this.date || !this.date2 || !this.time || !this.time2) errors.push('Fechas no seleccionadas correctamente');
+      if (!this.direccion) errors.push('Selecciona una dirección');
+
+      if (errors.length > 0) {
+        errors.forEach((item)=>showNotification('error', item));
+        errors = [];
+        console.log(object);
+        return
+      }
+
       const envio = this.carrito.map((item) => {
         return {cantidad: item.cantidad, idServicio: item.idServicio};
       });
