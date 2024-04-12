@@ -107,14 +107,7 @@
                   </v-chip>
                 </td>
                 <td class="text-start">{{
-                    new Date(item.ultimaModificacion).toLocaleString('es-ES', {
-                      year: 'numeric',
-                      month: '2-digit',
-                      day: '2-digit',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                      second: '2-digit'
-                    })
+                    formatDateTime(item.ultimaModificacion)
                   }}
                 </td>
                 <td class="text-center">
@@ -294,16 +287,8 @@
                     }}
                   </v-chip>
                 </td>
-                <td class="text-start">{{
-                    new Date(item.ultimaModificacion).toLocaleString('es-ES', {
-                      year: 'numeric',
-                      month: '2-digit',
-                      day: '2-digit',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                      second: '2-digit'
-                    })
-                  }}
+                <td class="text-start">
+                {{formatDateTime(item.ultimaModificacion)}}
                 </td>
                 <td class="text-center">
                   <v-dialog
@@ -397,6 +382,7 @@ import {
   eliminarCategoriaServicio, getAllCategoriasServiciosPaginado, getAllCategoriasPersonalesPaginado,
 } from "../../../services/CategoryServices.js";
 import swalService from "@/services/SwalService";
+import moment from "moment";
 
 export default {
   data() {
@@ -465,6 +451,11 @@ export default {
     };
   },
   methods: {
+
+    formatDateTime(dateTimeString) {
+  return moment.utc(dateTimeString, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss");
+},
+    
     async getCategoriasPersonales() {
       try {
         this.loading = true;
