@@ -523,7 +523,7 @@
 import { useAuthStore } from "@/stores";
 import UsersServices from "@/services/UsersServices";
 import DireccionesService from "@/services/DireccionesService";
-import { getEventosByIdUsuario } from "@/services/EventosServices";
+import {getEventosByIdUsuario, getEventosByUsuario} from "@/services/EventosServices";
 import ServicioEventoService from "@/services/ServicioEventoService";
 import moment from "moment";
 
@@ -567,11 +567,9 @@ export default {
     },
     async getUserAndDirecciones() {
       this.loading = true;
-      const authStore = useAuthStore();
-      const idUsuario = authStore.user.usuarios.idUsuario;
       this.usuario = await UsersServices.getMyUser();
       this.direcciones = await DireccionesService.getMyDirecciones();
-      this.getMisEventos(idUsuario);
+      this.getMisEventos();
       this.loading = false;
     },
     async updateUser() {
@@ -604,12 +602,11 @@ export default {
       this.loading = false;
     },
 
-    async getMisEventos(idUsuario) {
-  console.log("desde mis eventos", idUsuario);
+    async getMisEventos() {
   this.loading = true;
   try {
     // Obtener todos los eventos del usuario
-    const eventos = await getEventosByIdUsuario(idUsuario);
+    const eventos = await getEventosByUsuario();
     // Iterar sobre cada evento y obtener los servicios asociados
     for (const evento of eventos) {
       // Obtener los servicios asociados al evento
