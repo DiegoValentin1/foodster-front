@@ -186,7 +186,7 @@
                 Cerrar
               </v-btn>
               <v-btn
-                  v-if="personal.categoria.nombre === 'Chef'"
+                  v-if="personal.categoria.nombre === 'Chef' && selectedEvent.details.estado === 'En proceso'"
                   color="secondary"
                   variant="text"
                   @click="setFinalizado(selectedEvent.details)"

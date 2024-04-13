@@ -128,7 +128,6 @@
 <script>
 import {useAuthStore} from "@/stores";
 import UsersServices from "@/services/UsersServices";
-import DireccionesService from "@/services/DireccionesService";
 
 export default {
   data() {

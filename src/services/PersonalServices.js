@@ -85,6 +85,15 @@ const update = async (personal) => {
     }
 };
 
+const getPersonalEvento = async (idEvento) => {
+    try {
+        const response = await axiosClient.get(`${baseUrl}-evento/evento/${idEvento}`);
+        return response.data;
+    } catch (error) {
+        showNotification("error", "Error al obtener personal");
+    }
+};
+
 export default {
-    getPersonal, insert, delete_, changeStatus, update, getAllPaginado
+    getPersonal, insert, delete_, changeStatus, update, getAllPaginado, getPersonalEvento
 };
