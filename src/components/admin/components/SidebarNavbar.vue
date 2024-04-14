@@ -39,6 +39,10 @@
             <v-icon color="white"> mdi-package-variant-closed </v-icon>
             <span class="mt-2">Paquetes</span>
           </a>
+          <a href="/admin/personalEvento" class="text-indigo-100 hover:bg-gray-800 hover:text-white group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium">
+                    <v-icon color="white"> mdi-account-multiple </v-icon>
+                    <span class="mt-2">Asignar personal</span>
+                  </a>
         </div>
       </div>
     </div>
@@ -93,7 +97,10 @@
                     <v-icon color="white"> mdi-package-variant-closed </v-icon>
                     <span class="mt-2">Paquetes</span>
                   </a>
-
+                  <a href="/admin/personalEvento" class="text-indigo-100 hover:bg-gray-800 hover:text-white group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium">
+                    <v-icon color="white"> mdi-account-multiple </v-icon>
+                    <span class="mt-2">Asignar personal</span>
+                  </a>
               </div>
             </nav>
           </div>
