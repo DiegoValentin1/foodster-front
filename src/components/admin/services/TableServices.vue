@@ -57,15 +57,18 @@
                               type="number"
                               step="0.01"
                               :rules="[
-  v => !!v || 'El precio no puede ser nulo',
-  v => v > 0 || 'El precio debe ser positivo'
-]"
+                               v => !!v || 'El precio no puede ser nulo',
+                                 v => v > 0 || 'El precio debe ser positivo',
+                                 v => !isNaN(v) || 'El precio debe ser un número'
+                                ]"
                           ></v-text-field>
                           <v-text-field
                               v-model="nuevoServicio.precioDescuento"
                               label="Precio Descuento"
                               type="number"
                               step="0.01"
+                              :rules="[(v) => v > -1 || 'El precio debe ser positivo', v => !isNaN(v) || 'El precio debe ser un número']"
+
                           ></v-text-field>
 
                           <input
@@ -83,7 +86,8 @@
                               type="number"
                               :rules="[
   v => !!v || 'Las existencias son requeridas',
-  v => v > 0 || 'Las existencias deben ser positivas'
+  v => v > 0 || 'Las existencias deben ser positivas',
+  v => !isNaN(v) || 'Las existencias deben ser un número'
 ]"
                           ></v-text-field>
                           <v-select
@@ -134,6 +138,12 @@
               :page.sync="currentPageServicios"
               @update:page="fetchServicios"
               @update:items-per-page="fetchServicios"
+              :footer-props="{
+          showFirstLastPage: true,
+          'items-per-page-text': 'Items por página',
+          'items-per-page-all-text': 'Todos',
+          'items-per-page-options': [10, 20, 30, 40, 50]
+        }"
           >
             <template v-slot:item="{ item }">
               <tr>
@@ -198,7 +208,7 @@
                                 <v-text-field
                                     v-model="item.precioDescuento"
                                     label="Precio Descuento"
-                                    :rules="[(v) => v > 0 || 'El precio debe ser positivo']"
+                                    :rules="[(v) => v > -1 || 'El precio debe ser positivo', v => !isNaN(v) || 'El precio debe ser un número']"
                                     type="number"
                                 ></v-text-field>
                                 <v-text-field
@@ -350,13 +360,25 @@
               style="height: auto; max-height: 500px; overflow-y: auto"
               :headers="headersPaquete"
               :items="servicioPaquete"
-              :search="searchServicios"
+              :search="searchPaquete"
+              :server-items-length="totalItemsPaquete"
+              :items-per-page.sync="itemsPerPagePaquete"
+              :loading="loadingPaquete"
+              :page.sync="currentPagePaquete"
+              @update:page="fetchServiciosPaquete"
+              @update:items-per-page="fetchServiciosPaquete"
+              :footer-props="{
+          showFirstLastPage: true,
+          'items-per-page-text': 'Items por página',
+          'items-per-page-all-text': 'Todos',
+          'items-per-page-options': [10, 20, 30, 40, 50]
+        }"
           >
             <template v-slot:item="{ item }">
               <tr>
                 <td class="text-start">{{ item.paquete.nombre }}</td>
                 <td class="text-start">{{ item.servicio.nombre }}</td>
-                <td class="text-start">{{ formatDateTime(item.ultimaModificacion)}}</td>
+                <td class="text-start">{{ formatDateTime(item.ultimaModificacion) }}</td>
                 <td class="text-start">
                   <v-chip :color="item.active ? 'green' : 'red'" outlined small>{{
                       item.active ? "Activo" : "Inactivo"
@@ -454,14 +476,13 @@
 
 <script>
 import {
-  getServicios,
   updateServicio,
   createServicio,
   deleteServicio,
   deleteServicioPaquete,
   createServicioPaquete,
   updateServicioPaquete,
-  getServiciosPaquete, getAllServiciosPaginado,
+  getAllServiciosPaginado, getServiciosPaquetePaginado,
 
 } from "@/services/ServicesServices";
 import {getCategoriasServicios} from "@/services/CategoryServices";
@@ -473,9 +494,11 @@ export default {
   data() {
     return {
       loadingServicios: false,
+      loadingPaquete: false,
       tab: null,
       validAgregarServicio: true,
       searchServicios: "",
+      searchPaquete: "",
       dialogServicios: false,
       dialogPaquete: false,
       dialogosEditarServicio: {},
@@ -588,13 +611,17 @@ export default {
       ],
       paquete: [],
       servicioPaquete: [],
+      currentPagePaquete: 1,
+      totalItemsPaquete: 0,
+      totalPagesPaquete: 0,
+      itemsPerPagePaquete: 10,
     };
   },
   methods: {
 
     formatDateTime(dateTimeString) {
-  return moment.utc(dateTimeString, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss");
-},  
+      return moment.utc(dateTimeString, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss");
+    },
     async fetchServicios() {
       // Renombrado el método
       try {
@@ -619,9 +646,19 @@ export default {
     },
     async fetchServiciosPaquete() {
       try {
-        const response = await getServiciosPaquete();
+        this.loadingPaquete = true;
+        const response = await getServiciosPaquetePaginado(this.currentPagePaquete - 1, this.itemsPerPagePaquete);
         if (response) {
-          this.servicioPaquete = response;
+          this.totalPagesPaquete = response.totalPages;
+          this.totalItemsPaquete = response.totalElements;
+          this.servicioPaquete = response.content;
+          this.loadingPaquete = false;
+        } else {
+          this.totalPagesPaquete = 0;
+          this.servicioPaquete = [];
+          this.currentPagePaquete = 1;
+          this.totalItemsPaquete = 0;
+          this.loadingPaquete = false;
         }
       } catch (error) {
         console.error(error);
@@ -836,6 +873,35 @@ export default {
     this.fetchServiciosPaquete();
     this.getCategoriasServicios();
     this.getAllPaquetes();
+  },
+  watch: {
+    searchPaquete: async function (val) {
+      if (val) {
+        this.servicioPaquete = this.servicioPaquete.filter((item) => {
+          return item.paquete.nombre.toLowerCase().includes(val.toLowerCase()) ||
+              item.servicio.nombre.toLowerCase().includes(val.toLowerCase()) ||
+              item.ultimaModificacion.toString().includes(val) ||
+              item.active.toString().includes(val);
+        });
+      } else {
+        await this.fetchServiciosPaquete();
+      }
+    },
+    searchServicios: async function (val) {
+      if (val) {
+        this.servicios = this.servicios.filter((item) => {
+          return item.nombre.toLowerCase().includes(val.toLowerCase()) ||
+              item.descripcion.toLowerCase().includes(val.toLowerCase()) ||
+              item.precio.toString().includes(val) ||
+              item.precioDescuento.toString().includes(val) ||
+              item.existencias.toString().includes(val) ||
+              item.categoria.nombre.toLowerCase().includes(val.toLowerCase());
+
+        });
+      } else {
+        await this.fetchServicios(); // Llamada al método renombrado
+      }
+    },
   },
 };
 </script>

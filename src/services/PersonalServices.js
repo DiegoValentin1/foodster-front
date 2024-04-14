@@ -52,6 +52,14 @@ const insert = async (personal) => {
         showNotification("error", "Error al crear personal")
     }
 };
+const getPersonalDisponible = async (fechaHoraInicio, fechaHoraFin) => {
+    try {
+        const response = await axiosClient.get(`${baseUrl}/disponibles/${fechaHoraInicio}/${fechaHoraFin}`);
+        return response.data;
+    } catch (error) {
+        showNotification("error", "Error al obtener personal disponibles");
+    }
+};
 
 const delete_ = async (id_personal) => {
     try {
@@ -59,6 +67,16 @@ const delete_ = async (id_personal) => {
         !response.data ? showNotification("success", "Personal eliminado") : showNotification("error", "Error al eliminar personal");
     } catch (error) {
         showNotification("error", "Error al eliminar personal");
+    }
+};
+
+const deletePersonalEvento = async (uid) => {
+    console.log("usuario a eliminar desde servicio: ", uid);
+    try {
+        const response = await axiosClient.delete(`${baseUrl}/${uid}`);
+        !response.data ? showNotification("success", "Personal eliminado del evento") : showNotification("error", "Error al eliminar personal del evento");
+    } catch (error) {
+        showNotification("error", "Error al eliminar personal del evento");
     }
 };
 
@@ -94,6 +112,19 @@ const getPersonalEvento = async (idEvento) => {
     }
 };
 
+const asignarPersonalEvento = async (personalEvento) => {
+    try {
+        const response = await axiosClient.post(`${baseUrl}-evento/`, personalEvento);
+        if (response.data) {
+            showNotification("success", "Personal creado en evento");
+        } else {
+            showNotification("error", "Error al crear personal en evento");
+        }
+    } catch (error) {
+        showNotification("error", "Error al crear personal en evento")
+    }
+}
+
 export default {
-    getPersonal, insert, delete_, changeStatus, update, getAllPaginado, getPersonalEvento
+    getPersonal, insert, delete_, deletePersonalEvento, changeStatus, update, getAllPaginado, getPersonalEvento,getPersonalDisponible,asignarPersonalEvento
 };

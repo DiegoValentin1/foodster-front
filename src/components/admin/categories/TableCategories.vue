@@ -288,7 +288,7 @@
                   </v-chip>
                 </td>
                 <td class="text-start">
-                {{formatDateTime(item.ultimaModificacion)}}
+                  {{ formatDateTime(item.ultimaModificacion) }}
                 </td>
                 <td class="text-center">
                   <v-dialog
@@ -372,11 +372,9 @@
 
 <script>
 import {
-  getCategoriasPersonales,
   actualizarCategoriaPersonal,
   crearCategoriaPersonal,
   eliminarCategoriaPersonal,
-  getCategoriasServicios,
   actualizarCategoriaServicio,
   crearCategoriaServicio,
   eliminarCategoriaServicio, getAllCategoriasServiciosPaginado, getAllCategoriasPersonalesPaginado,
@@ -453,9 +451,9 @@ export default {
   methods: {
 
     formatDateTime(dateTimeString) {
-  return moment.utc(dateTimeString, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss");
-},
-    
+      return moment.utc(dateTimeString, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss");
+    },
+
     async getCategoriasPersonales() {
       try {
         this.loading = true;
@@ -663,6 +661,27 @@ export default {
   mounted() {
     this.getCategoriasPersonales();
     this.getCategoriasServicios();
+  },
+  watch: {
+    searchServicios: async function (val) {
+      if (val) {
+        this.categoriasServicios = this.categoriasServicios.filter((item) => {
+          return item.nombre.toLowerCase().includes(val.toLowerCase());
+        });
+      } else {
+        await this.getCategoriasServicios();
+
+      }
+    },
+    searchPersonal: async function (val) {
+      if (val) {
+        this.categoriasPersonal = this.categoriasPersonal.filter((item) => {
+          return item.nombre.toLowerCase().includes(val.toLowerCase());
+        });
+      } else {
+        await this.getCategoriasPersonales();
+      }
+    },
   },
 };
 </script>
