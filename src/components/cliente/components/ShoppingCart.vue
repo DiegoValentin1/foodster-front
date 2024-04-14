@@ -716,6 +716,8 @@ export default {
       if (!this.direccion) errors.push("Selecciona una dirección");
 
       if (errors.length > 0) {
+        console.log(new Date(`${this.date2}T${this.time2}`) ,
+        new Date(`${this.date}T${this.time}`), new Date());
         errors.forEach((item) => showNotification("error", item));
         errors = [];
         return;
