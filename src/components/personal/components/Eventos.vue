@@ -408,6 +408,7 @@ export default {
     async setFinalizado(evento) {
       try {
         await setFinalizarEvento(evento.idEvento)
+        this.selectedOpen = false
         await this.fetchEvents(this.personal.usuarios.idUsuario)
       } catch (e) {
         console.log(e)
