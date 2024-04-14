@@ -62,6 +62,12 @@
         :page.sync="currentPage"
         @update:page="getAllPaquetes"
         @update:items-per-page="getAllPaquetes"
+        :footer-props="{
+          showFirstLastPage: true,
+          'items-per-page-text': 'Items por página',
+          'items-per-page-all-text': 'Todos',
+          'items-per-page-options': [10, 20, 30, 40, 50]
+        }"
 
     >
       <template v-slot:item="{ item }">
@@ -90,10 +96,10 @@
               <v-card>
                 <v-form class="space-y-4" @submit.prevent="editItemPaquete(item)" ref="formUpdatePaquete"
                         v-model="validUpdate">
-                <v-card-title> Editar servicio</v-card-title>
-                <v-card-text>
-                  <v-container>
-                    <v-row>
+                  <v-card-title> Editar servicio</v-card-title>
+                  <v-card-text>
+                    <v-container>
+                      <v-row>
 
                         <v-col cols="12" sm="6" md="6">
                           <v-text-field v-model="item.nombre" label="Nombre"
@@ -113,15 +119,15 @@
                           <input type="file" @change="onFileChange" accept="image/*"/>
                         </v-col>
 
-                    </v-row>
-                  </v-container>
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" text @click="cancelEditItemPaquete(item)">Cerrar</v-btn>
+                      </v-row>
+                    </v-container>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" text @click="cancelEditItemPaquete(item)">Cerrar</v-btn>
 
-                  <v-btn color="blue darken-1" type="submit">Guardar</v-btn>
-                </v-card-actions>
+                    <v-btn color="blue darken-1" type="submit">Guardar</v-btn>
+                  </v-card-actions>
                 </v-form>
               </v-card>
 
@@ -205,8 +211,8 @@ export default {
   },
   methods: {
     formatDateTime(dateTimeString) {
-  return moment.utc(dateTimeString, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss");
-},  
+      return moment.utc(dateTimeString, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss");
+    },
     async getAllPaquetes() {
       try {
         this.loading = true;
@@ -333,6 +339,20 @@ export default {
   },
   mounted() {
     this.getAllPaquetes();
+  },
+  watch: {
+    searchPaquetes: async function (val) {
+      if (val) {
+        this.paquetes = this.paquetes.filter((item) => {
+          return item.nombre.toLowerCase().includes(val.toLowerCase()) ||
+              item.descripcion.toLowerCase().includes(val.toLowerCase()) ||
+              item.recomendadoPara.toLowerCase().includes(val.toLowerCase()) ||
+              item.numeroPedidos.toString().toLowerCase().includes(val.toLowerCase());
+        });
+      }else {
+        await this.getAllPaquetes();
+      }
+    },
   },
 };
 </script>

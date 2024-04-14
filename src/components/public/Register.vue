@@ -57,7 +57,7 @@
           Bienvenido a Foodster, inicia sesión para continuar
         </h1>
         <v-form class="space-y-4" @submit.prevent="onSubmit" ref="form" v-model="valid">
-        <v-text-field
+          <v-text-field
               v-model="nombres"
               :rules="nameRules"
               :counter="30"
@@ -100,7 +100,7 @@
           <v-text-field
               v-model="contrasena"
               :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-              :rules="[rules.required, rules.min]"
+              :rules="[...passwordRules, rules.required]"
               :type="show1 ? 'text' : 'password'"
               name="input-10-1"
               label="Contraseña"
@@ -109,7 +109,7 @@
               @click:append="show1 = !show1"
           ></v-text-field>
           <div class="flex justify-center">
-            <Captcha @solucion="ponerSolucion" />
+            <Captcha @solucion="ponerSolucion"/>
           </div>
           <div>
             <v-btn
@@ -179,9 +179,18 @@ export default {
         v => !!v || 'Apellido Materno requerido',
         v => v.length <= 30 || 'El apellido debe de tener menos de 30 caracteres',
       ],
-      telefonoRules: [
-        v => !!v || 'Telefono requerido',
-        v => v.length <= 10 || 'El numero de telefono debe tener 10 caracteres',
+      telefonoRules: [v => !!v || 'El telefono es requerido',
+        v => (v && v.length === 10) || 'El telefono debe tener 10 caracteres',
+        v => !isNaN(v) || 'Solo se permiten números'
+      ],
+      passwordRules: [
+        v => !!v || 'la contraseña es requerida',
+        v => (v && v.length >= 8) || 'Minimo 8 caracteres',
+        v => (v && /[A-Z]/.test(v)) || 'Al menos una letra mayúscula',
+        v => (v && /[a-z]/.test(v)) || 'Al menos una letra minúscula',
+        v => /\d/.test(v) || 'Al menos un número',
+        v => (v && !/\s/.test(v)) || 'No espacios en blanco',
+        v => (v && /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>?]+/.test(v)) || 'Al menos un caracter especial',
       ],
     };
   },

@@ -81,15 +81,14 @@
             @click:event="showEvent"
             @click:more="viewDay"
         ></v-calendar>
-        <v-menu
+        <v-dialog
+            max-width="500px"
             v-model="selectedOpen"
             :activator="selectedElement"
             :close-on-content-click="false"
-            offset-x
         >
           <v-card
-              color="grey-lighten-4"
-              min-width="350px"
+              class="w-full md:min-w-350px overflow-auto max-w-350px"
               flat
               v-if="selectedEvent.details"
           >
@@ -99,6 +98,9 @@
             >
               <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
               <v-spacer></v-spacer>
+              <v-btn icon @click="selectedOpen = false">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
             </v-toolbar>
             <v-card-text>
               <div>
@@ -110,12 +112,12 @@
               <div>
                 <v-icon left>mdi-calendar</v-icon>
                 <span>Fecha y Hora de Inicio: </span>
-                <span>{{ selectedEvent.start }}</span>
+                <span>{{ formatDateTime(selectedEvent.start) }}</span>
               </div>
               <div>
                 <v-icon left>mdi-calendar</v-icon>
                 <span>Fecha y Hora de Fin: </span>
-                <span>{{ selectedEvent.end }}</span>
+                <span>{{ formatDateTime(selectedEvent.end) }}</span>
               </div>
               <div>
                 <v-icon left>mdi-account</v-icon>
@@ -139,40 +141,92 @@
                 <span>Correo: </span>
                 <span>{{ selectedEvent.details.usuario.correo }}</span>
                 <div>
-                  <v-icon left>mdi-map-marker</v-icon>
-                  <span>Calle: </span>
-                  <span>{{ selectedEvent.details.direccion.calle }}</span>
+                  <span>
+                  <v-icon>mdi-map-marker</v-icon>
+                  <span class="value">
+                  Direccion:
+                  </span>
+                  <span>
+                    Calle: {{ selectedEvent.details.direccion.calle }}, Col:
+                    {{ selectedEvent.details.direccion.colonia }}, No°:
+                    {{ selectedEvent.details.direccion.numero }}, CP:
+                    {{ selectedEvent.details.direccion.codigoPostal }}, Municipio:
+                    {{ selectedEvent.details.direccion.municipio }}, Estado:
+                    {{ selectedEvent.details.direccion.estado }}
+                  </span>
+                </span>
                 </div>
                 <div>
                   <v-icon left>mdi-map-marker</v-icon>
-                  <span>Numero: </span>
-                  <span>{{ selectedEvent.details.direccion.numero }}</span>
+                  <span class="value">
+                  Referencias: {{ selectedEvent.details.direccion.referencias }}
+                </span>
                 </div>
-                <div>
-                  <v-icon left>mdi-map-marker</v-icon>
-                  <span>Colonia: </span>
-                  <span>{{ selectedEvent.details.direccion.colonia }}</span>
-                </div>
-                <div>
-                  <v-icon left>mdi-map-marker</v-icon>
-                  <span>Codigo Postal: </span>
-                  <span>{{ selectedEvent.details.direccion.codigoPostal }}</span>
-                </div>
-                <div>
-                  <v-icon left>mdi-map-marker</v-icon>
-                  <span>Estado: </span>
-                  <span>{{ selectedEvent.details.direccion.estado }}</span>
-                </div>
-                <div>
-                  <v-icon left>mdi-map-marker</v-icon>
-                  <span>Municipio: </span>
-                  <span>{{ selectedEvent.details.direccion.municipio }}</span>
-                </div>
-                <div>
-                  <v-icon left>mdi-map-marker</v-icon>
-                  <span>Referencias: </span>
-                  <span>{{ selectedEvent.details.direccion.referencias }}</span>
-                </div>
+              </div>
+              <div class="mt-4">
+                <h4>Servicios del evento:</h4>
+                <v-expansion-panels>
+                  <v-expansion-panel
+                      v-for="(servicio, index) in selectedEvent.details.servicios"
+                      :key="index"
+                  >
+                    <v-expansion-panel-header>
+                      {{ servicio.servicio.nombre }}
+                    </v-expansion-panel-header>
+                    <v-expansion-panel-content>
+                      <div class="flex justify-center items-center">
+                        <img
+                            :src="servicio.servicio.imagen"
+                            alt="Servicio"
+                            class="w-1/2 h-1/2"
+                        />
+                      </div>
+                      <p>
+                        <v-icon small class="mr-2">mdi-cube-outline</v-icon>
+                        Cantidad: {{ servicio.cantidad }}
+                      </p>
+                      <p>
+                        <v-icon small class="mr-2">mdi-information-outline</v-icon>
+                        Descripción: {{ servicio.servicio.descripcion }}
+                      </p>
+                      <p>
+                        <v-icon small class="mr-2">mdi-cash</v-icon>
+                        Precio: {{ servicio.servicio.precio.toFixed(2) }}
+                      </p>
+                      <p>
+                        <v-icon small class="mr-2">mdi-tag-outline</v-icon>
+                        Precio con descuento: {{ servicio.servicio.precioDescuento }}
+                      </p>
+                      <p>
+                        <v-icon small class="mr-2">mdi-archive-outline</v-icon>
+                        Existencias: {{ servicio.servicio.existencias }}
+                      </p>
+                      <p>
+                        <v-icon small class="mr-2">mdi-folder-outline</v-icon>
+                        Categoría: {{ servicio.servicio.categoria.nombre }}
+                      </p>
+                    </v-expansion-panel-content>
+                  </v-expansion-panel>
+                </v-expansion-panels>
+              </div>
+              <div class="mt-4">
+                <h4>Personal del evento:</h4>
+                <v-expansion-panels>
+                  <v-expansion-panel
+                      v-for="(personal, index) in selectedEvent.details.personal"
+                      :key="index"
+                  >
+                    <v-expansion-panel-header>
+                      {{ personal.personal.usuarios.nombres }}
+                    </v-expansion-panel-header>
+                    <v-expansion-panel-content>
+                      <p><v-icon small class="mr-2">mdi-account-outline</v-icon> Nombre: {{ personal.personal.usuarios.nombres }} {{ personal.personal.usuarios.primerApellido }} {{ personal.personal.usuarios.segundoApellido }}</p>
+                      <p><v-icon small class="mr-2">mdi-account-outline</v-icon> Teléfono: {{ personal.personal.usuarios.telefono }}</p>
+                      <p><v-icon small class="mr-2">mdi-account-outline</v-icon> Correo: {{ personal.personal.usuarios.correo }}</p>
+                      <p><v-icon small class="mr-2">mdi-account-outline</v-icon> Cargo: {{ personal.personal.categoria.nombre }}</p>
+                    </v-expansion-panel-content>
+                  </v-expansion-panel>
+                </v-expansion-panels>
               </div>
 
 
@@ -195,7 +249,7 @@
               </v-btn>
             </v-card-actions>
           </v-card>
-        </v-menu>
+        </v-dialog>
       </v-sheet>
     </v-col>
   </v-row>
@@ -263,8 +317,11 @@ function showEvent({nativeEvent, event}) {
 </script>
 
 <script>
-import {getEventosByPersonalIdUsuario,setFinalizarEvento} from "@/services/EventosServices";
+import {getEventosByPersonalIdUsuario, setFinalizarEvento} from "@/services/EventosServices";
 import {useAuthStore} from "@/stores";
+import moment from "moment/moment";
+import ServicioEventoService from "@/services/ServicioEventoService";
+import PersonalServices from "@/services/PersonalServices";
 
 export default {
   data: () => ({
@@ -288,6 +345,9 @@ export default {
     this.loadPersonal()
   },
   methods: {
+    formatDateTime(dateTimeString) {
+      return moment.utc(dateTimeString, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss");
+    },
     viewDay({date}) {
       this.focus = date
       this.type = 'day'
@@ -352,8 +412,12 @@ export default {
 
     async fetchEvents(idUsuario) {
       try {
-        let response = await getEventosByPersonalIdUsuario(idUsuario)
-        this.eventos = this.convertToEvents(response)
+        let eventos = await getEventosByPersonalIdUsuario(idUsuario)
+        for (const evento of eventos) {
+          evento.servicios = await ServicioEventoService.getServiciosEventoByEvento(evento.idEvento);
+          evento.personal = await PersonalServices.getPersonalEvento(evento.idEvento);
+        }
+        this.eventos = this.convertToEvents(eventos)
       } catch (e) {
         console.log(e)
       }

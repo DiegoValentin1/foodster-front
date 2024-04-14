@@ -1,8 +1,7 @@
 <template>
   <div>
-
     <div class="v-sheet-container">
-      <v-sheet :elevation="2" border rounded class="half-sheet">
+      <v-sheet :elevation="5" border rounded class="half-sheet" color="#F1F1F1">
         <div class="title flex justify-end text-2xl font-bold py-4">
           <h1 class="flex-grow text-center">Mi perfil</h1>
           <button
@@ -21,85 +20,76 @@
             class="border-black border-opacity-50 my-4"
         ></v-divider>
         <div class="InfoCont">
-          <v-avatar size="150">
-            <v-img
-                alt="John"
-                src="https://cdn-icons-png.flaticon.com/512/1946/1946392.png"
-            ></v-img>
-          </v-avatar>
           <br/>
-          <v-form class="space-y-4" v-model="validUpdateUser" ref="formUpdateUser" @submit.prevent="updateUser">
-            <div class="pair-container">
-              <p class="label">Nombre:</p>
-              <v-text-field
-                  class="value"
-                  v-model="usuario.nombres"
-                  outlined
-                  dense
-                  required
-                  :rules="[
-                  (v) => !!v || 'Nombre es requerido',
-                  (v) => /^[a-zA-Z ]+$/.test(v) || 'Nombre no es válido',
-                ]"
-              ></v-text-field>
-            </div>
+          <v-form
+              class="space-y-4 margin"
+              v-model="validUpdateUser"
+              ref="formUpdateUser"
+              @submit.prevent="updateUser"
+          >
+            <v-text-field
+                class="value"
+                v-model="usuario.nombres"
+                outlined
+                dense
+                label="Nombres"
+                required
+                :rules="[
+                (v) => !!v || 'Nombres es requerido',
+                (v) => v.length <= 30 && v.length >= 3 || 'El nombre debe tener entre 3 y 30 caracteres',
+              ]"
+            ></v-text-field>
             <v-divider
                 :thickness="7"
                 color="black"
                 class="border-opacity-75"
             ></v-divider>
-            <div class="pair-container">
-              <p class="label">Primer apellido:</p>
-              <v-text-field
-                  class="value"
-                  v-model="usuario.primerApellido"
-                  outlined
-                  dense
-                  required
-                  :rules="[
-                  (v) => !!v || 'Primer apellido es requerido',
-                  (v) => /^[a-zA-Z ]+$/.test(v) || 'Apellido no es válido',
-                ]"
-              ></v-text-field>
-            </div>
+            <v-text-field
+                class="value"
+                v-model="usuario.primerApellido"
+                outlined
+                dense
+                label="Primer apellido"
+                required
+                :rules="[
+                (v) => !!v || 'Primer apellido es requerido',
+                (v) => v.length <= 30 && v.length >= 3 || 'El apellido debe tener entre 3 y 30 caracteres',
+              ]"
+            ></v-text-field>
             <v-divider
                 :thickness="7"
                 color="black"
                 class="border-opacity-75"
             ></v-divider>
-            <div class="pair-container">
-              <p class="label">Segundo apellido:</p>
-              <v-text-field
-                  class="value"
-                  v-model="usuario.segundoApellido"
-                  outlined
-                  dense
-                  required
-                  :rules="[
-                  (v) => !!v || 'Segundo apellido es requerido',
-                  (v) => /^[a-zA-Z ]+$/.test(v) || 'Apellido no es válido',
-                ]"
-              ></v-text-field>
-            </div>
+            <v-text-field
+                class="value"
+                v-model="usuario.segundoApellido"
+                outlined
+                dense
+                label="Segundo apellido"
+                required
+                :rules="[
+                (v) => !!v || 'Segundo apellido es requerido',
+                (v) => v.length <= 30 && v.length >= 3 || 'El apellido debe tener entre 3 y 30 caracteres',
+              ]"
+            ></v-text-field>
             <v-divider
                 :thickness="7"
                 color="black"
                 class="border-opacity-75"
             ></v-divider>
-            <div class="pair-container">
-              <p class="label">Teléfono:</p>
-              <v-text-field
-                  class="value"
-                  v-model="usuario.telefono"
-                  outlined
-                  dense
-                  required
-                  :rules="[
-                  (v) => !!v || 'Teléfono es requerido',
-                  (v) => /^[0-9]{10}$/.test(v) || 'Teléfono no es válido',
-                ]"
-              ></v-text-field>
-            </div>
+            <v-text-field
+                class="value"
+                v-model="usuario.telefono"
+                outlined
+                dense
+                label="Teléfono"
+                required
+                :rules="[
+                (v) => !!v || 'Teléfono es requerido',
+                (v) => /^[0-9]{10}$/.test(v) || 'Teléfono no es válido',
+              ]"
+            ></v-text-field>
             <v-divider
                 :thickness="7"
                 color="black"
@@ -113,8 +103,8 @@
           </v-form>
         </div>
       </v-sheet>
-
     </div>
+
     <footer class="footer">
       <p>
         Tus datos en Foodster son completamente privados y seguros. Respetamos
@@ -136,18 +126,30 @@ export default {
       validUpdateDireccion: true,
       dialog: false,
       usuario: {},
+      direcciones: [],
+      eventos: [],
       loading: false,
-
+      servicios: [],
+      nuevaDireccion: {
+        calle: "", //
+        colonia: "", //
+        numero: "", //
+        municipio: "",
+        estado: "",
+        codigoPostal: "",
+        referencias: "", ///
+      },
     };
   },
   methods: {
+
     signOut() {
       this.loading = true;
       const authStore = useAuthStore();
       authStore.logout();
       this.loading = false;
     },
-    async getUser() {
+    async getUserAndDirecciones() {
       this.loading = true;
       this.usuario = await UsersServices.getMyUser();
       this.loading = false;
@@ -156,15 +158,30 @@ export default {
       if (this.$refs.formUpdateUser.validate()) {
         this.loading = true;
         await UsersServices.update(this.usuario);
-        await this.getUser();
         this.loading = false;
+      }
+    },
+
+  },
+
+  watch: {
+    dialog(val) {
+      if (!val) {
+        this.nuevaDireccion = {
+          calle: "",
+          colonia: "",
+          numero: "",
+          municipio: "",
+          estado: "",
+          codigoPostal: "",
+          referencias: "",
+        };
       }
     },
   },
 
-
   mounted() {
-    this.getUser();
+    this.getUserAndDirecciones();
   },
 };
 </script>
@@ -197,6 +214,8 @@ export default {
   align-items: center;
   margin-top: 5vh;
   width: 70%;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+  "Lucida Sans", Arial, sans-serif;
 }
 
 .label {
@@ -210,15 +229,8 @@ export default {
   margin-left: 10px;
 }
 
-.pair-container {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start; /* Ajusta la alineación vertical según sea necesario */
-  margin-top: 10px;
-}
-
 .value {
-  width: auto;
+  width: 95%;
   display: inline-block;
   vertical-align: top;
   color: #424242;
@@ -236,6 +248,7 @@ export default {
 
 .v-divider {
   opacity: 0.1;
+  margin-bottom: 10px;
 }
 
 .actions {

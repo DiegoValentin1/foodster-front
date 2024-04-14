@@ -39,6 +39,7 @@
             {{ formatDateTime(item.fechaHoraFin) }}
           </td>
           <td class="text-start">{{ item.personalizado }}</td>
+          <td class="text-start">{{item.estado}}</td>
           <td class="text-start">{{ formatDateTime(item.ultimaModificacion) }}</td>
           <td class="text-start">
             <v-chip :color="item.active ? 'green' : 'red'" outlined small>
@@ -127,6 +128,7 @@ export default {
         { text: "Fecha y Hora de Inicio", align: "start", sortable: false, value: "fechaHoraInicio" },
         { text: "Fecha y Hora de Fin", align: "start", sortable: false, value: "fechaHoraFin" },
         { text: "Personalizado", align: "start", sortable: false, value: "personalizado" },
+        { text: "Estado", align: "start", sortable: false, value: "active" },
         { text: "Ultima Modificacion", align: "start", sortable: false, value: "ultimaModificacion" },
         { text: "Estado", align: "start", sortable: false, value: "active" },
         { text: "Acciones", align: "center", sortable: false, value: "acciones" },
@@ -269,6 +271,22 @@ export default {
   },
   mounted() {
     this.getAllEventos();
+  },
+  watch: {
+    searchEventos: async function (val) {
+      if(val){
+        this.eventos = this.eventos.filter((evento) => {
+          return evento.numeroPersonas.toString().toLowerCase().includes(val.toLowerCase()) ||
+              evento.costoTotal.toString().toLowerCase().includes(val.toLowerCase()) ||
+              evento.fechaHoraInicio.toString().toLowerCase().includes(val.toLowerCase()) ||
+              evento.fechaHoraFin.toString().toLowerCase().includes(val.toLowerCase()) ||
+              evento.personalizado.toString().toLowerCase().includes(val.toLowerCase()) ||
+              evento.estado.toLowerCase().includes(val.toLowerCase());
+        });
+      }else {
+        await this.getAllEventos();
+      }
+    },
   },
 };
 

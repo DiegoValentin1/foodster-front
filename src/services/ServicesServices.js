@@ -107,6 +107,16 @@ const getServiciosPaquete = async () => {
     }
 };
 
+const getServiciosPaquetePaginado = async (page, size) => {
+    try {
+        const response = await axiosClient.get(`/servicios-paquete/paginado/${page}/${size}`);
+        return response.data;
+    } catch (error) {
+        showNotification("error", "Error al obtener servicios de paquete")
+    }
+
+}
+
 const updateServicioPaquete = async (servicioPaquete) => {
     try {
         const response = await axiosClient.put("/servicios-paquete/", servicioPaquete);
@@ -172,6 +182,7 @@ export {
     deleteServicio,
     deleteServicioByStatus,
     getServiciosPaquete,
+    getServiciosPaquetePaginado,
     updateServicioPaquete,
     createServicioPaquete,
     getServiciosPaqueteByStatus,

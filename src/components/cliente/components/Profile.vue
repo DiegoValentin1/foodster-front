@@ -35,8 +35,8 @@
                 label="Nombres"
                 required
                 :rules="[
-                (v) => !!v || 'Nombre es requerido',
-                (v) => /^[a-zA-Z ]+$/.test(v) || 'Nombre no es válido',
+                (v) => !!v || 'Nombres es requerido',
+                (v) => v.length <= 30 && v.length >= 3 || 'El nombre debe tener entre 3 y 30 caracteres',
               ]"
             ></v-text-field>
             <v-divider
@@ -53,7 +53,7 @@
                 required
                 :rules="[
                 (v) => !!v || 'Primer apellido es requerido',
-                (v) => /^[a-zA-Z ]+$/.test(v) || 'Apellido no es válido',
+                (v) => v.length <= 30 && v.length >= 3 || 'El apellido debe tener entre 3 y 30 caracteres',
               ]"
             ></v-text-field>
             <v-divider
@@ -70,7 +70,7 @@
                 required
                 :rules="[
                 (v) => !!v || 'Segundo apellido es requerido',
-                (v) => /^[a-zA-Z ]+$/.test(v) || 'Apellido no es válido',
+                (v) => v.length <= 30 && v.length >= 3 || 'El apellido debe tener entre 3 y 30 caracteres',
               ]"
             ></v-text-field>
             <v-divider
@@ -643,8 +643,6 @@ export default {
         for (const evento of eventos) {
           evento.servicios = await ServicioEventoService.getServiciosEventoByEvento(evento.idEvento);
           evento.personal = await PersonalServices.getPersonalEvento(evento.idEvento);
-          console.log(evento.personal);
-          console.log(evento.servicios);
         }
 
         // Asignar los eventos actualizados con los servicios al data binding

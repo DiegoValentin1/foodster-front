@@ -27,9 +27,16 @@
         :page.sync="currentPage"
         @update:page="getAllEventos"
         @update:items-per-page="getAllEventos"
+        :footer-props="{
+          showFirstLastPage: true,
+          'items-per-page-text': 'Items por página',
+          'items-per-page-all-text': 'Todos',
+          'items-per-page-options': [10, 20, 30, 40, 50]
+        }"
 
     >
       <template v-slot:item="{ item }">
+
         <tr>
           <td class="text-start">{{ item.numeroPersonas }}</td>
           <td class="text-start">{{ item.costoTotal }}</td>
@@ -44,6 +51,7 @@
             }}
           </td>
           <td class="text-start">{{ item.personalizado }}</td>
+          <td class="text-start">{{ item.estado }}</td>
           <td class="text-start">{{ formatDateTime(item.ultimaModificacion) }}</td>
           <td class="text-start">
             <v-chip :color="item.active ? 'green' : 'red'" outlined small>{{
@@ -66,6 +74,8 @@
                 </v-icon
                 >
               </template>
+              <v-form  ref="formEventoUpdate" @submit.prevent="editItemEvento(item)">
+
               <v-card>
                 <v-card-title> Editar evento</v-card-title>
                 <v-card-text>
@@ -77,6 +87,7 @@
                             label="Número de Personas"
                             :rules="[
                             (v) => !!v || 'El número de personas es requerido',
+                            (v) => (!isNaN(v)) || 'El número de personas debe ser un número',
                             (v) => (v && v > 0) || 'El número de personas debe ser mayor a 0',
                             (v) => (v && v < 1000) || 'El número de personas debe ser menor a 1000',
                           ]"
@@ -84,7 +95,7 @@
                         <v-text-field
                             v-model="item.costoTotal"
                             label="Costo Total"
-                            :rules="[(v) => !!v || 'El costo total es requerido']"
+                            :rules="[(v) => !!v || 'El costo total es requerido', (v) => (!isNaN(v)) || 'El costo total debe ser un número', (v) => (v && v > 0) || 'El costo total debe ser mayor a 0']"
                             type="number"
                         ></v-text-field>
                         <v-text-field
@@ -136,12 +147,13 @@
                   <v-btn
                       color="blue darken-1"
                       text
-                      @click="editItemEvento(item)"
+                      type="submit"
                   >Guardar
                   </v-btn
                   >
                 </v-card-actions>
               </v-card>
+              </v-form>
             </v-dialog>
             <v-icon color="red" @click="deleteItemEvento(item.idEvento)"
             >mdi-delete
@@ -156,13 +168,11 @@
 
 <script>
 import {
-  getEventos,
   updateEvento,
   createEvento,
   deleteEvento, getAllPaginado,
-} from "../../../services/EventosServices";
+} from "@/services/EventosServices";
 import swalService from "@/services/SwalService";
-import {getAllPaquetesPaginado} from "@/services/PaquetesServices";
 import moment from "moment";
 
 
@@ -214,6 +224,12 @@ export default {
           value: "personalizado",
         },
         {
+          text: "Estado",
+          align: "start",
+          sortable: false,
+          value: "active",
+        },
+        {
           text: "Ultima Modificacion",
           align: "start",
           sortable: false,
@@ -237,8 +253,10 @@ export default {
 
   methods: {
     formatDateTime(dateTimeString) {
-  return moment.utc(dateTimeString, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss");
-},    
+      return moment.utc(dateTimeString, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss");
+    }, formatDateTimeToLocal(dateTimeString) {
+      return moment.utc(dateTimeString).local().format('YYYY-MM-DDTHH:mm');
+    },
     async getAllEventos() {
       try {
         this.loading = true;
@@ -247,6 +265,11 @@ export default {
           this.totalPages = response.totalPages;
           this.totalItems = response.totalElements;
           this.eventos = response.content;
+          // Formatear las fechas
+          this.eventos.forEach(item => {
+            item.fechaHoraInicio = this.formatDateTimeToLocal(item.fechaHoraInicio);
+            item.fechaHoraFin = this.formatDateTimeToLocal(item.fechaHoraFin);
+          });
           this.loading = false;
         } else {
           this.totalPages = 0;
@@ -280,9 +303,11 @@ export default {
     async editItemEvento(item) {
       item.ultimaModificacion = new Date().toISOString();
       try {
-        await updateEvento(item);
-        this.getAllEventos();
-        this.dialogosEditarEvento[item.idEvento] = false;
+       if (this.$refs.formEventoUpdate.validate()) {
+          await updateEvento(item);
+          this.dialogosEditarEvento[item.idEvento] = false;
+          await this.getAllEventos();
+        }
       } catch (error) {
         console.error("Error al actualizar paquete", error);
       }
@@ -308,7 +333,7 @@ export default {
         if (response) {
           this.dialogEvento = false;
           this.cerrarModalAgregarEvento();
-          this.getAllEventos();
+          await this.getAllEventos();
         }
       } catch (error) {
         console.error("Error al agregar categoría de servicio:", error);
@@ -321,6 +346,23 @@ export default {
   },
   mounted() {
     this.getAllEventos();
+  },
+  watch: {
+    searchEventos: async function (val) {
+      if (val) {
+        this.eventos = this.eventos.filter((evento) => {
+          return evento.numeroPersonas.toString().toLowerCase().includes(val.toLowerCase()) ||
+              evento.costoTotal.toString().toLowerCase().includes(val.toLowerCase()) ||
+              evento.fechaHoraInicio.toString().toLowerCase().includes(val.toLowerCase()) ||
+              evento.fechaHoraFin.toString().toLowerCase().includes(val.toLowerCase()) ||
+              evento.personalizado.toString().toLowerCase().includes(val.toLowerCase()) ||
+              evento.estado.toLowerCase().includes(val.toLowerCase());
+        });
+      } else {
+        await this.getAllEventos();
+      }
+    },
+
   },
 };
 </script>

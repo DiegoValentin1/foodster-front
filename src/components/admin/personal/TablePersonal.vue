@@ -1,7 +1,6 @@
 <template>
 
   <v-card>
-    <v-breadcrumbs :items="items" large></v-breadcrumbs>
     <v-card-title>
       Personal
       <v-divider class="mx-4" inset vertical></v-divider>
@@ -13,48 +12,71 @@
           <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">Nueva Persona</v-btn>
         </template>
         <v-card>
-          <v-card-title>
-            <span class="text-h5">Agregar nueva persona</span>
-          </v-card-title>
-          <v-card-text>
-            <v-container>
-              <v-row>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field v-model="nuevoUsuario.nombres" label="Nombre"></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field v-model="nuevoUsuario.primerApellido" label="Primer Apellido"></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field v-model="nuevoUsuario.segundoApellido" label="Segundo Apellido"></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field v-model="nuevoUsuario.telefono" label="Telefono"></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field v-model="nuevoUsuario.correo" :rules="emailRules" label="Correo"
-                                required></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field v-model="nuevoUsuario.contrasena" label="Contraseña" required></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="6" md="4">
-                  <v-text-field label="Confirmar contraseña"></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="6" md="4">
-                  <v-select label="Cargo" v-model="nuevoUsuario.categoria.idCategoria" :items="categoriasPersonal"
-                            item-text="nombre" item-value="idCategoria">
-                  </v-select>
-                </v-col>
+          <v-form ref="form" @submit.prevent="addPersonal">
+            <v-card-title>
+              <span class="text-h5">Agregar nueva persona</span>
+            </v-card-title>
+            <v-card-text>
+              <v-container>
+                <v-row>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field v-model="nuevoUsuario.nombres" label="Nombre"
+                                  :rules="[v => !!v || 'El nombre es requerido', v => (v && v.length <= 30 && v.length >= 3) || 'El nombre debe tener entre 3 y 30 caracteres']"
 
-              </v-row>
-            </v-container>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click="closeModalAddPersonal">Cancelar</v-btn>
-            <v-btn color="blue darken-1" text @click="addPersonal">Guardar</v-btn>
-          </v-card-actions>
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field v-model="nuevoUsuario.primerApellido" label="Primer Apellido"
+                                  :rules="[v => !!v || 'El apellido es requerido', v => (v && v.length <= 30 && v.length >= 3) || 'El apellido debe tener entre 3 y 30 caracteres']"
+                    ></v-text-field>
+
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field v-model="nuevoUsuario.segundoApellido" label="Segundo Apellido"
+                                  :rules="[v => !!v || 'El apellido es requerido', v => (v && v.length <= 30 && v.length >= 3) || 'El apellido debe tener entre 3 y 30 caracteres']"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field v-model="nuevoUsuario.telefono" label="Telefono"
+                                  :rules="[v => !!v || 'El telefono es requerido',
+                                  v => (v && v.length === 10) || 'El telefono debe tener 10 caracteres',
+                                  v => !isNaN(v) || 'Solo se permiten números']"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field v-model="nuevoUsuario.correo" label="Correo"
+                                  :rules="[v => !!v || 'El correo es requerido', v => /.+@.+/.test(v) || 'El correo es requerido']"
+                                  required></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field v-model="nuevoUsuario.contrasena" label="Contraseña"
+                                  :rules="passwordRules"
+                                  required></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field label="Confirmar contraseña"
+                                  :rules="[v => !!v || 'La confirmación de la contraseña es requerida', v => v === nuevoUsuario.contrasena || 'Las contraseñas no coinciden']"
+                                  required></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-select label="Cargo" v-model="nuevoUsuario.categoria.idCategoria" :items="categoriasPersonal"
+                              item-text="nombre" item-value="idCategoria"
+                              :rules="[v => !!v || 'El cargo es requerido']"
+                    >
+                    </v-select>
+                  </v-col>
+
+                </v-row>
+              </v-container>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" text @click="closeModalAddPersonal">Cancelar</v-btn>
+              <v-btn color="blue darken-1" text type="submit"> <!-- Cambiar a submit -->
+                Guardar
+              </v-btn>
+            </v-card-actions>
+          </v-form>
         </v-card>
       </v-dialog>
     </v-card-title>
@@ -71,6 +93,12 @@
         :page.sync="currentPage"
         @update:page="getPersonal"
         @update:items-per-page="getPersonal"
+        :footer-props="{
+          showFirstLastPage: true,
+          'items-per-page-text': 'Items por página',
+          'items-per-page-all-text': 'Todos',
+          'items-per-page-options': [10, 20, 30, 40, 50]
+        }"
 
     >
       <template v-slot:item="{ item }">
@@ -99,55 +127,74 @@
       </template>
     </v-data-table>
     <v-dialog v-model="editDialog" max-width="500px">
-      <v-card>
-        <v-card-title>
-          <span class="text-h5">Editar persona</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="editedItem.usuarios.nombres" label="Nombre"></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="editedItem.usuarios.primerApellido" label="Primer Apellido"></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="editedItem.usuarios.segundoApellido" label="Segundo Apellido"></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="4">
-                <v-text-field v-model="editedItem.usuarios.telefono" label="Telefono"></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6" md="4">
-                <v-select label="Cargo" v-model="editedItem.categoria.idCategoria" :items="categoriasPersonal"
-                          item-text="nombre" item-value="idCategoria">
-                </v-select>
-              </v-col>
+      <v-form ref="formUpdate" @submit.prevent="saveEdit" v-model="valid">
+        <v-card>
+          <v-card-title>
+            <span class="text-h5">Editar persona</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container>
+              <v-row>
+                <v-col cols="12" sm="6" md="4">
+                  <v-text-field v-model="editedItem.usuarios.nombres" label="Nombre"
+                                :rules="[v => !!v || 'El nombre es requerido', v => (v && v.length <= 30 && v.length >= 3) || 'El nombre debe tener entre 3 y 30 caracteres']"
+                  ></v-text-field>
 
-
-            </v-row>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="cancelEdit">Cancelar</v-btn>
-          <v-btn color="blue darken-1" text @click="saveEdit">Guardar</v-btn>
-        </v-card-actions>
-      </v-card>
+                </v-col>
+                <v-col cols="12" sm="6" md="4">
+                  <v-text-field v-model="editedItem.usuarios.primerApellido" label="Primer Apellido"
+                                :rules="[v => !!v || 'El apellido es requerido', v => (v && v.length <= 30 && v.length >= 3) || 'El apellido debe tener entre 3 y 30 caracteres']"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="6" md="4">
+                  <v-text-field v-model="editedItem.usuarios.segundoApellido" label="Segundo Apellido"
+                                :rules="[v => !!v || 'El apellido es requerido', v => (v && v.length <= 30 && v.length >= 3) || 'El apellido debe tener entre 3 y 30 caracteres']"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="6" md="4">
+                  <v-text-field v-model="editedItem.usuarios.telefono" label="Telefono"
+                                :rules="[v => !!v || 'El telefono es requerido',
+                                v => (v && v.length === 10) || 'El telefono debe tener 10 caracteres',
+                                v => !isNaN(v) || 'Solo se permiten números']"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="6" md="4">
+                  <v-select label="Cargo" v-model="editedItem.categoria.idCategoria" :items="categoriasPersonal"
+                            item-text="nombre" item-value="idCategoria" :rules="[v => !!v || 'El cargo es requerido']">
+                  </v-select>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" text @click="cancelEdit">Cancelar</v-btn>
+            <v-btn color="blue darken-1" text type="submit">Guardar</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-form>
     </v-dialog>
   </v-card>
 </template>
 
 <script>
-import personalServices from '../../../services/PersonalServices'
 import {getCategoriasPersonales} from "@/services/CategoryServices";
 import swalService from "@/services/SwalService";
-import PersonalServices from "../../../services/PersonalServices";
 import moment from "moment";
+import PersonalServices from "@/services/PersonalServices";
 
 export default {
   data() {
     return {
+      passwordRules: [
+        v => !!v || 'la contraseña es requerida',
+        v => (v && v.length >= 8) || 'Minimo 8 caracteres',
+        v => (v && /[A-Z]/.test(v)) || 'Al menos una letra mayúscula',
+        v => (v && /[a-z]/.test(v)) || 'Al menos una letra minúscula',
+        v => /\d/.test(v) || 'Al menos un número',
+        v => (v && !/\s/.test(v)) || 'No espacios en blanco',
+        v => (v && /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>?]+/.test(v)) || 'Al menos un caracter especial',
+      ],
       loading: false,
       personal: [],
       currentPage: 1,
@@ -211,16 +258,7 @@ export default {
         {text: 'Estado', align: 'start', sortable: false, value: 'estado'},
         {text: 'Acciones', align: 'center', sortable: false, value: 'acciones'},
       ],
-
-      nameRules: [
-        v => !!v || 'Name is required',
-        v => v.length <= 10 || 'Name must be less than 10 characters',
-      ],
       email: '',
-      emailRules: [
-        v => !!v || 'E-mail is required',
-        v => /.+@.+/.test(v) || 'E-mail must be valid',
-      ],
     };
   },
   mounted() {
@@ -228,15 +266,12 @@ export default {
     this.getCategoriasPersonal();
   },
   methods: {
-
     formatDateTime(dateTimeString) {
-  return moment.utc(dateTimeString, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss");
-},  
+      return moment.utc(dateTimeString, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss");
+    },
     async getCategoriasPersonal() {
       try {
-        const response = await getCategoriasPersonales();
-        console.log(response)
-        this.categoriasPersonal = response;
+        this.categoriasPersonal = await getCategoriasPersonales();
       } catch (error) {
         console.log(error)
       }
@@ -295,33 +330,34 @@ export default {
     },
     async saveEdit() {
       try {
-        await personalServices.update(this.editedItem);
+        if (this.$refs.formUpdate.validate()) {
+          await PersonalServices.update(this.editedItem);
+          this.editDialog = false;
+          this.editedItem = {
+            idPersonal: "",
+            usuarios: {
+              idUsuario: "",
+              nombres: "",
+              primerApellido: "",
+              segundoApellido: "",
+              telefono: "",
+              correo: "",
+              contrasena: "",
+              active: '',
+              roles: [
+                {
+                  idRol: "",
+                }
+              ]
+            },
+            categoria: {
+              idCategoria: "",
+            },
+            active: ''
+          };
+          await this.getPersonal();
+        }
       } catch (error) {
-      } finally {
-        this.editDialog = false;
-        this.editedItem = {
-          idPersonal: "",
-          usuarios: {
-            idUsuario: "",
-            nombres: "",
-            primerApellido: "",
-            segundoApellido: "",
-            telefono: "",
-            correo: "",
-            contrasena: "",
-            active: '',
-            roles: [
-              {
-                idRol: "",
-              }
-            ]
-          },
-          categoria: {
-            idCategoria: "",
-          },
-          active: ''
-        };
-        await this.getPersonal();
       }
 
     },
@@ -340,7 +376,7 @@ export default {
           "¿Estás seguro de cambiar el estado de este personal?",
       );
       if (proceder) {
-        await personalServices.changeStatus(idPersonal);
+        await PersonalServices.changeStatus(idPersonal);
         await this.getPersonal();
       }
     }
@@ -348,6 +384,7 @@ export default {
     ,
     closeModalAddPersonal() {
       this.dialog = false;
+      this.resetNuevoPersona();
     },
     resetNuevoPersona() {
       this.nuevoUsuario = {
@@ -365,17 +402,33 @@ export default {
     },
     async addPersonal() {
       try {
-        await personalServices.insert(this.nuevoUsuario);
+        if (this.$refs.form.validate()) {
+          await PersonalServices.insert(this.nuevoUsuario);
+          this.closeModalAddPersonal();
+          await this.getPersonal()
+        }
       } catch (error) {
         console.log(error)
-      } finally {
-        this.resetNuevoPersona();
-        this.closeModalAddPersonal();
-        await this.getPersonal()
       }
     }
 
 
+  },
+  watch: {
+    search: async function (val) {
+      if (val) {
+        // filter personal data based on search value
+        this.personal = this.personal.filter(person =>
+            person.usuarios.nombres.toLowerCase().includes(val.toLowerCase()) ||
+            person.usuarios.primerApellido.toLowerCase().includes(val.toLowerCase()) ||
+            person.usuarios.segundoApellido.toLowerCase().includes(val.toLowerCase()) ||
+            person.usuarios.telefono.toLowerCase().includes(val.toLowerCase()) ||
+            person.usuarios.correo.toLowerCase().includes(val.toLowerCase())
+        );
+      } else {
+        await this.getPersonal();
+      }
+    }
   }
 }
 </script>
