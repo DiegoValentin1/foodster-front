@@ -11,10 +11,10 @@
           a 40,40 0 1,1 80,0
           a 40,40 0 1,1 -80,0
         "/>
-            <text stroke="black" stroke-width="0.45" id="text" font-family="monospace" font-size="12.7"
+            <text stroke="black" stroke-width="0.45" id="text" font-family="monospace" font-size="12"
                   font-weight="bolder" fill="#e2e2e2">
               <textPath id="textPath" href="#circlePath">
-                🍱 Foodster 🍚 Foodster 🥗 Foodster
+              🍱 Foodster 🍚 Foodster 🥗 Foodster
               </textPath>
             </text>
           </svg>
