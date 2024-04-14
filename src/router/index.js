@@ -50,7 +50,11 @@ const router = new VueRouter({
             path: "/admin/direcciones", name: "direcciones", component: TableDirecciones,
         }, {
             path: "/admin/perfil", name: "perfilAdmin", component: () => import("../components/public/Profile.vue"),
-        }],
+        },{
+            path: "/admin/personalEvento", name: "personalEvento", component: () => import("../components/admin/personalEvento/TablePersonalEvento.vue"),
+        }
+    
+    ],
     }, {
         path: "/home",
         name: "home",
