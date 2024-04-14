@@ -722,7 +722,7 @@ export default {
           activo: true,
         },
         servicios: envio,
-        idPaquete: null,
+        idPaquete: useCartStore().idPaquete ? useCartStore().idPaquete : null,
       };
 
       await EventosService.createEvento(eventoDto);

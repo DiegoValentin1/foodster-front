@@ -1,11 +1,13 @@
 import {defineStore} from 'pinia';
 import {showNotification} from "@/utils/notification";
+import {getServiciosByPaquete} from "@/services/ServicesServices";
 
 
 export const useCartStore = defineStore({
     id: 'cart',
     state: () => ({
         cart: JSON.parse(localStorage.getItem('cart')) || [],
+        idPaquete: localStorage.getItem('idPaquete') || ''
     }),
     actions: {
         addStuff(nuevoServicio) {
@@ -30,7 +32,24 @@ export const useCartStore = defineStore({
         },
         deleteAll() {
             this.cart = [];
+            this.idPaquete = '';
+            localStorage.removeItem('idPaquete');
             localStorage.setItem('cart', JSON.stringify(this.cart));
         },
+
+        setIdPaquete(idPaquete) {
+            this.idPaquete = idPaquete;
+            localStorage.setItem('idPaquete', idPaquete);
+        },
+
+        async setPaquete(idPaquete) {
+            this.deleteAll();
+            this.setIdPaquete(idPaquete);
+            const serviciosPaquete = await getServiciosByPaquete(idPaquete);
+            serviciosPaquete.forEach(serviciosPaquete => {
+                this.addStuff(serviciosPaquete.servicio);
+            });
+            showNotification('success', 'Paquete añadido correctamente')
+        }
     }
 });

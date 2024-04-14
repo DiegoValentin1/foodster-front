@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import {useCartStore} from "../../../stores/cart.store";
+import {useCartStore} from "@/stores/cart.store";
 
 export default {
   data: () => ({

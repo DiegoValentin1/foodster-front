@@ -97,9 +97,9 @@ const deleteServicioByStatus = async (uid) => {
     }
 };
 
-const getServiciosPaquete = async () => {
+const getServiciosByPaquete = async (idPaquete) => {
     try {
-        const response = await axiosClient.get("/servicios-paquete/");
+        const response = await axiosClient.get(`/servicios-paquete/paquete/${idPaquete}`);
         return response.data;
     } catch (error) {
         showNotification("error", "Error al obtener servicios de paquete");
@@ -181,7 +181,7 @@ export {
     getServiciosByStatus,
     deleteServicio,
     deleteServicioByStatus,
-    getServiciosPaquete,
+    getServiciosByPaquete,
     getServiciosPaquetePaginado,
     updateServicioPaquete,
     createServicioPaquete,
