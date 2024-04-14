@@ -49,9 +49,9 @@ function authHeader(url) {
 function handleResponse(response) {
     const data = response.data;
     if (response.status > 400) {
-        const { user, logout } = useAuthStore();
+        const { user } = useAuthStore();
         if ([401].includes(response.status) && user) {
-            showNotification('error', 'Intentaste acceder a una página sin permisos');
+            showNotification('error', 'Recurso mal solicitado o no autorizado');
         }
         const error = data?.message || response.statusText;
         return Promise.reject(error);

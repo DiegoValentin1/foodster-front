@@ -155,7 +155,8 @@ export default {
 
   methods: {
     formatDateTime(dateTimeString) {
-      return moment.utc(dateTimeString, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss");
+      //mexico city time
+      return moment(dateTimeString).format("YYYY-MM-DD HH:mm");
     },
 
     async getAllEventos() {

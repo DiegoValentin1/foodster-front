@@ -45,7 +45,9 @@
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field v-model="nuevoUsuario.correo" label="Correo"
-                                  :rules="[v => !!v || 'El correo es requerido', v => /.+@.+/.test(v) || 'El correo es requerido']"
+                                  :rules="[v => !!v || 'El correo es requerido',
+                                   (v) => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(v) || 'El correo electronico tiene un formato incorrecto'
+                                   ]"
                                   required></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
@@ -267,7 +269,8 @@ export default {
   },
   methods: {
     formatDateTime(dateTimeString) {
-      return moment.utc(dateTimeString, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss");
+      //mexico city time
+      return moment(dateTimeString).format("YYYY-MM-DD HH:mm");
     },
     async getCategoriasPersonal() {
       try {
