@@ -1,14 +1,14 @@
 <template>
   <v-card
-    :loading="loading"
-    class="mx-auto my-4 animate__animated animate__rubberBand"
-    max-width="300"
+      :loading="loading"
+      class="mx-auto my-4 animate__animated animate__rubberBand"
+      max-width="300"
   >
     <template slot="progress">
       <v-progress-linear
-        color="blue"
-        height="10"
-        indeterminate
+          color="blue"
+          height="10"
+          indeterminate
       ></v-progress-linear>
     </template>
 
@@ -26,27 +26,33 @@
       </div>
 
       <div class="my-2 font-weight-black">
-        ${{ servicio.precio.toFixed(2) }}
+        <template v-if="servicio.precioDescuento > 0">
+          <s>${{ servicio.precio.toFixed(2) }}</s>
+          ${{ servicio.precioDescuento.toFixed(2) }}
+        </template>
+        <template v-else>
+          ${{ servicio.precio.toFixed(2) }}
+        </template>
       </div>
     </v-card-text>
 
     <v-divider class="mx-2"></v-divider>
     <v-card-actions>
       <v-btn
-        v-if="!inCart"
-        color="deep-purple lighten-2"
-        text
-        @click="agregarElemento(servicio)"
+          v-if="!inCart"
+          color="deep-purple lighten-2"
+          text
+          @click="agregarElemento(servicio)"
       >
         Agregar al carrito
       </v-btn>
-      <div v-else >Ya en carrito</div>
+      <div v-else>Ya en carrito</div>
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
-import { useCartStore } from "../../../stores/cart.store";
+import {useCartStore} from "@/stores/cart.store";
 
 export default {
   data: () => ({

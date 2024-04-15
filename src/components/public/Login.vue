@@ -86,8 +86,8 @@ export default {
       correo: '',
       contrasenia: '',
       emailRules: [
-        v => !!v || 'E-mail is required',
-        v => /.+@.+/.test(v) || 'El correo electronico es necesario',
+        v => !!v || 'El correo electronico es requerido',
+        (v) => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(v) || "El correo electronico tiene un formato incorrecto",
       ],
       passwordRules: [
         v => !!v || 'la contraseña es requerida',

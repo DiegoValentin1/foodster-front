@@ -42,12 +42,12 @@
           <td class="text-start">{{ item.costoTotal }}</td>
           <td class="text-start">
             {{
-              formatDateTime(item.fechaHoraInicio)
+              item.fechaHoraInicio
             }}
           </td>
           <td class="text-start">
             {{
-              formatDateTime(item.fechaHoraFin)
+              item.fechaHoraFin
             }}
           </td>
           <td class="text-start">{{ item.personalizado }}</td>
@@ -108,6 +108,7 @@
                             type="datetime-local"
                         ></v-text-field>
                         <v-text-field
+
                             v-model="item.fechaHoraFin"
                             label="Fecha y Hora de Fin"
                             :rules="[
@@ -253,9 +254,8 @@ export default {
 
   methods: {
     formatDateTime(dateTimeString) {
-      return moment.utc(dateTimeString, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss");
-    }, formatDateTimeToLocal(dateTimeString) {
-      return moment.utc(dateTimeString).local().format('YYYY-MM-DDTHH:mm');
+      //mexico city time
+      return moment(dateTimeString).format("YYYY-MM-DD HH:mm");
     },
     async getAllEventos() {
       try {
@@ -267,8 +267,8 @@ export default {
           this.eventos = response.content;
           // Formatear las fechas
           this.eventos.forEach(item => {
-            item.fechaHoraInicio = this.formatDateTimeToLocal(item.fechaHoraInicio);
-            item.fechaHoraFin = this.formatDateTimeToLocal(item.fechaHoraFin);
+            item.fechaHoraInicio = this.formatDateTime(item.fechaHoraInicio);
+            item.fechaHoraFin = this.formatDateTime(item.fechaHoraFin);
           });
           this.loading = false;
         } else {
@@ -304,6 +304,8 @@ export default {
       item.ultimaModificacion = new Date().toISOString();
       try {
        if (this.$refs.formEventoUpdate.validate()) {
+          item.fechaHoraInicio = moment(item.fechaHoraInicio).toISOString();
+          item.fechaHoraFin = moment(item.fechaHoraFin).toISOString();
           await updateEvento(item);
           this.dialogosEditarEvento[item.idEvento] = false;
           await this.getAllEventos();
