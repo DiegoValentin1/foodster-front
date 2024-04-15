@@ -87,8 +87,18 @@ const update = async (users) => {
 
     }
 };
+const cambiarContrasena = async (cambioDto) => {
+    try {
+        const response = await axiosClient.put(`${baseUrl}/cambio-contrasena/`, cambioDto);
+        response.data ? showNotification("success", "Contraseña actualizada") : showNotification("error", "Error al actualizar contraseña")
+        return response.data;
+    } catch (error) {
+        showNotification("error", "Error al actualizar contraseña")
+
+    }
+};
 
 
 export default {
-    getUsers, getUser, getMyUser, insert, insertPublic, deleteUser: deleteUser, changeStatus, update, getAllPaginado
+    getUsers, getUser, getMyUser, insert, insertPublic, deleteUser: deleteUser, changeStatus, update, getAllPaginado, cambiarContrasena
 }

@@ -5,6 +5,17 @@
         <div class="title flex justify-end text-2xl font-bold py-4">
           <h1 class="flex-grow text-center">Mi perfil</h1>
           <button
+                @click="openCloseDialogCambio"
+                 class="block px-4 py-2 text-sm text-white bg-blue-500 hover:bg-blue-700 rounded mr-4"
+                 role="menuitem"
+                 tabindex="-1"
+                 id="user-menu-item-1"
+          >
+            <v-icon>mdi-lock-reset</v-icon>
+            Cambiar contraseña
+          </button>
+
+          <button
               @click="signOut"
               class="block px-4 py-2 text-sm text-white bg-red-500 hover:bg-red-700 rounded"
               role="menuitem"
@@ -702,6 +713,7 @@
             </v-expansion-panel>
           </v-expansion-panels>
         </div>
+        <DialogCambiarContra :visible="dialogCambio" :openClose="openCloseDialogCambio"/>
       </v-sheet>
     </div>
 
@@ -725,10 +737,13 @@ import moment from "moment";
 import PersonalServices from "@/services/PersonalServices";
 import CalificationService from "@/services/CalificationService";
 import {showNotification} from "@/utils/notification";
+import DialogCambiarContra from "@/components/public/DialogCambiarContra.vue";
 
 export default {
+  components: {DialogCambiarContra},
   data() {
     return {
+      dialogCambio: false,
       validUpdateUser: true,
       validUpdateDireccion: true,
       dialog: false,
@@ -755,6 +770,10 @@ export default {
     formatDateTime(dateTimeString) {
       //mexico city time
       return moment(dateTimeString).format("YYYY-MM-DD HH:mm");
+    },
+
+    openCloseDialogCambio() {
+      this.dialogCambio = !this.dialogCambio;
     },
 
     signOut() {
