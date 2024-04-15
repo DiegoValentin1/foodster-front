@@ -13,26 +13,29 @@
             <v-divider class="mx-4" inset vertical></v-divider>
             <v-spacer></v-spacer>
             <v-text-field
-                v-model="searchServicios"
-                append-icon="mdi-magnify"
-                label="Buscar"
-                single-line
-                hide-details
+              v-model="searchServicios"
+              append-icon="mdi-magnify"
+              label="Buscar"
+              single-line
+              hide-details
             ></v-text-field>
             <v-spacer></v-spacer>
             <v-dialog v-model="dialogServicios" max-width="500px">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
-                    color="primary"
-                    dark
-                    class="mb-2"
-                    v-bind="attrs"
-                    v-on="on"
-                >Nuevo servicio
-                </v-btn
-                >
+                  color="primary"
+                  dark
+                  class="mb-2"
+                  v-bind="attrs"
+                  v-on="on"
+                  >Nuevo servicio
+                </v-btn>
               </template>
-              <v-form @submit.prevent="agregarServicio" ref="formAgregarServicio" v-model="validAgregarServicio">
+              <v-form
+                @submit.prevent="agregarServicio"
+                ref="formAgregarServicio"
+                v-model="validAgregarServicio"
+              >
                 <v-card>
                   <v-card-title>
                     <span class="text-h5">Agregar nuevo servicio</span>
@@ -42,69 +45,86 @@
                       <v-row>
                         <v-col cols="12" sm="6" md="6">
                           <v-text-field
-                              v-model="nuevoServicio.nombre"
-                              label="Nombre"
-                              :rules="[v => !!v || 'El nombre es requerido', v => (v && v.length >= 3 && v.length <= 50) || 'El nombre debe tener entre 3 y 50 caracteres']"
+                            v-model="nuevoServicio.nombre"
+                            label="Nombre"
+                            :rules="[
+                              (v) => !!v || 'El nombre es requerido',
+                              (v) =>
+                                (v && v.length >= 3 && v.length <= 50) ||
+                                'El nombre debe tener entre 3 y 50 caracteres',
+                            ]"
                           ></v-text-field>
                           <v-text-field
-                              v-model="nuevoServicio.descripcion"
-                              label="Descripcion"
-                              :rules="[v => !!v || 'La descripción es requerida', v => (v && v.length >= 3 && v.length <= 255) || 'La descripción debe tener entre 3 y 255 caracteres']"
+                            v-model="nuevoServicio.descripcion"
+                            label="Descripcion"
+                            :rules="[
+                              (v) => !!v || 'La descripción es requerida',
+                              (v) =>
+                                (v && v.length >= 3 && v.length <= 255) ||
+                                'La descripción debe tener entre 3 y 255 caracteres',
+                            ]"
                           ></v-text-field>
                           <v-text-field
-                              v-model="nuevoServicio.precio"
-                              label="Precio"
-                              type="number"
-                              step="0.01"
-                              :rules="[
-                               v => !!v || 'El precio no puede ser nulo',
-                                 v => v > 0 || 'El precio debe ser positivo',
-                                 v => !isNaN(v) || 'El precio debe ser un número'
-                                ]"
+                            v-model="nuevoServicio.precio"
+                            label="Precio"
+                            type="number"
+                            step="0.01"
+                            :rules="[
+                              (v) => !!v || 'El precio no puede ser nulo',
+                              (v) => v > 0 || 'El precio debe ser positivo',
+                              (v) =>
+                                !isNaN(v) || 'El precio debe ser un número',
+                            ]"
                           ></v-text-field>
                           <v-text-field
-                              v-model="nuevoServicio.precioDescuento"
-                              label="Precio Descuento"
-                              type="number"
-                              step="0.01"
-                              :rules="[(v) => v > -1 || 'El precio debe ser positivo', v => !isNaN(v) || 'El precio debe ser un número']"
-
+                            v-model="nuevoServicio.precioDescuento"
+                            label="Precio Descuento"
+                            type="number"
+                            step="0.01"
+                            :rules="[
+                              (v) => v > -1 || 'El precio debe ser positivo',
+                              (v) =>
+                                !isNaN(v) || 'El precio debe ser un número',
+                            ]"
                           ></v-text-field>
 
                           <input
-                              type="file"
-                              @change="onFileChange"
-                              accept="image/*"
+                            type="file"
+                            @change="onFileChange"
+                            accept="image/*"
                           />
                         </v-col>
 
                         <!-- Segunda columna -->
                         <v-col cols="12" sm="6" md="6">
                           <v-text-field
-                              v-model="nuevoServicio.existencias"
-                              label="Existencias"
-                              type="number"
-                              :rules="[
-  v => !!v || 'Las existencias son requeridas',
-  v => v > 0 || 'Las existencias deben ser positivas',
-  v => !isNaN(v) || 'Las existencias deben ser un número'
-]"
+                            v-model="nuevoServicio.existencias"
+                            label="Existencias"
+                            type="number"
+                            :rules="[
+                              (v) => !!v || 'Las existencias son requeridas',
+                              (v) =>
+                                v > 0 || 'Las existencias deben ser positivas',
+                              (v) =>
+                                !isNaN(v) ||
+                                'Las existencias deben ser un número',
+                            ]"
                           ></v-text-field>
                           <v-select
-                              v-model="nuevoServicio.categoria.idCategoria"
-                              :items="categoriasServicios"
-                              item-text="nombre"
-                              item-value="idCategoria"
-                              label="Categoria"
-                              :rules="[(v) => !!v || 'La categoría es requerida']"
+                            v-model="nuevoServicio.categoria.idCategoria"
+                            :items="categoriasServicios"
+                            item-text="nombre"
+                            item-value="idCategoria"
+                            label="Categoria"
+                            :rules="[(v) => !!v || 'La categoría es requerida']"
                           ></v-select>
                           <v-select
-                              v-model="nuevoServicio.active"
-                              :items="[
-                            { text: 'Activo', value: true },
-                            { text: 'Inactivo', value: false },
-                          ]"
-                              label="Estado"
+                            v-model="nuevoServicio.active"
+                            :items="[
+                              { text: 'Activo', value: true },
+                              { text: 'Inactivo', value: false },
+                            ]"
+                            label="Estado"
                           ></v-select>
                         </v-col>
                       </v-row>
@@ -113,37 +133,38 @@
                   <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn
-                        color="blue darken-1"
-                        text
-                        @click="cerrarModalAgregarServicio"
-                    >Cancelar
-                    </v-btn
+                      color="blue darken-1"
+                      text
+                      @click="cerrarModalAgregarServicio"
+                      >Cancelar
+                    </v-btn>
+                    <v-btn color="blue darken-1" text type="submit"
+                      >Guardar</v-btn
                     >
-                    <v-btn color="blue darken-1" text type="submit">Guardar</v-btn>
                   </v-card-actions>
                 </v-card>
               </v-form>
             </v-dialog>
           </v-card-title>
           <v-data-table
-              class="mx-auto"
-              style="height: auto; max-height: 500px; overflow-y: auto"
-              :items-per-page-options="[5, 10, 15]"
-              :headers="headersServicios"
-              :items="servicios"
-              :server-items-length="totalItemsServicios"
-              :items-per-page.sync="itemsPerPageServicios"
-              :loading="loadingServicios"
-              :search="searchServicios"
-              :page.sync="currentPageServicios"
-              @update:page="fetchServicios"
-              @update:items-per-page="fetchServicios"
-              :footer-props="{
-          showFirstLastPage: true,
-          'items-per-page-text': 'Items por página',
-          'items-per-page-all-text': 'Todos',
-          'items-per-page-options': [10, 20, 30, 40, 50]
-        }"
+            class="mx-auto"
+            style="height: auto; max-height: 500px; overflow-y: auto"
+            :items-per-page-options="[5, 10, 15]"
+            :headers="headersServicios"
+            :items="servicios"
+            :server-items-length="totalItemsServicios"
+            :items-per-page.sync="itemsPerPageServicios"
+            :loading="loadingServicios"
+            :search="searchServicios"
+            :page.sync="currentPageServicios"
+            @update:page="fetchServicios"
+            @update:items-per-page="fetchServicios"
+            :footer-props="{
+              showFirstLastPage: true,
+              'items-per-page-text': 'Items por página',
+              'items-per-page-all-text': 'Todos',
+              'items-per-page-options': [10, 20, 30, 40, 50],
+            }"
           >
             <template v-slot:item="{ item }">
               <tr>
@@ -153,89 +174,120 @@
                 <td class="text-start">{{ item.precioDescuento }}</td>
                 <td class="text-start">
                   <img
-                      :src="item.imagen"
-                      alt="Servicio"
-                      style="max-width: 100px; max-height: 100px"
+                    :src="item.imagen"
+                    alt="Servicio"
+                    style="max-width: 100px; max-height: 100px"
                   />
                 </td>
 
                 <td class="text-start">{{ item.existencias }}</td>
                 <td class="text-start">{{ item.categoria.nombre }}</td>
                 <td class="text-start">
-                  <v-chip :color="item.active ? 'green' : 'red'" outlined small>{{
-                      item.active ? "Activo" : "Inactivo"
-                    }}
+                  <v-chip :color="item.active ? 'green' : 'red'" outlined small
+                    >{{ item.active ? "Activo" : "Inactivo" }}
                   </v-chip>
                 </td>
-                <td class="text-start">{{ formatDateTime(item.ultimaModificacion) }}
+                <td class="text-start">
+                  {{ formatDateTime(item.ultimaModificacion) }}
                 </td>
                 <td class="text-center">
                   <v-dialog
-                      v-model="dialogosEditarServicio[item.idServicio]"
-                      max-width="500px"
+                    v-model="dialogosEditarServicio[item.idServicio]"
+                    max-width="500px"
                   >
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon
-                          color="blue"
-                          v-bind="attrs"
-                          v-on="on"
-                          @click="openEditServicioDialog(item.idServicio)"
-                      >mdi-pencil
-                      </v-icon
-                      >
+                        color="blue"
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="openEditServicioDialog(item.idServicio)"
+                        >mdi-pencil
+                      </v-icon>
                     </template>
-                    <v-form @submit.prevent="editItemServicio(item) " ref="formEditarServicio">
+                    <v-form
+                      @submit.prevent="editItemServicio(item)"
+                      ref="formEditarServicio"
+                    >
                       <v-card>
                         <v-card-title> Editar servicio</v-card-title>
                         <v-card-text>
                           <v-container>
                             <v-row>
                               <v-col cols="12" sm="6" md="4">
-                                <v-text-field v-model="item.nombre" label="Nombre"
-                                              :rules="[(v) => !!v || 'El nombre es requerido']"></v-text-field>
                                 <v-text-field
-                                    v-model="item.descripcion"
-                                    label="Descripcion"
-                                    :rules="[(v) => !!v || 'La descripción es requerida']"
-                                    type="text"
+                                  v-model="item.nombre"
+                                  label="Nombre"
+                                  :rules="[
+                                    (v) => !!v || 'El nombre es requerido',
+                                  ]"
                                 ></v-text-field>
                                 <v-text-field
-                                    v-model="item.precio"
-                                    label="Precio"
-                                    :rules="[(v) => !!v || 'El precio es requerido', v => v > 0 || 'El precio debe ser positivo']"
-                                    type="number"
+                                  v-model="item.descripcion"
+                                  label="Descripcion"
+                                  :rules="[
+                                    (v) => !!v || 'La descripción es requerida',
+                                  ]"
+                                  type="text"
                                 ></v-text-field>
                                 <v-text-field
-                                    v-model="item.precioDescuento"
-                                    label="Precio Descuento"
-                                    :rules="[(v) => v > -1 || 'El precio debe ser positivo', v => !isNaN(v) || 'El precio debe ser un número']"
-                                    type="number"
+                                  v-model="item.precio"
+                                  label="Precio"
+                                  :rules="[
+                                    (v) => !!v || 'El precio es requerido',
+                                    (v) =>
+                                      v > 0 || 'El precio debe ser positivo',
+                                  ]"
+                                  type="number"
                                 ></v-text-field>
                                 <v-text-field
-                                    v-model="item.existencias"
-                                    label="Existencias"
-                                    :rules="[(v) => !!v || 'Las existencias son requeridas', v => v > 0 || 'Las existencias deben ser positivas']"
-                                    type="number"
+                                  v-model="item.precioDescuento"
+                                  label="Precio Descuento"
+                                  :rules="[
+                                    (v) =>
+                                      v > -1 || 'El precio debe ser positivo',
+                                    (v) =>
+                                      !isNaN(v) ||
+                                      'El precio debe ser un número',
+                                  ]"
+                                  type="number"
+                                ></v-text-field>
+                                <v-text-field
+                                  v-model="item.existencias"
+                                  label="Existencias"
+                                  :rules="[
+                                    (v) =>
+                                      !!v || 'Las existencias son requeridas',
+                                    (v) =>
+                                      v > 0 ||
+                                      'Las existencias deben ser positivas',
+                                  ]"
+                                  type="number"
                                 ></v-text-field>
                               </v-col>
                               <v-col cols="12" sm="6" md="4">
                                 <v-select
-                                    v-model="item.categoria.idCategoria"
-                                    :items="categoriasServicios"
-                                    item-text="nombre"
-                                    item-value="idCategoria"
-                                    label="Categoria"
-                                    :rules="[(v) => !!v || 'La categoría es requerida']"
+                                  v-model="item.categoria.idCategoria"
+                                  :items="categoriasServicios"
+                                  item-text="nombre"
+                                  item-value="idCategoria"
+                                  label="Categoria"
+                                  :rules="[
+                                    (v) => !!v || 'La categoría es requerida',
+                                  ]"
                                 ></v-select>
                                 <v-select
-                                    v-model="item.active"
-                                    :items="[
+                                  v-model="item.active"
+                                  :items="[
                                     { text: 'Activo', value: true },
                                     { text: 'Inactivo', value: false },
                                   ]"
-                                    label="Estado"
+                                  label="Estado"
                                 ></v-select>
-                                <input type="file" @change="onFileChange" accept="image/*"/>
+                                <input
+                                  type="file"
+                                  @change="onFileChange"
+                                  accept="image/*"
+                                />
                               </v-col>
                             </v-row>
                           </v-container>
@@ -243,29 +295,27 @@
                         <v-card-actions>
                           <v-spacer></v-spacer>
                           <v-btn
-                              color="blue darken-1"
-                              text
-                              @click="cancelEditItemServicio(item)"
-                          >Cerrar
-                          </v-btn
-                          >
-                          <v-btn
-                              color="blue darken-1"
-                              text
-                              type="submit"
-                          >Guardar
-                          </v-btn
-                          >
+                            color="blue darken-1"
+                            text
+                            @click="cancelEditItemServicio(item)"
+                            >Cerrar
+                          </v-btn>
+                          <v-btn color="blue darken-1" text type="submit"
+                            >Guardar
+                          </v-btn>
                         </v-card-actions>
                       </v-card>
                     </v-form>
                   </v-dialog>
                   <v-icon
-                      color="red"
-                      @click="deleteItemServicio(item.idServicio)"
-                  >mdi-delete
-                  </v-icon
-                  >
+                    color="red"
+                    @click="deleteItemServicio(item.idServicio)"
+                    >mdi-delete
+                  </v-icon>
+                  <router-link :to="{ path: '/admin/AsignarPaqueteServicio', query: { item: item }}">
+  <v-icon color="green">mdi-package-variant</v-icon>
+</router-link>
+
                 </td>
               </tr>
             </template>
@@ -279,24 +329,23 @@
             <v-divider class="mx-4" inset vertical></v-divider>
             <v-spacer></v-spacer>
             <v-text-field
-                v-model="searchServicios"
-                append-icon="mdi-magnify"
-                label="Buscar"
-                single-line
-                hide-details
+              v-model="searchServicios"
+              append-icon="mdi-magnify"
+              label="Buscar"
+              single-line
+              hide-details
             ></v-text-field>
             <v-spacer></v-spacer>
             <v-dialog v-model="dialogPaquete" max-width="500px">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
-                    color="primary"
-                    dark
-                    class="mb-2"
-                    v-bind="attrs"
-                    v-on="on"
-                >Nuevo paquete
-                </v-btn
-                >
+                  color="primary"
+                  dark
+                  class="mb-2"
+                  v-bind="attrs"
+                  v-on="on"
+                  >Nuevo paquete
+                </v-btn>
               </template>
               <v-form @submit.prevent="agregarPaquete" ref="formAgregarPaquete">
                 <v-card>
@@ -308,30 +357,30 @@
                       <v-row>
                         <v-col cols="12" sm="6" md="4">
                           <v-select
-                              v-model="nuevoPaquete.paquete.idPaquete"
-                              :items="paquete"
-                              item-text="nombre"
-                              item-value="idPaquete"
-                              label="Paquete"
-                              :rules="[(v) => !!v || 'El paquete es requerido']"
+                            v-model="nuevoPaquete.paquete.idPaquete"
+                            :items="paquete"
+                            item-text="nombre"
+                            item-value="idPaquete"
+                            label="Paquete"
+                            :rules="[(v) => !!v || 'El paquete es requerido']"
                           ></v-select>
                           <v-select
-                              v-model="nuevoPaquete.servicio.idServicio"
-                              :items="servicios"
-                              item-text="nombre"
-                              item-value="idServicio"
-                              label="Servicio"
-                              :rules="[(v) => !!v || 'El servicio es requerido']"
+                            v-model="nuevoPaquete.servicio.idServicio"
+                            :items="servicios"
+                            item-text="nombre"
+                            item-value="idServicio"
+                            label="Servicio"
+                            :rules="[(v) => !!v || 'El servicio es requerido']"
                           ></v-select>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
                           <v-select
-                              v-model="nuevoPaquete.active"
-                              :items="[
-                            { text: 'Activo', value: true },
-                            { text: 'Inactivo', value: false },
-                          ]"
-                              label="Estado"
+                            v-model="nuevoPaquete.active"
+                            :items="[
+                              { text: 'Activo', value: true },
+                              { text: 'Inactivo', value: false },
+                            ]"
+                            label="Estado"
                           ></v-select>
                         </v-col>
                       </v-row>
@@ -340,67 +389,69 @@
                   <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn
-                        color="blue darken-1"
-                        text
-                        @click="cerrarModalAgregarPaquete"
-                    >Cancelar
-                    </v-btn
-                    >
+                      color="blue darken-1"
+                      text
+                      @click="cerrarModalAgregarPaquete"
+                      >Cancelar
+                    </v-btn>
                     <v-btn color="blue darken-1" text type="submit"
-                    >Guardar
-                    </v-btn
-                    >
+                      >Guardar
+                    </v-btn>
                   </v-card-actions>
                 </v-card>
               </v-form>
             </v-dialog>
           </v-card-title>
           <v-data-table
-              class="mx-auto"
-              style="height: auto; max-height: 500px; overflow-y: auto"
-              :headers="headersPaquete"
-              :items="servicioPaquete"
-              :search="searchPaquete"
-              :server-items-length="totalItemsPaquete"
-              :items-per-page.sync="itemsPerPagePaquete"
-              :loading="loadingPaquete"
-              :page.sync="currentPagePaquete"
-              @update:page="fetchServiciosPaquete"
-              @update:items-per-page="fetchServiciosPaquete"
-              :footer-props="{
-          showFirstLastPage: true,
-          'items-per-page-text': 'Items por página',
-          'items-per-page-all-text': 'Todos',
-          'items-per-page-options': [10, 20, 30, 40, 50]
-        }"
+            class="mx-auto"
+            style="height: auto; max-height: 500px; overflow-y: auto"
+            :headers="headersPaquete"
+            :items="servicioPaquete"
+            :search="searchPaquete"
+            :server-items-length="totalItemsPaquete"
+            :items-per-page.sync="itemsPerPagePaquete"
+            :loading="loadingPaquete"
+            :page.sync="currentPagePaquete"
+            @update:page="fetchServiciosPaquete"
+            @update:items-per-page="fetchServiciosPaquete"
+            :footer-props="{
+              showFirstLastPage: true,
+              'items-per-page-text': 'Items por página',
+              'items-per-page-all-text': 'Todos',
+              'items-per-page-options': [10, 20, 30, 40, 50],
+            }"
           >
             <template v-slot:item="{ item }">
               <tr>
                 <td class="text-start">{{ item.paquete.nombre }}</td>
                 <td class="text-start">{{ item.servicio.nombre }}</td>
-                <td class="text-start">{{ formatDateTime(item.ultimaModificacion) }}</td>
                 <td class="text-start">
-                  <v-chip :color="item.active ? 'green' : 'red'" outlined small>{{
-                      item.active ? "Activo" : "Inactivo"
-                    }}
+                  {{ formatDateTime(item.ultimaModificacion) }}
+                </td>
+                <td class="text-start">
+                  <v-chip :color="item.active ? 'green' : 'red'" outlined small
+                    >{{ item.active ? "Activo" : "Inactivo" }}
                   </v-chip>
                 </td>
-                <td class="text-start">{{ item.ultima_modificacion }}
+                <td class="text-start">
+                  {{ item.ultima_modificacion }}
                   <v-dialog
-                      v-model="dialogosEditarPaquete[item.idServicioPaquete]"
-                      max-width="500px"
+                    v-model="dialogosEditarPaquete[item.idServicioPaquete]"
+                    max-width="500px"
                   >
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon
-                          color="blue"
-                          v-bind="attrs"
-                          v-on="on"
-                          @click="openEditPaqueteDialog(item.idServicioPaquete)"
-                      >mdi-pencil
-                      </v-icon
-                      >
+                        color="blue"
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="openEditPaqueteDialog(item.idServicioPaquete)"
+                        >mdi-pencil
+                      </v-icon>
                     </template>
-                    <v-form @submit.prevent="editarServicioPaquete(item)" ref="formEditarServicioPaquete">
+                    <v-form
+                      @submit.prevent="editarServicioPaquete(item)"
+                      ref="formEditarServicioPaquete"
+                    >
                       <v-card>
                         <v-card-title> Editar servicio paquete</v-card-title>
                         <v-card-text>
@@ -408,30 +459,34 @@
                             <v-row>
                               <v-col cols="12" sm="6" md="4">
                                 <v-select
-                                    v-model="item.paquete.idPaquete"
-                                    :items="paquete"
-                                    item-text="nombre"
-                                    item-value="idPaquete"
-                                    label="Paquete"
-                                    :rules="[(v) => !!v || 'El paquete es requerido']"
+                                  v-model="item.paquete.idPaquete"
+                                  :items="paquete"
+                                  item-text="nombre"
+                                  item-value="idPaquete"
+                                  label="Paquete"
+                                  :rules="[
+                                    (v) => !!v || 'El paquete es requerido',
+                                  ]"
                                 ></v-select>
                                 <v-select
-                                    v-model="item.servicio.idServicio"
-                                    :items="servicios"
-                                    item-text="nombre"
-                                    item-value="idServicio"
-                                    label="Servicio"
-                                    :rules="[(v) => !!v || 'El servicio es requerido']"
+                                  v-model="item.servicio.idServicio"
+                                  :items="servicios"
+                                  item-text="nombre"
+                                  item-value="idServicio"
+                                  label="Servicio"
+                                  :rules="[
+                                    (v) => !!v || 'El servicio es requerido',
+                                  ]"
                                 ></v-select>
                               </v-col>
                               <v-col cols="12" sm="6" md="4">
                                 <v-select
-                                    v-model="item.active"
-                                    :items="[
-                                  { text: 'Activo', value: true },
-                                  { text: 'Inactivo', value: false },
-                                ]"
-                                    label="Estado"
+                                  v-model="item.active"
+                                  :items="[
+                                    { text: 'Activo', value: true },
+                                    { text: 'Inactivo', value: false },
+                                  ]"
+                                  label="Estado"
                                 ></v-select>
                               </v-col>
                             </v-row>
@@ -440,30 +495,24 @@
                         <v-card-actions>
                           <v-spacer></v-spacer>
                           <v-btn
-                              color="blue darken-1"
-                              text
-                              @click="cancelEditItemPaquete(item)"
-                          >Cerrar
-                          </v-btn
-                          >
+                            color="blue darken-1"
+                            text
+                            @click="cancelEditItemPaquete(item)"
+                            >Cerrar
+                          </v-btn>
 
-                          <v-btn
-                              color="blue darken-1"
-                              text
-                              type="submit"
-                          >Guardar
-                          </v-btn
-                          >
+                          <v-btn color="blue darken-1" text type="submit"
+                            >Guardar
+                          </v-btn>
                         </v-card-actions>
                       </v-card>
                     </v-form>
                   </v-dialog>
                   <v-icon
-                      color="red"
-                      @click="deleteItemServicioPaquete(item.idServicioPaquete)"
-                  >mdi-delete
-                  </v-icon
-                  >
+                    color="red"
+                    @click="deleteItemServicioPaquete(item.idServicioPaquete)"
+                    >mdi-delete
+                  </v-icon>
                 </td>
               </tr>
             </template>
@@ -482,11 +531,11 @@ import {
   deleteServicioPaquete,
   createServicioPaquete,
   updateServicioPaquete,
-  getAllServiciosPaginado, getServiciosPaquetePaginado,
-
+  getAllServiciosPaginado,
+  getServiciosPaquetePaginado,
 } from "@/services/ServicesServices";
-import {getCategoriasServicios} from "@/services/CategoryServices";
-import {getAllPaquetes} from "@/services/PaquetesServices";
+import { getCategoriasServicios } from "@/services/CategoryServices";
+import { getAllPaquetes } from "@/services/PaquetesServices";
 import swalService from "@/services/SwalService";
 import moment from "moment";
 
@@ -534,21 +583,21 @@ export default {
         active: true,
       },
       headersServicios: [
-        {text: "Nombre", align: "start", sortable: false, value: "nombre"},
+        { text: "Nombre", align: "start", sortable: false, value: "nombre" },
         {
           text: "Descripcion",
           align: "start",
           sortable: false,
           value: "descripcion",
         },
-        {text: "Precio", align: "start", sortable: false, value: "precio"},
+        { text: "Precio", align: "start", sortable: false, value: "precio" },
         {
           text: "Descuento",
           align: "start",
           sortable: false,
           value: "precioDescuento",
         },
-        {text: "Imagen", align: "start", sortable: false, value: "imagen"},
+        { text: "Imagen", align: "start", sortable: false, value: "imagen" },
         {
           text: "Existencia",
           align: "start",
@@ -561,7 +610,7 @@ export default {
           sortable: false,
           value: "categoria.nombre",
         }, // Corregido aquí
-        {text: "Estado", align: "start", sortable: false, value: "active"},
+        { text: "Estado", align: "start", sortable: false, value: "active" },
         {
           text: "Última Modificación",
           align: "start",
@@ -601,7 +650,7 @@ export default {
           sortable: false,
           value: "ultimaModificacion",
         },
-        {text: "Estado", align: "start", sortable: false, value: "active"},
+        { text: "Estado", align: "start", sortable: false, value: "active" },
         {
           text: "Acciones",
           align: "center",
@@ -618,7 +667,6 @@ export default {
     };
   },
   methods: {
-
     formatDateTime(dateTimeString) {
       //mexico city time
       return moment(dateTimeString).format("YYYY-MM-DD HH:mm");
@@ -627,7 +675,10 @@ export default {
       // Renombrado el método
       try {
         this.loadingServicios = true;
-        const response = await getAllServiciosPaginado(this.currentPageServicios - 1, this.itemsPerPageServicios);
+        const response = await getAllServiciosPaginado(
+          this.currentPageServicios - 1,
+          this.itemsPerPageServicios
+        );
         if (response) {
           this.totalPagesServicios = response.totalPages;
           this.totalItemsServicios = response.totalElements;
@@ -648,7 +699,10 @@ export default {
     async fetchServiciosPaquete() {
       try {
         this.loadingPaquete = true;
-        const response = await getServiciosPaquetePaginado(this.currentPagePaquete - 1, this.itemsPerPagePaquete);
+        const response = await getServiciosPaquetePaginado(
+          this.currentPagePaquete - 1,
+          this.itemsPerPagePaquete
+        );
         if (response) {
           this.totalPagesPaquete = response.totalPages;
           this.totalItemsPaquete = response.totalElements;
@@ -759,7 +813,7 @@ export default {
     async deleteItemServicio(idServicio) {
       try {
         let proceder = await swalService.confirmationWarning(
-            "¿Estás seguro de eliminar el servicio?"
+          "¿Estás seguro de eliminar el servicio?"
         );
         if (proceder) {
           await deleteServicio(idServicio);
@@ -774,7 +828,7 @@ export default {
         await deleteServicioPaquete(idServicioPaquete);
 
         const index = this.servicioPaquete.findIndex(
-            (service) => service.idServicioPaquete === idServicioPaquete
+          (service) => service.idServicioPaquete === idServicioPaquete
         );
         if (index !== -1) {
           this.servicioPaquete.splice(index, 1);
@@ -868,6 +922,17 @@ export default {
     convertToImageUrl(base64) {
       return "data:image/jpeg;base64," + base64;
     },
+    async sendItemAsignar(item) {
+      try {
+        // Aquí puedes redirigir a otra pantalla y pasar el item como parámetro
+        this.$router.push({
+          path: "/admin/asigarPaqueteServicio",
+          query: { item: JSON.stringify(item) },
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
   mounted() {
     this.fetchServicios(); // Llamada al método renombrado
@@ -879,10 +944,12 @@ export default {
     searchPaquete: async function (val) {
       if (val) {
         this.servicioPaquete = this.servicioPaquete.filter((item) => {
-          return item.paquete.nombre.toLowerCase().includes(val.toLowerCase()) ||
-              item.servicio.nombre.toLowerCase().includes(val.toLowerCase()) ||
-              item.ultimaModificacion.toString().includes(val) ||
-              item.active.toString().includes(val);
+          return (
+            item.paquete.nombre.toLowerCase().includes(val.toLowerCase()) ||
+            item.servicio.nombre.toLowerCase().includes(val.toLowerCase()) ||
+            item.ultimaModificacion.toString().includes(val) ||
+            item.active.toString().includes(val)
+          );
         });
       } else {
         await this.fetchServiciosPaquete();
@@ -891,13 +958,14 @@ export default {
     searchServicios: async function (val) {
       if (val) {
         this.servicios = this.servicios.filter((item) => {
-          return item.nombre.toLowerCase().includes(val.toLowerCase()) ||
-              item.descripcion.toLowerCase().includes(val.toLowerCase()) ||
-              item.precio.toString().includes(val) ||
-              item.precioDescuento.toString().includes(val) ||
-              item.existencias.toString().includes(val) ||
-              item.categoria.nombre.toLowerCase().includes(val.toLowerCase());
-
+          return (
+            item.nombre.toLowerCase().includes(val.toLowerCase()) ||
+            item.descripcion.toLowerCase().includes(val.toLowerCase()) ||
+            item.precio.toString().includes(val) ||
+            item.precioDescuento.toString().includes(val) ||
+            item.existencias.toString().includes(val) ||
+            item.categoria.nombre.toLowerCase().includes(val.toLowerCase())
+          );
         });
       } else {
         await this.fetchServicios(); // Llamada al método renombrado
