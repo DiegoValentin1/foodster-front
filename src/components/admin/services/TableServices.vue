@@ -312,9 +312,6 @@
                     @click="deleteItemServicio(item.idServicio)"
                     >mdi-delete
                   </v-icon>
-                  <router-link :to="{ path: '/admin/AsignarPaqueteServicio', query: { item: item }}">
-  <v-icon color="green">mdi-package-variant</v-icon>
-</router-link>
 
                 </td>
               </tr>
@@ -917,21 +914,6 @@ export default {
       reader.onerror = (error) => {
         console.error("Error al leer la imagen:", error);
       };
-    },
-
-    convertToImageUrl(base64) {
-      return "data:image/jpeg;base64," + base64;
-    },
-    async sendItemAsignar(item) {
-      try {
-        // Aquí puedes redirigir a otra pantalla y pasar el item como parámetro
-        this.$router.push({
-          path: "/admin/asigarPaqueteServicio",
-          query: { item: JSON.stringify(item) },
-        });
-      } catch (error) {
-        console.error(error);
-      }
     },
   },
   mounted() {

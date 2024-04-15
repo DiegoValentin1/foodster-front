@@ -13,18 +13,16 @@
           indeterminate
           v-if="loading"
         ></v-progress-linear>
-        <div
-          class="card-item col-lg-2 col-md-2 col-sm-6 col-12 mb-4"
-          v-for="(item, index) in paquetes"
-          :key="index"
-          @mousedown="dragStart(item, $event)"
-          @mousemove="drag(item, $event)"
-          @mouseup="dragEnd"
-        >
-          <CardPaquete :paquete="item" />
-        </div>
+        <draggable v-model="paquetes" class="card-item col-lg-2 col-md-2 col-sm-6 col-12 mb-4" @start="dragStart" @add="drop">
+          <div
+              v-for="(item, index) in paquetes"
+              :key="index"
+          >
+            <CardPaquete :paquete="item" />
+          </div>
+        </draggable>
       </div>
-      <div class="fixed-container">
+      <div class="fixed-container" @dragover.prevent @drop="drop">
         <h1>Paquetes a asignar</h1>
         <div v-for="(item, index) in draggedItems" :key="index">
           <CardPaquete :paquete="item" />
@@ -45,22 +43,17 @@
   import CardPaquete from "@/components/cliente/components/CardPaqueteServicio.vue";
   import { getAllPaquetesPaginado } from "@/services/PaquetesServices";
   import {     getServiciosPaquete,
-    createServicioPaquete,
-    updateServicioPaquete,
-    deleteServicioPaquete,
-    getServicioPaqueteById,
-    getServiciosPaqueteByStatus,
-    getServiciosPaqueteByStatusPaginated,
-    getServiciosPaqueteByPaqueteId,
-    getServiciosPaquetePaginated,
-    deleteServicioPaqueteByStatus }  from "@/services/ServiciosPaqueteService"; 
+    createServicioPaquete,}  from "@/services/ServiciosPaqueteService";
+  import draggable from "vuedraggable";
   
   export default {
     components: {
       CardPaquete,
+      draggable,
     },
     data() {
       return {
+        draggedItem: null,
         paquetes: [],
         loading: false,
         currentPage: 1,
@@ -76,8 +69,8 @@
       async fetchPaquetes() {
         this.loading = true;
         const response = await getAllPaquetesPaginado(
-          this.currentPage - 1,
-          this.itemsPerPage
+            this.currentPage - 1,
+            this.itemsPerPage
         );
         if (response) {
           this.totalPages = response.totalPages;
@@ -92,36 +85,16 @@
         }
         this.loading = false;
       },
-      dragStart(item, event) {
-        if (!this.draggedItems.some((draggedItem) => draggedItem.idPaquete === item.idPaquete)) {
-          this.dragging = true;
-          this.startPosition = { x: event.clientX, y: event.clientY };
-          this.currentPosition = { x: event.clientX, y: event.clientY };
-          this.draggedItems.push(item);
+      dragStart(evt) {
+        this.draggedItem = this.paquetes[evt.oldIndex];
+      },
+      drop(evt) {
+        if (this.draggedItem && !this.draggedItems.some((item) => item.idPaquete === this.draggedItem.idPaquete)) {
+          this.draggedItems.push(this.draggedItem);
         }
+        this.draggedItem = null;
       },
-      drag(item, event) {
-        if (this.dragging) {
-          const dx = event.clientX - this.currentPosition.x;
-          const dy = event.clientY - this.currentPosition.y;
-          this.currentPosition = { x: event.clientX, y: event.clientY };
-          this.draggedItems = this.draggedItems.map((draggedItem) => {
-            if (draggedItem.idPaquete === item.idPaquete) {
-              return {
-                ...draggedItem,
-                position: {
-                  x: draggedItem.position.x + dx,
-                  y: draggedItem.position.y + dy,
-                },
-              };
-            }
-            return draggedItem;
-          });
-        }
-      },
-      dragEnd() {
-        this.dragging = false;
-      },
+
     async Asignar() {
       for (const item of this.draggedItems) {
         const servicioPaquete = {
@@ -130,7 +103,8 @@
           },
           servicio: {
             idServicio: this.$route.query.item.idServicio
-          }
+          },
+          active: true
         };
         await createServicioPaquete(servicioPaquete);
       }
@@ -147,6 +121,14 @@
     mounted() {
       this.fetchPaquetes();
         this.traerServiciosPaquete();
+    },
+    watch: {
+      draggedItems: {
+        handler() {
+          console.log("draggedItems", this.draggedItems);
+        },
+        deep: true,
+      },
     },
   };
   </script>  

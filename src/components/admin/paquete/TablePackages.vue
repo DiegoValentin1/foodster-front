@@ -1,5 +1,11 @@
 <template>
   <v-card>
+    <v-progress-linear
+        color="blue darken-2"
+        height="5"
+        indeterminate
+        v-if="loading"
+    ></v-progress-linear>
     <v-card-title>
       Paquete
       <v-divider class="mx-4" inset vertical></v-divider>
@@ -85,6 +91,15 @@
             </v-chip>
           </td>
           <td class="text-center">
+            <v-dialog v-model="showDialogAsignar" class="w-1/4 overflow-auto mx-auto bg-white shadow-lg rounded-lg max-h-96" flat
+                      offset-y>
+              <v-card class="p-6">
+                <v-card-title class="text-xl font-bold text-gray-700">
+                  Elementos del paquete
+                </v-card-title>
+                <AsignarServicios :paquete="item" :close="closeOpenAsignar"/>
+              </v-card>
+            </v-dialog>
             <v-dialog v-model="dialogosEditarPaquete[item.idPaquete]" max-width="500px">
               <template v-slot:activator="{ on, attrs }">
                 <v-icon color="blue" v-bind="attrs" @click="openEditServicioDialog(item.idPaquete)"
@@ -134,20 +149,26 @@
 
             </v-dialog>
             <v-icon color="red" @click="deleteItemPaquete(item.idPaquete)">mdi-delete</v-icon>
+            <v-btn color="blue darken-1" text @click="closeOpenAsignar">Asignar servicios</v-btn>
+
           </td>
         </tr>
       </template>
     </v-data-table>
+
   </v-card>
 </template>
 
 <script>
 import {createPaquete, deletePaquete, getAllPaquetesPaginado, updatePaquete,} from "@/services/PaquetesServices";
 import moment from "moment";
+import AsignarServicios from "@/components/admin/paquete/AsignarServicios.vue";
 
 export default {
+  components: {AsignarServicios},
   data() {
     return {
+      showDialogAsignar: false,
       loading: false,
       tab: null,
       validUpdate: true,
@@ -210,6 +231,9 @@ export default {
     formatDateTime(dateTimeString) {
       //mexico city time
       return moment(dateTimeString).format("YYYY-MM-DD HH:mm");
+    },
+    closeOpenAsignar() {
+      this.showDialogAsignar = !this.showDialogAsignar;
     },
     async getAllPaquetes() {
       try {
