@@ -28,15 +28,17 @@
             @submit.prevent="updateUser"
           >
             <v-text-field
-                class="value"
-                v-model="usuario.nombres"
-                outlined
-                dense
-                label="Nombres"
-                required
-                :rules="[
+              class="value"
+              v-model="usuario.nombres"
+              outlined
+              dense
+              label="Nombres"
+              required
+              :rules="[
                 (v) => !!v || 'Nombres es requerido',
-                (v) => v.length <= 30 && v.length >= 3 || 'El nombre debe tener entre 3 y 30 caracteres',
+                (v) =>
+                  (v.length <= 30 && v.length >= 3) ||
+                  'El nombre debe tener entre 3 y 30 caracteres',
               ]"
             ></v-text-field>
             <v-divider
@@ -53,7 +55,9 @@
               required
               :rules="[
                 (v) => !!v || 'Primer apellido es requerido',
-                (v) => v.length <= 30 && v.length >= 3 || 'El apellido debe tener entre 3 y 30 caracteres',
+                (v) =>
+                  (v.length <= 30 && v.length >= 3) ||
+                  'El apellido debe tener entre 3 y 30 caracteres',
               ]"
             ></v-text-field>
             <v-divider
@@ -70,7 +74,9 @@
               required
               :rules="[
                 (v) => !!v || 'Segundo apellido es requerido',
-                (v) => v.length <= 30 && v.length >= 3 || 'El apellido debe tener entre 3 y 30 caracteres',
+                (v) =>
+                  (v.length <= 30 && v.length >= 3) ||
+                  'El apellido debe tener entre 3 y 30 caracteres',
               ]"
             ></v-text-field>
             <v-divider
@@ -537,7 +543,10 @@
                       <div v-if="evento.estado == 'Finalizado'">
                         <!-- Agregar comentario -->
 
-                        <div v-if="!servicio.calificacion" class="flex items-start space-x-4 mt-3">
+                        <div
+                          v-if="!servicio.calificacion"
+                          class="flex items-start space-x-4 mt-3"
+                        >
                           <div class="min-w-0 flex-1">
                             <div class="relative">
                               <div
@@ -571,6 +580,16 @@
                               <div
                                 class="absolute bottom-0 inset-x-0 pl-3 pr-2 py-2 flex justify-end"
                               >
+                                <div class="flex items-center space-x-5">
+                                  <div class="flex items-center">
+                                    <v-rating
+                                      v-model="rating"
+                                      active-color="#333"
+                                      color="#333"
+                                      hover
+                                    ></v-rating>
+                                  </div>
+                                </div>
                                 <div class="flex-shrink-0">
                                   <button
                                     @click="
@@ -590,7 +609,8 @@
 
                         <!-- Ver Comentario -->
 
-                        <section v-else
+                        <section
+                          v-else
                           class="relative isolate overflow-hidden bg-white px-6 py-24 sm:py-32 lg:px-8"
                         >
                           <div
@@ -600,12 +620,20 @@
                             class="absolute inset-y-0 right-1/2 -z-10 mr-16 w-[200%] origin-bottom-left skew-x-[-30deg] bg-white shadow-xl shadow-indigo-600/10 ring-1 ring-indigo-50 sm:mr-28 lg:mr-0 xl:mr-16 xl:origin-center"
                           ></div>
                           <div class="mx-auto max-w-2xl lg:max-w-4xl">
+                            <div class="w-full flex justify-center">
+                              <v-rating
+                                v-model="servicio.calificacion.calificacion"
+                                active-color="#333"
+                                color="#333"
+                                readonly
+                              ></v-rating>
+                            </div>
                             <figure class="mt-10">
                               <blockquote
                                 class="text-center text-sm font-light leading-8 text-gray-900 sm:text-2xl sm:leading-9"
                               >
                                 <p>
-                                  {{ servicio.calificacion.comentario }}
+                                  "{{ servicio.calificacion.comentario }}"
                                 </p>
                               </blockquote>
                               <figcaption class="mt-10">
@@ -613,7 +641,7 @@
                                   class="mt-4 flex items-center justify-center space-x-3 text-base"
                                 >
                                   <div class="font-semibold text-gray-900">
-                                    Judith Black
+                                    {{ userName }}
                                   </div>
                                   <svg
                                     viewBox="0 0 2 2"
@@ -702,11 +730,13 @@ export default {
       validUpdateUser: true,
       validUpdateDireccion: true,
       dialog: false,
+      rating: null,
       usuario: {},
       direcciones: [],
       eventos: [],
       loading: false,
       calificacion: "",
+      userName: "",
       servicios: [],
       nuevaDireccion: {
         calle: "", //
@@ -765,9 +795,14 @@ export default {
           "warning",
           "No puedes mandar un comentario con mas de 300 carácteres"
         );
+      if (!this.rating)
+        return showNotification(
+          "warning",
+          "Tienes que elegir una calificación"
+        );
       await CalificationService.postCalificacion({
         servicios: { idServicio },
-        calificacion: 5,
+        calificacion: this.rating,
         comentario: this.calificacion,
         active: true,
       });
@@ -788,6 +823,13 @@ export default {
       await DireccionesService.createDireccion(direccion);
       this.getUserAndDirecciones();
       this.loading = false;
+    },
+    getUserName() {
+      const { user } = useAuthStore();
+      const isLoggedIn = !!user?.token;
+      this.userName = isLoggedIn
+        ? `${user.usuarios.nombres} ${user.usuarios.primerApellido}`
+        : "Usuario";
     },
 
     async getMisEventos() {
@@ -865,6 +907,7 @@ export default {
 
   mounted() {
     this.getUserAndDirecciones();
+    this.getUserName();
   },
 };
 </script>
