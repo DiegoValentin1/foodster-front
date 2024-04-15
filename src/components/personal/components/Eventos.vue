@@ -101,7 +101,7 @@
                 {{ selectedEvent.name }}
               </v-toolbar-title>
               <v-spacer></v-spacer>
-              <v-btn icon @click="selectedOpen = false">
+              <v-btn icon @click="closeModal">
                 <v-icon>mdi-close</v-icon>
               </v-btn>
             </v-toolbar>
@@ -223,10 +223,23 @@
                       {{ personal.personal.usuarios.nombres }}
                     </v-expansion-panel-header>
                     <v-expansion-panel-content>
-                      <p><v-icon small class="mr-2">mdi-account-outline</v-icon> Nombre: {{ personal.personal.usuarios.nombres }} {{ personal.personal.usuarios.primerApellido }} {{ personal.personal.usuarios.segundoApellido }}</p>
-                      <p><v-icon small class="mr-2">mdi-account-outline</v-icon> Teléfono: {{ personal.personal.usuarios.telefono }}</p>
-                      <p><v-icon small class="mr-2">mdi-account-outline</v-icon> Correo: {{ personal.personal.usuarios.correo }}</p>
-                      <p><v-icon small class="mr-2">mdi-account-outline</v-icon> Cargo: {{ personal.personal.categoria.nombre }}</p>
+                      <p>
+                        <v-icon small class="mr-2">mdi-account-outline</v-icon>
+                        Nombre: {{ personal.personal.usuarios.nombres }} {{ personal.personal.usuarios.primerApellido }}
+                        {{ personal.personal.usuarios.segundoApellido }}
+                      </p>
+                      <p>
+                        <v-icon small class="mr-2">mdi-account-outline</v-icon>
+                        Teléfono: {{ personal.personal.usuarios.telefono }}
+                      </p>
+                      <p>
+                        <v-icon small class="mr-2">mdi-account-outline</v-icon>
+                        Correo: {{ personal.personal.usuarios.correo }}
+                      </p>
+                      <p>
+                        <v-icon small class="mr-2">mdi-account-outline</v-icon>
+                        Cargo: {{ personal.personal.categoria.nombre }}
+                      </p>
                     </v-expansion-panel-content>
                   </v-expansion-panel>
                 </v-expansion-panels>
@@ -238,7 +251,7 @@
               <v-btn
                   color="secondary"
                   variant="text"
-                  @click="selectedOpen = false"
+                  @click="closeModal"
               >
                 Cerrar
               </v-btn>
@@ -269,13 +282,10 @@ const typeToLabel = {
   day: 'Dia',
 
 }
-const colors = ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1']
 
 const focus = ref('')
 const type = ref('month')
-const selectedEvent = ref({})
 const selectedElement = ref(null)
-const selectedOpen = ref(false)
 const events = ref([])
 
 onMounted(() => {
@@ -285,10 +295,6 @@ onMounted(() => {
 function viewDay({date}) {
   focus.value = date
   type.value = 'day'
-}
-
-function getEventColor(event) {
-  return event.color
 }
 
 function setToday() {
@@ -303,20 +309,7 @@ function next() {
   calendar.value.next()
 }
 
-function showEvent({nativeEvent, event}) {
-  const open = () => {
-    selectedEvent.value = event
-    selectedElement.value = nativeEvent.target
-    requestAnimationFrame(() => requestAnimationFrame(() => selectedOpen.value = true))
-  }
-  if (selectedOpen.value) {
-    selectedOpen.value = false
-    requestAnimationFrame(() => requestAnimationFrame(() => open()))
-  } else {
-    open()
-  }
-  nativeEvent.stopPropagation()
-}
+
 </script>
 
 <script>
@@ -348,6 +341,20 @@ export default {
     this.loadPersonal()
   },
   methods: {
+    showEvent({nativeEvent, event}) {
+      const open = () => {
+        this.selectedEvent = event
+        this.selectedElement = nativeEvent.target
+        requestAnimationFrame(() => requestAnimationFrame(() => this.selectedOpen = true))
+      }
+      if (this.selectedOpen) {
+        this.selectedOpen = false
+        requestAnimationFrame(() => requestAnimationFrame(() => open()))
+      } else {
+        open()
+      }
+      nativeEvent.stopPropagation()
+    },
     formatDateTime(dateTimeString) {
       //mexico city time
       return moment(dateTimeString).format("YYYY-MM-DD HH:mm");
@@ -368,22 +375,6 @@ export default {
     next() {
       this.$refs.calendar.next()
     },
-    showEvent({nativeEvent, event}) {
-      const open = () => {
-        this.selectedEvent = event
-        this.selectedElement = nativeEvent.target
-        requestAnimationFrame(() => requestAnimationFrame(() => this.selectedOpen = true))
-      }
-
-      if (this.selectedOpen) {
-        this.selectedOpen = false
-        requestAnimationFrame(() => requestAnimationFrame(() => open()))
-      } else {
-        open()
-      }
-
-      nativeEvent.stopPropagation()
-    },
     convertToEvents(json) {
       return json.map(evento => ({
         name: evento.usuario.nombres,
@@ -394,30 +385,35 @@ export default {
         details: evento,
       }));
     },
+    closeModal() {
+      this.selectedOpen = false
+    },
     loadPersonal() {
       let user = useAuthStore().user
       this.personal = user.personal ? user.personal : {}
       if (Object.keys(this.personal).length === 0) {
         useAuthStore().logout()
       } else {
-        console.log(this.personal)
-        this.fetchEvents(this.personal.usuarios.idUsuario)
+        this.fetchEvents()
       }
     },
 
+
     async setFinalizado(evento) {
       try {
+
         await setFinalizarEvento(evento.idEvento)
-        this.selectedOpen = false
-        await this.fetchEvents(this.personal.usuarios.idUsuario)
+        this.eventos = []
+        await this.fetchEvents()
+        this.closeModal()
       } catch (e) {
         console.log(e)
       }
     },
 
-    async fetchEvents(idUsuario) {
+    async fetchEvents() {
       try {
-        let eventos = await getEventosByPersonalIdUsuario(idUsuario)
+        let eventos = await getEventosByPersonalIdUsuario()
         for (const evento of eventos) {
           evento.servicios = await ServicioEventoService.getServiciosEventoByEvento(evento.idEvento);
           evento.personal = await PersonalServices.getPersonalEvento(evento.idEvento);

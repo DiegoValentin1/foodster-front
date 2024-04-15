@@ -26,6 +26,45 @@ const postCalificacion = async (calificacion) => {
     showNotification("error", "Error al guardar calificación");
   }
 }
+export const avgCalifServicio = async (idServicio) => {
+    try {
+        const response = await axiosClient.get(`${baseUrl}/servicios/${idServicio}/avg/`);
+        return response.data;
+    } catch (error) {
+        showNotification("error", "Error al obtener calificaciones");
+    }
+
+}
+
+export const avgCalifPaquete = async (idPaquete) => {
+    try {
+        const response = await axiosClient.get(`${baseUrl}/paquetes/${idPaquete}/avg/`);
+        return response.data;
+    } catch (error) {
+        showNotification("error", "Error al obtener calificaciones");
+    }
+
+}
+
+export const getCalificacionesPaginadasByServicio = async (idServicio, page, size) => {
+    try {
+        const response = await axiosClient.get(`${baseUrl}/servicios/${idServicio}/paginado/${page}/${size}`);
+        return response.data;
+    } catch (error) {
+        showNotification("error", "Error al obtener calificaciones");
+    }
+
+}
+
+export const getCalificacionesPaginadasByPaquete = async (idPaquete, page, size) => {
+    try {
+        const response = await axiosClient.get(`${baseUrl}/paquetes/${idPaquete}/paginado/${page}/${size}`);
+        return response.data;
+    } catch (error) {
+        showNotification("error", "Error al obtener calificaciones");
+    }
+
+}
 
 
 export default {

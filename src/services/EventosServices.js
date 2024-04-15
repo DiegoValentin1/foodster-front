@@ -90,9 +90,9 @@ const getEventosByUsuario = async () => {
     }
 }
 
-const getEventosByPersonalIdUsuario = async (uid) => {
+const getEventosByPersonalIdUsuario = async () => {
     try {
-        const response = await axiosClient.get(`${baseUrl}/personal/${uid}`);
+        const response = await axiosClient.get(`${baseUrl}/personal/`);
         return response.data;
     } catch (error) {
         showNotification("error", "Error al obtener eventos por usuario")

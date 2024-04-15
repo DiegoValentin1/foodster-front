@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="v-sheet-container">
-      <v-sheet :elevation="5" border rounded class="half-sheet" color="#F1F1F1">
+      <v-sheet :elevation="5" border rounded class="half-sheet" color="#F1F1F1" v-if="usuario">
         <div class="title flex justify-end text-2xl font-bold py-4">
           <h1 class="flex-grow text-center">Mi perfil</h1>
           <button
@@ -611,14 +611,9 @@
 
                         <!-- Ver Comentario -->
 
-<<<<<<< HEAD
-                        <section
-                          v-else
-                          class="relative isolate overflow-hidden bg-white px-6 py-24 sm:py-32 lg:px-8"
-=======
+
                         <section v-else
                                  class="relative isolate overflow-hidden bg-white px-6 py-24 sm:py-32 lg:px-8"
->>>>>>> 71f25082de65c94d1dab4d7d5dc371213de2c89d
                         >
                           <div
                               class="absolute inset-0 -z-10 bg-[radial-gradient(45rem_50rem_at_top,theme(colors.indigo.100),white)] opacity-20"
@@ -807,13 +802,8 @@ export default {
           "Tienes que elegir una calificación"
         );
       await CalificationService.postCalificacion({
-<<<<<<< HEAD
         servicios: { idServicio },
         calificacion: this.rating,
-=======
-        servicios: {idServicio},
-        calificacion: 5,
->>>>>>> 71f25082de65c94d1dab4d7d5dc371213de2c89d
         comentario: this.calificacion,
         active: true,
       });
