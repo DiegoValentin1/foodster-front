@@ -72,6 +72,7 @@
       </v-sheet>
       <v-sheet height="600">
         <v-calendar
+            locale="es-MX"
             ref="calendar"
             v-model="focus"
             :events="eventos"
@@ -96,7 +97,9 @@
                 :color="selectedEvent.color"
                 dark
             >
-              <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
+              <v-toolbar-title v-if="selectedEvent.name">
+                {{ selectedEvent.name }}
+              </v-toolbar-title>
               <v-spacer></v-spacer>
               <v-btn icon @click="selectedOpen = false">
                 <v-icon>mdi-close</v-icon>
@@ -346,7 +349,8 @@ export default {
   },
   methods: {
     formatDateTime(dateTimeString) {
-      return moment.utc(dateTimeString, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss");
+      //mexico city time
+      return moment(dateTimeString).format("YYYY-MM-DD HH:mm");
     },
     viewDay({date}) {
       this.focus = date
@@ -404,6 +408,7 @@ export default {
     async setFinalizado(evento) {
       try {
         await setFinalizarEvento(evento.idEvento)
+        this.selectedOpen = false
         await this.fetchEvents(this.personal.usuarios.idUsuario)
       } catch (e) {
         console.log(e)

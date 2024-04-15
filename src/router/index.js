@@ -20,15 +20,7 @@ const router = new VueRouter({
             path: "/admin/personal",
             name: "personal",
             component: () => import("../components/admin/personal/TablePersonal.vue"),
-        }, {
-            path: "/admin/banquetes",
-            name: "banquetes",
-            component: () => import("../components/admin/banquetes/TableBanquetes.vue"),
-        }, {
-            path: "/admin/descuentos", name: "descuentos", component: () => import(
-                "../components/admin/banquetes/descuentos/TableDescuentos.vue"
-                ),
-        }, {
+        },  {
             path: "/admin/eventos",
             name: "eventos",
             component: () => import("../components/admin/eventos/TableEventos.vue"),
@@ -52,6 +44,10 @@ const router = new VueRouter({
             path: "/admin/perfil", name: "perfilAdmin", component: () => import("../components/public/Profile.vue"),
         },{
             path: "/admin/personalEvento", name: "personalEvento", component: () => import("../components/admin/personalEvento/TablePersonalEvento.vue"),
+        },{
+            path: "/admin/asignarPaqueteServicio",
+            name: "asignarPaqueteServicio",
+            component: () => import("../components/admin/services/AsignarPaqueteServicio.vue"),
         }
     
     ],
@@ -100,8 +96,6 @@ const router = new VueRouter({
             path: "/home/carrito/",
             name: "carrito",
             component: () => import("../components/cliente/components/ShoppingCart.vue"),
-        }, {
-            path: "/home/pedido", name: "pedido", component: () => import("../components/cliente/Pedido.vue"),
         },
 
 

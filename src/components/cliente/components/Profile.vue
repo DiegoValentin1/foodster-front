@@ -5,27 +5,27 @@
         <div class="title flex justify-end text-2xl font-bold py-4">
           <h1 class="flex-grow text-center">Mi perfil</h1>
           <button
-            @click="signOut"
-            class="block px-4 py-2 text-sm text-white bg-red-500 hover:bg-red-700 rounded"
-            role="menuitem"
-            tabindex="-1"
-            id="user-menu-item-1"
+              @click="signOut"
+              class="block px-4 py-2 text-sm text-white bg-red-500 hover:bg-red-700 rounded"
+              role="menuitem"
+              tabindex="-1"
+              id="user-menu-item-1"
           >
             <v-icon dark left color="white"> mdi-logout</v-icon>
             Cerrar sesion
           </button>
         </div>
         <v-divider
-          :thickness="2"
-          class="border-black border-opacity-50 my-4"
+            :thickness="2"
+            class="border-black border-opacity-50 my-4"
         ></v-divider>
         <div class="InfoCont">
-          <br />
+          <br/>
           <v-form
-            class="space-y-4 margin"
-            v-model="validUpdateUser"
-            ref="formUpdateUser"
-            @submit.prevent="updateUser"
+              class="space-y-4 margin"
+              v-model="validUpdateUser"
+              ref="formUpdateUser"
+              @submit.prevent="updateUser"
           >
             <v-text-field
               class="value"
@@ -42,18 +42,18 @@
               ]"
             ></v-text-field>
             <v-divider
-              :thickness="7"
-              color="black"
-              class="border-opacity-75"
+                :thickness="7"
+                color="black"
+                class="border-opacity-75"
             ></v-divider>
             <v-text-field
-              class="value"
-              v-model="usuario.primerApellido"
-              outlined
-              dense
-              label="Primer apellido"
-              required
-              :rules="[
+                class="value"
+                v-model="usuario.primerApellido"
+                outlined
+                dense
+                label="Primer apellido"
+                required
+                :rules="[
                 (v) => !!v || 'Primer apellido es requerido',
                 (v) =>
                   (v.length <= 30 && v.length >= 3) ||
@@ -61,18 +61,18 @@
               ]"
             ></v-text-field>
             <v-divider
-              :thickness="7"
-              color="black"
-              class="border-opacity-75"
+                :thickness="7"
+                color="black"
+                class="border-opacity-75"
             ></v-divider>
             <v-text-field
-              class="value"
-              v-model="usuario.segundoApellido"
-              outlined
-              dense
-              label="Segundo apellido"
-              required
-              :rules="[
+                class="value"
+                v-model="usuario.segundoApellido"
+                outlined
+                dense
+                label="Segundo apellido"
+                required
+                :rules="[
                 (v) => !!v || 'Segundo apellido es requerido',
                 (v) =>
                   (v.length <= 30 && v.length >= 3) ||
@@ -80,26 +80,26 @@
               ]"
             ></v-text-field>
             <v-divider
-              :thickness="7"
-              color="black"
-              class="border-opacity-75"
+                :thickness="7"
+                color="black"
+                class="border-opacity-75"
             ></v-divider>
             <v-text-field
-              class="value"
-              v-model="usuario.telefono"
-              outlined
-              dense
-              label="Teléfono"
-              required
-              :rules="[
+                class="value"
+                v-model="usuario.telefono"
+                outlined
+                dense
+                label="Teléfono"
+                required
+                :rules="[
                 (v) => !!v || 'Teléfono es requerido',
                 (v) => /^[0-9]{10}$/.test(v) || 'Teléfono no es válido',
               ]"
             ></v-text-field>
             <v-divider
-              :thickness="7"
-              color="black"
-              class="border-opacity-75"
+                :thickness="7"
+                color="black"
+                class="border-opacity-75"
             ></v-divider>
             <div class="actions">
               <v-btn icon color="blue" type="submit">
@@ -113,9 +113,9 @@
         <div class="title">
           <h1>Mis direcciones</h1>
           <v-divider
-            :thickness="7"
-            color="black"
-            class="border-opacity-75"
+              :thickness="7"
+              color="black"
+              class="border-opacity-75"
           ></v-divider>
         </div>
         <v-dialog v-model="dialog" persistent max-width="600px">
@@ -134,12 +134,12 @@
                 <v-row>
                   <v-col cols="12" sm="6">
                     <v-text-field
-                      label="Nombre de la calle"
-                      outlined
-                      dense
-                      required
-                      v-model="nuevaDireccion.calle"
-                      :rules="[
+                        label="Nombre de la calle"
+                        outlined
+                        dense
+                        required
+                        v-model="nuevaDireccion.calle"
+                        :rules="[
                         (v) => !!v || 'Nombre de la calle es requerido',
                         (v) =>
                           /^[a-zA-Z0-9 ]+$/.test(v) ||
@@ -149,12 +149,12 @@
                   </v-col>
                   <v-col cols="12" sm="6">
                     <v-text-field
-                      label="Nombre de la colonia"
-                      outlined
-                      dense
-                      required
-                      v-model="nuevaDireccion.colonia"
-                      :rules="[
+                        label="Nombre de la colonia"
+                        outlined
+                        dense
+                        required
+                        v-model="nuevaDireccion.colonia"
+                        :rules="[
                         (v) => !!v || 'Nombre de la colonia es requerido',
                         (v) =>
                           /^[a-zA-Z0-9 ]+$/.test(v) ||
@@ -164,22 +164,22 @@
                   </v-col>
                   <v-col cols="12" sm="6">
                     <v-text-field
-                      label="Número de casa"
-                      outlined
-                      dense
-                      required
-                      v-model="nuevaDireccion.numero"
-                      :rules="[(v) => !!v || 'Número de casa es requerido']"
+                        label="Número de casa"
+                        outlined
+                        dense
+                        required
+                        v-model="nuevaDireccion.numero"
+                        :rules="[(v) => !!v || 'Número de casa es requerido']"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6">
                     <v-text-field
-                      label="Municipio"
-                      outlined
-                      dense
-                      required
-                      v-model="nuevaDireccion.municipio"
-                      :rules="[
+                        label="Municipio"
+                        outlined
+                        dense
+                        required
+                        v-model="nuevaDireccion.municipio"
+                        :rules="[
                         (v) => !!v || 'Municipio es requerido',
                         (v) =>
                           /^[a-zA-Z ]+$/.test(v) || 'Municipio no es válido',
@@ -188,12 +188,12 @@
                   </v-col>
                   <v-col cols="12" sm="6">
                     <v-text-field
-                      label="Estado"
-                      outlined
-                      dense
-                      required
-                      v-model="nuevaDireccion.estado"
-                      :rules="[
+                        label="Estado"
+                        outlined
+                        dense
+                        required
+                        v-model="nuevaDireccion.estado"
+                        :rules="[
                         (v) => !!v || 'Estado es requerido',
                         (v) => /^[a-zA-Z ]+$/.test(v) || 'Estado no es válido',
                       ]"
@@ -201,12 +201,12 @@
                   </v-col>
                   <v-col cols="12" sm="6">
                     <v-text-field
-                      label="Código postal"
-                      outlined
-                      dense
-                      required
-                      v-model="nuevaDireccion.codigoPostal"
-                      :rules="[
+                        label="Código postal"
+                        outlined
+                        dense
+                        required
+                        v-model="nuevaDireccion.codigoPostal"
+                        :rules="[
                         (v) => !!v || 'Código postal es requerido',
                         (v) =>
                           /^[0-9]{5}$/.test(v) || 'Código postal no es válido',
@@ -215,12 +215,12 @@
                   </v-col>
                   <v-col cols="12">
                     <v-text-field
-                      label="Referencia"
-                      outlined
-                      dense
-                      required
-                      v-model="nuevaDireccion.referencias"
-                      :rules="[
+                        label="Referencia"
+                        outlined
+                        dense
+                        required
+                        v-model="nuevaDireccion.referencias"
+                        :rules="[
                         (v) => !!v || 'Referencia es requerida',
                         (v) =>
                           /^[a-zA-Z0-9 ]+$/.test(v) ||
@@ -235,9 +235,9 @@
               <v-spacer></v-spacer>
               <v-btn color="red" text @click="dialog = false"> Cancelar</v-btn>
               <v-btn
-                color="green"
-                text
-                @click="(dialog = false), addDireccion(nuevaDireccion)"
+                  color="green"
+                  text
+                  @click="(dialog = false), addDireccion(nuevaDireccion)"
               >
                 Guardar
               </v-btn>
@@ -247,27 +247,27 @@
         <div class="InfoCont">
           <v-expansion-panels :value="0">
             <v-expansion-panel
-              v-for="(address, index) in direcciones"
-              :key="index"
+                v-for="(address, index) in direcciones"
+                :key="index"
             >
               <v-expansion-panel-header
-                >Calle: {{ address.calle }}
+              >Calle: {{ address.calle }}
               </v-expansion-panel-header>
               <v-expansion-panel-content>
                 <h1>Dirección número {{ index + 1 }}:</h1>
                 <v-divider
-                  :thickness="7"
-                  color="black"
-                  class="border-opacity-75"
+                    :thickness="7"
+                    color="black"
+                    class="border-opacity-75"
                 ></v-divider>
                 <v-text-field
-                  class="value"
-                  v-model="address.calle"
-                  label="Nombre de la calle"
-                  outlined
-                  dense
-                  required
-                  :rules="[
+                    class="value"
+                    v-model="address.calle"
+                    label="Nombre de la calle"
+                    outlined
+                    dense
+                    required
+                    :rules="[
                     (v) => !!v || 'Nombre de la calle es requerido',
                     (v) =>
                       /^[a-zA-Z0-9 ]+$/.test(v) ||
@@ -275,18 +275,18 @@
                   ]"
                 ></v-text-field>
                 <v-divider
-                  :thickness="7"
-                  color="black"
-                  class="border-opacity-75"
+                    :thickness="7"
+                    color="black"
+                    class="border-opacity-75"
                 ></v-divider>
                 <v-text-field
-                  class="value"
-                  v-model="address.colonia"
-                  outlined
-                  dense
-                  label="Nombre de la colonia"
-                  required
-                  :rules="[
+                    class="value"
+                    v-model="address.colonia"
+                    outlined
+                    dense
+                    label="Nombre de la colonia"
+                    required
+                    :rules="[
                     (v) => !!v || 'Nombre de la colonia es requerido',
                     (v) =>
                       /^[a-zA-Z0-9 ]+$/.test(v) ||
@@ -294,98 +294,98 @@
                   ]"
                 ></v-text-field>
                 <v-divider
-                  :thickness="7"
-                  color="black"
-                  class="border-opacity-75"
+                    :thickness="7"
+                    color="black"
+                    class="border-opacity-75"
                 ></v-divider>
                 <v-text-field
-                  class="value"
-                  v-model="address.numero"
-                  outlined
-                  label="Número de casa"
-                  dense
-                  required
-                  :rules="[(v) => !!v || 'Número de casa es requerido']"
+                    class="value"
+                    v-model="address.numero"
+                    outlined
+                    label="Número de casa"
+                    dense
+                    required
+                    :rules="[(v) => !!v || 'Número de casa es requerido']"
                 ></v-text-field>
                 <v-divider
-                  :thickness="7"
-                  color="black"
-                  class="border-opacity-75"
+                    :thickness="7"
+                    color="black"
+                    class="border-opacity-75"
                 ></v-divider>
                 <v-text-field
-                  class="value"
-                  v-model="address.municipio"
-                  outlined
-                  dense
-                  label="Municipio"
-                  required
-                  :rules="[
+                    class="value"
+                    v-model="address.municipio"
+                    outlined
+                    dense
+                    label="Municipio"
+                    required
+                    :rules="[
                     (v) => !!v || 'Municipio es requerido',
                     (v) => /^[a-zA-Z ]+$/.test(v) || 'Municipio no es válido',
                   ]"
                 ></v-text-field>
                 <v-divider
-                  :thickness="7"
-                  color="black"
-                  class="border-opacity-75"
+                    :thickness="7"
+                    color="black"
+                    class="border-opacity-75"
                 ></v-divider>
                 <v-text-field
-                  class="value"
-                  v-model="address.estado"
-                  outlined
-                  dense
-                  label="Estado"
-                  required
-                  :rules="[
+                    class="value"
+                    v-model="address.estado"
+                    outlined
+                    dense
+                    label="Estado"
+                    required
+                    :rules="[
                     (v) => !!v || 'Estado es requerido',
                     (v) => /^[a-zA-Z ]+$/.test(v) || 'Estado no es válido',
                   ]"
                 ></v-text-field>
                 <v-divider
-                  :thickness="7"
-                  color="black"
-                  class="border-opacity-75"
+                    :thickness="7"
+                    color="black"
+                    class="border-opacity-75"
                 ></v-divider>
                 <v-text-field
-                  class="value"
-                  v-model="address.codigoPostal"
-                  outlined
-                  dense
-                  label="Código postal"
-                  required
-                  :rules="[
+                    class="value"
+                    v-model="address.codigoPostal"
+                    outlined
+                    dense
+                    label="Código postal"
+                    required
+                    :rules="[
                     (v) => !!v || 'Código postal es requerido',
                     (v) => /^[0-9]{5}$/.test(v) || 'Código postal no es válido',
                   ]"
                 ></v-text-field>
                 <v-divider
-                  :thickness="7"
-                  color="black"
-                  class="border-opacity-75"
+                    :thickness="7"
+                    color="black"
+                    class="border-opacity-75"
                 ></v-divider>
                 <v-text-field
-                  class="value"
-                  v-model="address.referencias"
-                  outlined
-                  label="Referencia"
-                  dense
-                  required
-                  :rules="[
+                    class="value"
+                    v-model="address.referencias"
+                    outlined
+                    label="Referencia"
+                    dense
+                    required
+                    :rules="[
                     (v) => !!v || 'Referencia es requerida',
                     (v) =>
                       /^[a-zA-Z0-9 ]+$/.test(v) || 'Referencia no es válida',
                   ]"
                 ></v-text-field>
                 <v-divider
-                  :thickness="7"
-                  color="black"
-                  class="border-opacity-75"
+                    :thickness="7"
+                    color="black"
+                    class="border-opacity-75"
                 ></v-divider>
                 <div class="actions">
                   <v-btn
-                    icon
-                    color="red"
-                    @click="deleteDireccion(address.idDireccion)"
+                      icon
+                      color="red"
+                      @click="deleteDireccion(address.idDireccion)"
                   >
                     <v-icon>mdi-delete</v-icon>
                   </v-btn>
@@ -402,25 +402,25 @@
         <div class="title">
           <h1>Mis eventos</h1>
           <v-divider
-            :thickness="7"
-            color="black"
-            class="border-opacity-75"
+              :thickness="7"
+              color="black"
+              class="border-opacity-75"
           ></v-divider>
         </div>
         <div class="InfoCont">
           <v-expansion-panels :value="0">
             <v-expansion-panel v-for="(evento, index) in eventos" :key="index">
               <v-expansion-panel-header
-                @click="loadServiciosEvento(evento.idEvento)"
+                  @click="loadServiciosEvento(evento.idEvento)"
               >
                 {{ formatDateTime(evento.fechaHoraFin) }}
               </v-expansion-panel-header>
               <v-expansion-panel-content>
                 <h1>Evento número {{ index + 1 }}:</h1>
                 <v-divider
-                  :thickness="7"
-                  color="black"
-                  class="border-opacity-75"
+                    :thickness="7"
+                    color="black"
+                    class="border-opacity-75"
                 ></v-divider>
                 <span class="value">
                   <v-icon>mdi-clock-outline</v-icon>
@@ -428,45 +428,45 @@
                   {{ formatDateTime(evento.fechaHoraInicio) }}
                 </span>
                 <v-divider
-                  :thickness="7"
-                  color="black"
-                  class="border-opacity-75"
+                    :thickness="7"
+                    color="black"
+                    class="border-opacity-75"
                 ></v-divider>
                 <span class="value">
                   <v-icon>mdi-clock-end</v-icon>
                   Fecha y hora de fin: {{ formatDateTime(evento.fechaHoraFin) }}
                 </span>
                 <v-divider
-                  :thickness="7"
-                  color="black"
-                  class="border-opacity-75"
+                    :thickness="7"
+                    color="black"
+                    class="border-opacity-75"
                 ></v-divider>
                 <span class="value">
                   <v-icon>mdi-currency-usd</v-icon>
                   Costo total: {{ evento.costoTotal.toFixed(2) }}
                 </span>
                 <v-divider
-                  :thickness="7"
-                  color="black"
-                  class="border-opacity-75"
+                    :thickness="7"
+                    color="black"
+                    class="border-opacity-75"
                 ></v-divider>
                 <span class="value">
                   <v-icon>mdi-account-group</v-icon>
                   Invitados: {{ evento.numeroPersonas }}
                 </span>
                 <v-divider
-                  :thickness="7"
-                  color="black"
-                  class="border-opacity-75"
+                    :thickness="7"
+                    color="black"
+                    class="border-opacity-75"
                 ></v-divider>
                 <span class="value">
                   <v-icon>mdi-clock-end</v-icon>
                   Estado: {{ evento.estado }}
                 </span>
                 <v-divider
-                  :thickness="7"
-                  color="black"
-                  class="border-opacity-75"
+                    :thickness="7"
+                    color="black"
+                    class="border-opacity-75"
                 ></v-divider>
                 <span class="value">
                   <v-icon>mdi-map-marker</v-icon>
@@ -484,20 +484,20 @@
                   Referencias: {{ evento.direccion.referencias }}
                 </span>
                 <v-divider
-                  :thickness="7"
-                  color="black"
-                  class="border-opacity-75"
+                    :thickness="7"
+                    color="black"
+                    class="border-opacity-75"
                 ></v-divider>
                 <h1>Servicios del evento:</h1>
                 <v-divider
-                  :thickness="7"
-                  color="black"
-                  class="border-opacity-75"
+                    :thickness="7"
+                    color="black"
+                    class="border-opacity-75"
                 ></v-divider>
                 <v-expansion-panels :value="0">
                   <v-expansion-panel
-                    v-for="(servicio, index) in evento.servicios"
-                    :key="index"
+                      v-for="(servicio, index) in evento.servicios"
+                      :key="index"
                   >
                     <v-expansion-panel-header>
                       {{ servicio.servicio.nombre }}
@@ -505,9 +505,9 @@
                     <v-expansion-panel-content>
                       <div class="flex justify-center items-center">
                         <img
-                          :src="servicio.servicio.imagen"
-                          alt="Servicio"
-                          class="w-1/2"
+                            :src="servicio.servicio.imagen"
+                            alt="Servicio"
+                            class="w-1/2"
                         />
                       </div>
                       <p>
@@ -516,12 +516,14 @@
                       </p>
                       <p>
                         <v-icon small class="mr-2"
-                          >mdi-information-outline</v-icon
+                        >mdi-information-outline
+                        </v-icon
                         >
                         Descripción: {{ servicio.servicio.descripcion }}
                       </p>
                       <p>
-                        <v-icon small class="mr-2">mdi-cash</v-icon> Precio:
+                        <v-icon small class="mr-2">mdi-cash</v-icon>
+                        Precio:
                         {{ servicio.servicio.precio.toFixed(2) }}
                       </p>
                       <p>
@@ -550,22 +552,22 @@
                           <div class="min-w-0 flex-1">
                             <div class="relative">
                               <div
-                                class="border border-gray-300 rounded-lg shadow-sm overflow-hidden focus-within:border-[#333] focus-within:ring-1 focus-within:ring-[#333]"
+                                  class="border border-gray-300 rounded-lg shadow-sm overflow-hidden focus-within:border-[#333] focus-within:ring-1 focus-within:ring-[#333]"
                               >
                                 <label for="comment" class="sr-only"
-                                  >Add your comment</label
+                                >Add your comment</label
                                 >
                                 <textarea
-                                  style="
+                                    style="
                                     outline: none;
                                     border: 2px solid transparent;
                                   "
-                                  rows="3"
-                                  name="comment"
-                                  id="comment"
-                                  class="block w-full p-2 border-0 resize-none focus:ring-0 sm:text-sm"
-                                  placeholder="Add your comment..."
-                                  v-model="calificacion"
+                                    rows="3"
+                                    name="comment"
+                                    id="comment"
+                                    class="block w-full p-2 border-0 resize-none focus:ring-0 sm:text-sm"
+                                    placeholder="Add your comment..."
+                                    v-model="calificacion"
                                 ></textarea>
 
                                 <!-- Spacer element to match the height of the toolbar -->
@@ -578,7 +580,7 @@
                               </div>
 
                               <div
-                                class="absolute bottom-0 inset-x-0 pl-3 pr-2 py-2 flex justify-end"
+                                  class="absolute bottom-0 inset-x-0 pl-3 pr-2 py-2 flex justify-end"
                               >
                                 <div class="flex items-center space-x-5">
                                   <div class="flex items-center">
@@ -592,12 +594,12 @@
                                 </div>
                                 <div class="flex-shrink-0">
                                   <button
-                                    @click="
+                                      @click="
                                       insertCalificacion(
                                         servicio.servicio.idServicio
                                       )
                                     "
-                                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-[#4b4b4b] hover:bg-[#3a3a3a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3a3a3a]"
+                                      class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-[#4b4b4b] hover:bg-[#3a3a3a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3a3a3a]"
                                   >
                                     Post
                                   </button>
@@ -609,15 +611,20 @@
 
                         <!-- Ver Comentario -->
 
+<<<<<<< HEAD
                         <section
                           v-else
                           class="relative isolate overflow-hidden bg-white px-6 py-24 sm:py-32 lg:px-8"
+=======
+                        <section v-else
+                                 class="relative isolate overflow-hidden bg-white px-6 py-24 sm:py-32 lg:px-8"
+>>>>>>> 71f25082de65c94d1dab4d7d5dc371213de2c89d
                         >
                           <div
-                            class="absolute inset-0 -z-10 bg-[radial-gradient(45rem_50rem_at_top,theme(colors.indigo.100),white)] opacity-20"
+                              class="absolute inset-0 -z-10 bg-[radial-gradient(45rem_50rem_at_top,theme(colors.indigo.100),white)] opacity-20"
                           ></div>
                           <div
-                            class="absolute inset-y-0 right-1/2 -z-10 mr-16 w-[200%] origin-bottom-left skew-x-[-30deg] bg-white shadow-xl shadow-indigo-600/10 ring-1 ring-indigo-50 sm:mr-28 lg:mr-0 xl:mr-16 xl:origin-center"
+                              class="absolute inset-y-0 right-1/2 -z-10 mr-16 w-[200%] origin-bottom-left skew-x-[-30deg] bg-white shadow-xl shadow-indigo-600/10 ring-1 ring-indigo-50 sm:mr-28 lg:mr-0 xl:mr-16 xl:origin-center"
                           ></div>
                           <div class="mx-auto max-w-2xl lg:max-w-4xl">
                             <div class="w-full flex justify-center">
@@ -630,7 +637,7 @@
                             </div>
                             <figure class="mt-10">
                               <blockquote
-                                class="text-center text-sm font-light leading-8 text-gray-900 sm:text-2xl sm:leading-9"
+                                  class="text-center text-sm font-light leading-8 text-gray-900 sm:text-2xl sm:leading-9"
                               >
                                 <p>
                                   "{{ servicio.calificacion.comentario }}"
@@ -638,17 +645,17 @@
                               </blockquote>
                               <figcaption class="mt-10">
                                 <div
-                                  class="mt-4 flex items-center justify-center space-x-3 text-base"
+                                    class="mt-4 flex items-center justify-center space-x-3 text-base"
                                 >
                                   <div class="font-semibold text-gray-900">
                                     {{ userName }}
                                   </div>
                                   <svg
-                                    viewBox="0 0 2 2"
-                                    width="3"
-                                    height="3"
-                                    aria-hidden="true"
-                                    class="fill-gray-900"
+                                      viewBox="0 0 2 2"
+                                      width="3"
+                                      height="3"
+                                      aria-hidden="true"
+                                      class="fill-gray-900"
                                   ></svg>
                                 </div>
                               </figcaption>
@@ -662,14 +669,14 @@
 
                 <h1>Personal del evento:</h1>
                 <v-divider
-                  :thickness="7"
-                  color="black"
-                  class="border-opacity-75"
+                    :thickness="7"
+                    color="black"
+                    class="border-opacity-75"
                 ></v-divider>
                 <v-expansion-panels :value="0">
                   <v-expansion-panel
-                    v-for="(personal, index) in evento.personal"
-                    :key="index"
+                      v-for="(personal, index) in evento.personal"
+                      :key="index"
                   >
                     <v-expansion-panel-header>
                       {{ personal.personal.usuarios.nombres }}
@@ -714,15 +721,15 @@
 </template>
 
 <script>
-import { useAuthStore } from "@/stores";
+import {useAuthStore} from "@/stores";
 import UsersServices from "@/services/UsersServices";
 import DireccionesService from "@/services/DireccionesService";
-import { getEventosByUsuario } from "@/services/EventosServices";
+import {getEventosByUsuario} from "@/services/EventosServices";
 import ServicioEventoService from "@/services/ServicioEventoService";
 import moment from "moment";
 import PersonalServices from "@/services/PersonalServices";
 import CalificationService from "@/services/CalificationService";
-import { showNotification } from "@/utils/notification";
+import {showNotification} from "@/utils/notification";
 
 export default {
   data() {
@@ -751,9 +758,8 @@ export default {
   },
   methods: {
     formatDateTime(dateTimeString) {
-      return moment
-        .utc(dateTimeString, "YYYY-MM-DD HH:mm:ss")
-        .format("YYYY-MM-DD HH:mm:ss");
+      //mexico city time
+      return moment(dateTimeString).format("YYYY-MM-DD HH:mm");
     },
 
     signOut() {
@@ -787,13 +793,13 @@ export default {
       this.loading = true;
       if (this.calificacion.length == 0)
         return showNotification(
-          "warning",
-          "No puedes mandar un comentario vacio"
+            "warning",
+            "No puedes mandar un comentario vacio"
         );
       if (this.calificacion.length > 300)
         return showNotification(
-          "warning",
-          "No puedes mandar un comentario con mas de 300 carácteres"
+            "warning",
+            "No puedes mandar un comentario con mas de 300 carácteres"
         );
       if (!this.rating)
         return showNotification(
@@ -801,8 +807,13 @@ export default {
           "Tienes que elegir una calificación"
         );
       await CalificationService.postCalificacion({
+<<<<<<< HEAD
         servicios: { idServicio },
         calificacion: this.rating,
+=======
+        servicios: {idServicio},
+        calificacion: 5,
+>>>>>>> 71f25082de65c94d1dab4d7d5dc371213de2c89d
         comentario: this.calificacion,
         active: true,
       });
@@ -837,45 +848,44 @@ export default {
       try {
         const eventos = await getEventosByUsuario();
         const calificacionesByUser =
-          await CalificationService.getCalificacionesByUser();
+            await CalificationService.getCalificacionesByUser();
         const listIdCalificaciones = calificacionesByUser.map(
-          (item) => item.servicios.idServicio
+            (item) => item.servicios.idServicio
         );
         const listCalifById = calificacionesByUser.reduce(
-          (accumulator, item) => {
-            const idServicio = item.servicios.idServicio;
-            const valor = {
-              calificacion: item.calificacion,
-              comentario: item.comentario,
-            };
-            accumulator[idServicio] = valor;
-            return accumulator;
-          },
-          {}
+            (accumulator, item) => {
+              const idServicio = item.servicios.idServicio;
+              const valor = {
+                calificacion: item.calificacion,
+                comentario: item.comentario,
+              };
+              accumulator[idServicio] = valor;
+              return accumulator;
+            },
+            {}
         );
 
         for (const evento of eventos) {
           evento.servicios =
-            await ServicioEventoService.getServiciosEventoByEvento(
-              evento.idEvento
-            );
+              await ServicioEventoService.getServiciosEventoByEvento(
+                  evento.idEvento
+              );
 
           evento.servicios.forEach(async (servicio, index) => {
-            // console.log(calificacionesByUser,servicio.servicio.idServicio, listIdCalificaciones, listCalifById);
             evento.servicios[index]["calificacion"] =
-              listIdCalificaciones.includes(servicio.servicio.idServicio)
-                ? listCalifById[`${servicio.servicio.idServicio}`]
-                : null;
+                listIdCalificaciones.includes(servicio.servicio.idServicio)
+                    ? listCalifById[`${servicio.servicio.idServicio}`]
+                    : null;
           });
 
           evento.personal = await PersonalServices.getPersonalEvento(
-            evento.idEvento
+              evento.idEvento
           );
           console.log(
-            evento.servicios,
-            calificacionesByUser,
-            listIdCalificaciones,
-            listCalifById
+              evento.servicios,
+              calificacionesByUser,
+              listIdCalificaciones,
+              listCalifById
           );
         }
 
@@ -941,7 +951,7 @@ export default {
   margin-top: 5vh;
   width: 70%;
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-    "Lucida Sans", Arial, sans-serif;
+  "Lucida Sans", Arial, sans-serif;
 }
 
 .label {

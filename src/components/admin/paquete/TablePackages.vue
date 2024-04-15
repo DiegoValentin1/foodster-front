@@ -1,73 +1,77 @@
 <template>
   <v-card>
+    <v-progress-linear
+        color="blue darken-2"
+        height="5"
+        indeterminate
+        v-if="loading"
+    ></v-progress-linear>
     <v-card-title>
       Paquete
       <v-divider class="mx-4" inset vertical></v-divider>
       <v-spacer></v-spacer>
-      <v-text-field v-model="searchPaquetes" append-icon="mdi-magnify" label="Buscar" single-line
-                    hide-details></v-text-field>
+      <v-text-field v-model="searchPaquetes" append-icon="mdi-magnify" hide-details label="Buscar"
+                    single-line></v-text-field>
       <v-spacer></v-spacer>
       <v-dialog v-model="dialogPaquete" max-width="500px">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">Nuevo paquete</v-btn>
+          <v-btn class="mb-2" color="primary" dark v-bind="attrs" v-on="on">Nuevo paquete</v-btn>
         </template>
         <v-card>
-          <v-card-title>
-            <span class="text-h5">Agregar nuevo paquete</span>
-          </v-card-title>
-          <v-card-text>
-            <v-container>
-              <v-row>
-                <v-col cols="12" sm="6" md="6">
-                  <v-text-field v-model="nuevoPaquete.nombre" label="Nombre"
-                                :rules="[(v) => !!v || 'El nombre es requerido']"></v-text-field>
-                  <v-text-field v-model="nuevoPaquete.descripcion" label="Descripción"
-                                :rules="[(v) => !!v || 'La descripción es requerida']" type="text"></v-text-field>
+          <v-form ref="formNuevoPaquete" class="space-y-4" @submit.prevent="agregarPaquete">
+            <v-card-title>
+              <span class="text-h5">Agregar nuevo paquete</span>
+            </v-card-title>
+            <v-card-text>
+              <v-container>
+                <v-row>
+                  <v-col cols="12" md="6" sm="6">
+                    <v-text-field v-model="nuevoPaquete.nombre"
+                                  :rules="[(v) => !!v || 'El nombre es requerido'  , (v) => (v && v.length <= 50 && v.length >= 3) || 'El nombre debe tener entre 3 y 50 caracteres']"
+                                  label="Nombre"></v-text-field>
+                    <v-text-field v-model="nuevoPaquete.descripcion"
+                                  :rules="[(v) => !!v || 'La descripción es requerida', (v) => (v && v.length <= 70 && v.length >= 5) || 'La descripción debe tener entre 5 y 70 caracteres']"
+                                  label="Descripción" type="text"></v-text-field>
 
-                  <input type="file" @change="onFileChange" accept="image/*"/>
-
-
-                </v-col>
-                <v-col cols="12" sm="6" md="6">
-
-
-                  <v-text-field v-model="nuevoPaquete.recomendadoPara" label="Recomendado para"
-                                :rules="[(v) => !!v || 'El recomendado para es requerido']" type="text"></v-text-field>
-                  <v-select v-model="nuevoPaquete.active" :items="[
-                      { text: 'Activo', value: true },
-                      { text: 'Inactivo', value: false }
-                    ]" label="Estado"></v-select>
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click="cerrarModalAgregarPaquete">Cancelar</v-btn>
-            <v-btn color="blue darken-1" text @click="agregarPaquete(nuevoPaquete)">Guardar</v-btn>
-          </v-card-actions>
+                    <input accept="image/*" type="file" @change="onFileChange"/>
+                  </v-col>
+                  <v-col cols="12" md="6" sm="6">
+                    <v-text-field v-model="nuevoPaquete.recomendadoPara" :rules="[
+        (v) => !!v || 'El recomendado para es requerido',
+        (v) => (v && v.length <= 50 && v.length >= 3) || 'El recomendado para debe tener entre 3 y 50 caracteres'
+      ]" label="Recomendado para" type="text"></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" text @click="cerrarModalAgregarPaquete">Cerrar</v-btn>
+              <v-btn color="blue darken-1" text type="submit">Guardar</v-btn>
+            </v-card-actions>
+          </v-form>
         </v-card>
       </v-dialog>
     </v-card-title>
     <v-data-table
-        class="mx-auto"
-        style="height: auto; max-height: 500px; overflow-y: auto"
-        :items-per-page-options="[5, 10, 15]"
-        :headers="headersPaquetes"
-        :items="paquetes"
-        :server-items-length="totalItems"
-        :items-per-page.sync="itemsPerPage"
-        :loading="loading"
-        :search="searchPaquetes"
-        :page.sync="currentPage"
-        @update:page="getAllPaquetes"
-        @update:items-per-page="getAllPaquetes"
         :footer-props="{
           showFirstLastPage: true,
           'items-per-page-text': 'Items por página',
           'items-per-page-all-text': 'Todos',
           'items-per-page-options': [10, 20, 30, 40, 50]
         }"
+        :headers="headersPaquetes"
+        :items="paquetes"
+        :items-per-page-options="[5, 10, 15]"
+        :items-per-page.sync="itemsPerPage"
+        :loading="loading"
+        :page.sync="currentPage"
+        :search="searchPaquetes"
+        :server-items-length="totalItems"
+        class="mx-auto"
+        style="height: auto; max-height: 500px; overflow-y: auto"
+        @update:page="getAllPaquetes"
+        @update:items-per-page="getAllPaquetes"
 
     >
       <template v-slot:item="{ item }">
@@ -76,7 +80,7 @@
           <td class="text-start">{{ item.descripcion }}</td>
           <td class="text-start">{{ item.recomendadoPara }}</td>
           <td class="text-start">
-            <img :src="item.imagen" style="max-width: 100px; max-height: 100px" alt="Paquete de servicios"/>
+            <img :src="item.imagen" alt="Paquete de servicios" style="max-width: 100px; max-height: 100px"/>
           </td>
           <td class="text-start">{{ item.numeroPedidos }}</td>
           <td class="text-start">{{ formatDateTime(item.ultimaModificacion) }}</td>
@@ -87,36 +91,48 @@
             </v-chip>
           </td>
           <td class="text-center">
+            <v-dialog v-model="showDialogAsignar" class="w-1/4 overflow-auto mx-auto bg-white shadow-lg rounded-lg max-h-96" flat
+                      offset-y>
+              <v-card class="p-6">
+                <v-card-title class="text-xl font-bold text-gray-700">
+                  Elementos del paquete
+                </v-card-title>
+                <AsignarServicios :paquete="item" :close="closeOpenAsignar"/>
+              </v-card>
+            </v-dialog>
             <v-dialog v-model="dialogosEditarPaquete[item.idPaquete]" max-width="500px">
               <template v-slot:activator="{ on, attrs }">
-                <v-icon color="blue" v-bind="attrs" v-on="on"
-                        @click="openEditServicioDialog(item.idPaquete)">mdi-pencil
+                <v-icon color="blue" v-bind="attrs" @click="openEditServicioDialog(item.idPaquete)"
+                        v-on="on">mdi-pencil
                 </v-icon>
               </template>
               <v-card>
-                <v-form class="space-y-4" @submit.prevent="editItemPaquete(item)" ref="formUpdatePaquete"
-                        v-model="validUpdate">
+                <v-form ref="formUpdatePaquete" v-model="validUpdate" class="space-y-4"
+                        @submit.prevent="editItemPaquete(item)">
                   <v-card-title> Editar servicio</v-card-title>
                   <v-card-text>
                     <v-container>
                       <v-row>
 
-                        <v-col cols="12" sm="6" md="6">
-                          <v-text-field v-model="item.nombre" label="Nombre"
-                                        :rules="[(v) => !!v || 'El nombre es requerido']"></v-text-field>
-                          <v-text-field v-model="item.descripcion" label="Descripción"
-                                        :rules="[(v) => !!v || 'La descripción es requerida']"
+                        <v-col cols="12" md="6" sm="6">
+                          <v-text-field v-model="item.nombre" :rules="[(v) => !!v || 'El nombre es requerido',
+                                          (v) => (v && v.length <= 50 && v.length >= 3) || 'El nombre debe tener entre 3 y 50 caracteres']"
+                                        label="Nombre"></v-text-field>
+                          <v-text-field v-model="item.descripcion" :rules="[(v) => !!v || 'La descripción es requerida'
+                                        , (v) => (v && v.length <= 70 && v.length >= 5) || 'La descripción debe tener entre 5 y 70 caracteres']"
+                                        label="Descripción"
                                         type="text"></v-text-field>
                           <v-select v-model="item.active" :items="[
         { text: 'Activo', value: true },
         { text: 'Inactivo', value: false }
       ]" label="Estado"></v-select>
                         </v-col>
-                        <v-col cols="12" sm="6" md="6">
-                          <v-text-field v-model="item.recomendadoPara" label="Recomendado para" :rules="[
+                        <v-col cols="12" md="6" sm="6">
+                          <v-text-field v-model="item.recomendadoPara" :rules="[
         (v) => !!v || 'El recomendado para es requerido',
-      ]" type="text"></v-text-field>
-                          <input type="file" @change="onFileChange" accept="image/*"/>
+        (v) => (v && v.length <= 50 && v.length >= 3) || 'El recomendado para debe tener entre 3 y 50 caracteres'
+      ]" label="Recomendado para" type="text"></v-text-field>
+                          <input accept="image/*" type="file" @change="onFileChange"/>
                         </v-col>
 
                       </v-row>
@@ -126,31 +142,33 @@
                     <v-spacer></v-spacer>
                     <v-btn color="blue darken-1" text @click="cancelEditItemPaquete(item)">Cerrar</v-btn>
 
-                    <v-btn color="blue darken-1" type="submit">Guardar</v-btn>
+                    <v-btn color="blue darken-1" text type="submit">Guardar</v-btn>
                   </v-card-actions>
                 </v-form>
               </v-card>
 
             </v-dialog>
             <v-icon color="red" @click="deleteItemPaquete(item.idPaquete)">mdi-delete</v-icon>
+            <v-btn color="blue darken-1" text @click="closeOpenAsignar">Asignar servicios</v-btn>
+
           </td>
         </tr>
       </template>
     </v-data-table>
+
   </v-card>
 </template>
 
 <script>
-import {
-  updatePaquete,
-  createPaquete,
-  deletePaquete, getAllPaquetesPaginado,
-} from "@/services/PaquetesServices";
+import {createPaquete, deletePaquete, getAllPaquetesPaginado, updatePaquete,} from "@/services/PaquetesServices";
 import moment from "moment";
+import AsignarServicios from "@/components/admin/paquete/AsignarServicios.vue";
 
 export default {
+  components: {AsignarServicios},
   data() {
     return {
+      showDialogAsignar: false,
       loading: false,
       tab: null,
       validUpdate: true,
@@ -211,7 +229,11 @@ export default {
   },
   methods: {
     formatDateTime(dateTimeString) {
-      return moment.utc(dateTimeString, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss");
+      //mexico city time
+      return moment(dateTimeString).format("YYYY-MM-DD HH:mm");
+    },
+    closeOpenAsignar() {
+      this.showDialogAsignar = !this.showDialogAsignar;
     },
     async getAllPaquetes() {
       try {
@@ -259,15 +281,18 @@ export default {
         active: true,
       };
     },
-    async editItemPaquete(nuevoPaquete) {
-      this.loading = true;
-      nuevoPaquete.ultimaModificacion = new Date().toISOString(); // Esto generará la fecha actual en el formato correcto
-      nuevoPaquete.imagen = this.nuevoPaquete.imagen;
+    editItemPaquete: async function (nuevoPaquete) {
+
       try {
-        await updatePaquete(nuevoPaquete);
-        await this.getAllPaquetes;
-        this.dialogosEditarPaquete[nuevoPaquete.idPaquete] = false;
-        this.loading = false;
+        if (this.$refs.formUpdatePaquete.validate()) {
+          this.loading = true;
+          nuevoPaquete.ultimaModificacion = new Date().toISOString(); // Esto generará la fecha actual en el formato correcto
+          nuevoPaquete.imagen = this.nuevoPaquete.imagen;
+          await updatePaquete(nuevoPaquete);
+          await this.getAllPaquetes;
+          this.dialogosEditarPaquete[nuevoPaquete.idPaquete] = false;
+          this.loading = false;
+        }
       } catch (error) {
         console.error("Error al actualizar paquete", error);
         this.loading = false;
@@ -284,24 +309,26 @@ export default {
     async agregarPaquete(nuevoPaquete) {
       console.log(nuevoPaquete);
       try {
-        const nuevoPaquete = await createPaquete(this.nuevoPaquete);
-        if (nuevoPaquete) {
-          this.dialogPaquete = false;
-          this.nuevoPaquete = {
-            paquete: {
-              nombre: "",
-              descripcion: "",
-              recomendadoPara: "",
-              imagen: "",
-              numeroPedidos: 0,
+        if (this.$refs.formNuevoPaquete.validate()) {
+          const nuevoPaquete = await createPaquete(this.nuevoPaquete);
+          if (nuevoPaquete) {
+            this.dialogPaquete = false;
+            this.nuevoPaquete = {
+              paquete: {
+                nombre: "",
+                descripcion: "",
+                recomendadoPara: "",
+                imagen: "",
+                numeroPedidos: 0,
+                ultimaModificacion: new Date().toISOString(),
+                active: true,
+              },
               ultimaModificacion: new Date().toISOString(),
               active: true,
-            },
-            ultimaModificacion: new Date().toISOString(),
-            active: true,
-          };
-          this.cerrarModalAgregarPaquete();
-          await this.getAllPaquetes();
+            };
+            this.cerrarModalAgregarPaquete();
+            await this.getAllPaquetes();
+          }
         }
       } catch (error) {
         console.error("Error al agregar categoría de servicio:", error);
@@ -349,7 +376,7 @@ export default {
               item.recomendadoPara.toLowerCase().includes(val.toLowerCase()) ||
               item.numeroPedidos.toString().toLowerCase().includes(val.toLowerCase());
         });
-      }else {
+      } else {
         await this.getAllPaquetes();
       }
     },

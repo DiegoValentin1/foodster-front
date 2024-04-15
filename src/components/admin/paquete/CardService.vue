@@ -35,24 +35,10 @@
         </template>
       </div>
     </v-card-text>
-
-    <v-divider class="mx-2"></v-divider>
-    <v-card-actions>
-      <v-btn
-          v-if="!inCart"
-          color="deep-purple lighten-2"
-          text
-          @click="agregarElemento(servicio)"
-      >
-        Agregar al carrito
-      </v-btn>
-      <div v-else>Ya en carrito</div>
-    </v-card-actions>
   </v-card>
 </template>
 
 <script>
-import {useCartStore} from "@/stores/cart.store";
 
 export default {
   data: () => ({
@@ -65,23 +51,6 @@ export default {
   props: {
     servicio: {
       type: Object,
-    },
-  },
-  mounted() {
-    this.setIsInCart();
-  },
-
-  methods: {
-    agregarElemento(item) {
-      const cart = useCartStore();
-      this.loading = true;
-      cart.addStuff(item);
-      this.setIsInCart();
-      this.loading = false;
-    },
-    setIsInCart() {
-      const cart = useCartStore();
-      this.inCart = cart.isInCart(this.$props.servicio.idServicio);
     },
   },
 };
