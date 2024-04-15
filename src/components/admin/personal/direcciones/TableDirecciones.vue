@@ -199,13 +199,13 @@ export default {
             ],
 
             nameRules: [
-                v => !!v || 'Name is required',
+                v => !!v || 'El nombre es requerido',
                 v => v.length <= 10 || 'Name must be less than 10 characters',
             ],
             email: '',
             emailRules: [
-                v => !!v || 'E-mail is required',
-                v => /.+@.+/.test(v) || 'E-mail must be valid',
+                v => !!v || 'El correo es requerido',
+              (v) => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(v) || "El correo tiene un formato incorrecto",
             ],
         };
     },
@@ -214,9 +214,10 @@ export default {
         this.getCategoriasPersonal();
     },
     methods: {
-        formatDateTime(dateTimeString) {
-  return moment.utc(dateTimeString, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm:ss");
-},  
+      formatDateTime(dateTimeString) {
+        //mexico city time
+        return moment(dateTimeString).format("YYYY-MM-DD HH:mm");
+      },
         async getCategoriasPersonal() {
             try {
                 const response = await categoriasPersonal.getCategoriasPersonalByStatus(true);

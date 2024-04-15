@@ -109,8 +109,7 @@ export default {
       },
       emailRules: [
         (v) => !!v || "El correo electronico es requerido",
-        (v) => /.+@.+/.test(v) || "El correo electronico es requerido",
-      ],
+        (v) => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(v) || "El correo electronico es requerido",      ],
     };
   },
   methods: {

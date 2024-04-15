@@ -37,7 +37,7 @@ export default {
       loading: false,
       currentPage: 1,
       totalPages: 0,
-      itemsPerPage: 20,
+      itemsPerPage: 10,
     };
   },
   methods: {

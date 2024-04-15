@@ -114,7 +114,7 @@ export default {
   methods: {
     editItem(item) {
       // Copiar los datos del descuento a editar
-      this.editedItem = Object.assign({}, item);
+      this.editedItem = { ...item };
       // Abrir el modal de edición
       this.editDialog = true;
     },

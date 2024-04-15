@@ -20,7 +20,8 @@ const getCalificacionesByUser = async () => {
 const postCalificacion = async (calificacion) => {
   try {
     const response = await axiosClient.post(`${baseUrl}/`, {...calificacion, usuario : {idUsuario}})
-    showNotification("success", "Calificación guardada con exito");
+    response.data ? showNotification("success", "Calificación guardada con exito") : showNotification("error", "Error al guardar calificación");
+    return response.data;
   } catch (error) {
     showNotification("error", "Error al guardar calificación");
   }
