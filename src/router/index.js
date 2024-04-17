@@ -77,21 +77,54 @@ const router = new VueRouter({
 
 
         }, {
+            meta: {auth: false},
             path: "/home/login/", name: "login", component: () => import("../components/public/Login.vue"),
+            beforeEnter: (to, from, next) => {
+                const auth = useAuthStore();
+                if (auth.user) {
+                    next({ name: 'perfil' });
+                } else {
+                    next();
+                }
+            },
         }, {
-            // que aqui solo se acceda si no esta logeado
-            path: '/home/registro/', name: 'registrarse', component: () => import('../components/public/Register.vue')
+            meta: {auth: false},
+            path: '/home/registro/', name: 'registrarse', component: () => import('../components/public/Register.vue'),
+            beforeEnter: (to, from, next) => {
+                const auth = useAuthStore();
+                if (auth.user) {
+                    next({ name: 'perfil' });
+                } else {
+                    next();
+                }
+            },
         }, {
 
             path: "/restablecer/correo/",
             meta: {auth: false},
             name: "restablecerCorreo",
             component: () => import("../components/public/Restablecer.vue"),
+            beforeEnter: (to, from, next) => {
+                const auth = useAuthStore();
+                if (auth.user) {
+                    next({ name: 'inicio' });
+                } else {
+                    next();
+                }
+            },
         }, {
             path: "/restablecer/",
             meta: {auth: false},
             name: "restablecerConfirmar",
             component: () => import("../components/public/RestablecerConfirmar.vue"),
+            beforeEnter: (to, from, next) => {
+                const auth = useAuthStore();
+                if (auth.user) {
+                    next({ name: 'inicio' });
+                } else {
+                    next();
+                }
+            },
         }, {
             path: "/home/carrito/",
             name: "carrito",
@@ -128,7 +161,7 @@ router.beforeEach(async (to, from, next) => {
     if (to.matched.some((record) => record.meta?.auth)) {
         if (!auth.user) {
             auth.returnUrl = to.fullPath;
-            return next({name: "login"});
+            return next({name: "inicio"});
         }
     }
     if (to.matched.some((record) => record.meta?.roles)) {
