@@ -31,6 +31,7 @@
                 <v-card
                 >
                   <v-img :src="item.imagen"></v-img>
+                  <v-card-title>{{ item.nombre }}</v-card-title>
                   <v-card-text>
                     <div class="font-bold text-lg">
                       <template v-if="item.precioDescuento > 0">

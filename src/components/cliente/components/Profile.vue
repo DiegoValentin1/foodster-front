@@ -825,6 +825,7 @@ export default {
         calificacion: this.rating,
         comentario: this.calificacion,
         active: true,
+        idUsuario: this.usuario.usuarios.idUsuario,
       });
       await this.getUserAndDirecciones();
       this.loading = false;

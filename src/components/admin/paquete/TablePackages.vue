@@ -91,13 +91,13 @@
             </v-chip>
           </td>
           <td class="text-center">
-            <v-dialog v-model="showDialogAsignar" class="w-1/4 overflow-auto mx-auto bg-white shadow-lg rounded-lg max-h-96" flat
+            <v-dialog v-model="dialogAsignar[item.idPaquete]" class="w-1/4 overflow-auto mx-auto bg-white shadow-lg rounded-lg max-h-96" flat
                       offset-y>
               <v-card class="p-6">
                 <v-card-title class="text-xl font-bold text-gray-700">
                   Elementos del paquete
                 </v-card-title>
-                <AsignarServicios :paquete="item" :close="closeOpenAsignar"/>
+                <AsignarServicios :paquete="item" :close="closeAsignarDialog"/>
               </v-card>
             </v-dialog>
             <v-dialog v-model="dialogosEditarPaquete[item.idPaquete]" max-width="500px">
@@ -149,7 +149,7 @@
 
             </v-dialog>
             <v-icon color="red" @click="deleteItemPaquete(item.idPaquete)">mdi-delete</v-icon>
-            <v-btn color="blue darken-1" text @click="closeOpenAsignar">Asignar servicios</v-btn>
+            <v-btn color="blue darken-1" text @click="openAsignarDialog(item.idPaquete)">Asignar servicios</v-btn>
 
           </td>
         </tr>
@@ -168,7 +168,7 @@ export default {
   components: {AsignarServicios},
   data() {
     return {
-      showDialogAsignar: false,
+      dialogAsignar:{},
       loading: false,
       tab: null,
       validUpdate: true,
@@ -232,8 +232,12 @@ export default {
       //mexico city time
       return moment(dateTimeString).format("YYYY-MM-DD HH:mm");
     },
-    closeOpenAsignar() {
-      this.showDialogAsignar = !this.showDialogAsignar;
+
+    openAsignarDialog(idPaquete) {
+      this.$set(this.dialogAsignar, idPaquete, true);
+    },
+    closeAsignarDialog(idPaquete) {
+      this.$set(this.dialogAsignar, idPaquete, false);
     },
     async getAllPaquetes() {
       try {

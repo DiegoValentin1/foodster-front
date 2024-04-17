@@ -47,7 +47,7 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-btn @click="close">Cerrar</v-btn>
+    <v-btn @click="close(paquete.idPaquete)">Cerrar</v-btn>
   </v-container>
 </template>
 
